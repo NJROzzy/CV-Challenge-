@@ -1,0 +1,5 @@
+# Optional: only for the Phase 1 CPU vs GPU benchmark (python -m cvbench --backend gpu|both).
+# On a Jetson do NOT pip-install torch: PyPI builds target a newer CUDA than JetPack ships.
+# Use JetPack's PyTorch instead via .venv-jetson (see README, "Which Python environment to use").
+psutil
+torch

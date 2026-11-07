@@ -33,9 +33,24 @@ Everything is automatic: no manual annotation, no hard-coded coordinates or time
 | Video tools | FFmpeg / ffprobe 4.4.2 |
 | Viewer | Static HTML/CSS/JavaScript (no frameworks or CDNs) served by Python's `http.server` with added Range support |
 
-## Quick start (Jetson)
+## Quick start
 
-### Which Python environment to use
+### Setup (core pipeline: Python 3.9+, NumPy and OpenCV; verified from a fresh clone on the Jetson, Linux aarch64, Python 3.11 — other platforms untested)
+
+```bash
+git clone https://github.com/NJROzzy/CV-Challenge-.git && cd CV-Challenge-
+git checkout feature/challenge-2
+python3 -m venv .venv            # on this Jetson use python3.11: JetPack's python3.10 lacks ensurepip
+.venv/bin/pip install -r requirements.txt     # numpy, opencv-python, pytest - no PyTorch, no CUDA
+.venv/bin/python -m pytest -q                 # synthetic tests; no videos needed
+mkdir -p data/inbox && cp /path/to/your/videos/*.MOV data/inbox/   # raw videos are not in git
+.venv/bin/python -m reekon data/inbox         # annotated images -> outputs/<video>/classical/
+.venv/bin/python -m reekon.serve              # browse the results at http://localhost:8000/
+```
+
+`ffmpeg`/`ffprobe` on the PATH are optional. They make the browser copy of each video and check timestamps; without them the pipeline still runs, and `--no-proxy` skips the browser video. PyTorch is only needed for the optional GPU benchmark (`requirements-gpu.txt`); the measurement pipeline never imports it.
+
+### Which Python environment to use (on the Jetson)
 
 | Task | Environment | Why |
 |---|---|---|

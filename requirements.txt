@@ -1,7 +1,5 @@
-# Use NVIDIA-compatible PyTorch for the installed JetPack release on Jetson.
-# This file describes dependencies; do not blindly replace a Jetson torch build.
+# Core: the measurement pipeline (python -m reekon), the viewer server and the test suite.
+# No PyTorch or CUDA needed - the pipeline is OpenCV/NumPy on the CPU.
 numpy
 opencv-python
-psutil
-torch
 pytest

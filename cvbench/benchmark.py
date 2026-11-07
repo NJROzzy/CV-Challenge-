@@ -68,11 +68,14 @@ def peak_rss_bytes():
 
 
 def environment():
-    import torch
+    try:
+        import torch
+    except ImportError:  # core install (requirements.txt) has no PyTorch: CPU-only benchmark
+        torch = None
     with warnings.catch_warnings(record=True) as captured, redirect_stderr(io.StringIO()) as stderr:
         warnings.simplefilter('always')
-        available = torch.cuda.is_available()
-        count = torch.cuda.device_count()
+        available = bool(torch) and torch.cuda.is_available()
+        count = torch.cuda.device_count() if torch else 0
     return {'timestamp_utc': datetime.now(timezone.utc).isoformat(),
             'platform': platform.platform(), 'machine': platform.machine(),
             'jetson_model': read_optional('/proc/device-tree/model'),
@@ -82,8 +85,9 @@ def environment():
             'ram_total_bytes': psutil.virtual_memory().total if psutil else os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES'),
             'psutil_available': psutil is not None,
             'python': sys.version, 'numpy': np.__version__, 'opencv': cv2.__version__,
-            'opencv_build': cv2.getBuildInformation(), 'torch': torch.__version__,
-            'torch_cuda_build': torch.version.cuda, 'cudnn': torch.backends.cudnn.version(),
+            'opencv_build': cv2.getBuildInformation(), 'torch': torch.__version__ if torch else None,
+            'torch_cuda_build': torch.version.cuda if torch else None,
+            'cudnn': torch.backends.cudnn.version() if torch else None,
             'cuda_available': available, 'cuda_device_count': count,
             'cuda_devices': [str(torch.cuda.get_device_properties(i)) for i in range(count)] if available else [],
             'cuda_warnings': [str(w.message) for w in captured], 'cuda_stderr': stderr.getvalue(),
