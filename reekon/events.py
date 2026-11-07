@@ -121,6 +121,10 @@ class EventBuilder:
         self.sharpness = sharpness          # frame index -> variance of Laplacian
         self.W, self.H = frame_size
         self.radius = cluster_radius_frac * math.hypot(self.W, self.H)
+        # Hook sightings must map within this distance of the visible tape line. Measured on
+        # Cabinet-1.MOV: wide-angle registration error up to ~200 px across large pans, while a
+        # different door's hook lands ~640 px away.
+        self.line_tolerance = 3 * self.radius
         self.min_support = min_support
         self.min_hook_confidence = min_hook_confidence
         self.log = []
@@ -141,7 +145,7 @@ class EventBuilder:
 
     def _on_tape_line(self, mapped, canvas_obs):
         """Keep mapped hook points consistent with the straight blade seen in the canvas frame:
-        on the hook side of the housing and within 2 cluster radii of the line's extension.
+        on the hook side of the housing and within `line_tolerance` of the line's extension.
         Removes sightings of a different hook placement (e.g. the neighbouring door)."""
         a, b = canvas_obs.housing.xy, canvas_obs.hook.xy
         u = (b - a) / (np.linalg.norm(b - a) or 1)
@@ -150,7 +154,7 @@ class EventBuilder:
             rel = m[1] - a
             along = float(np.dot(rel, u))
             perp = float(abs(rel[0] * u[1] - rel[1] * u[0]))
-            if along > 0 and perp <= 2 * self.radius:
+            if along > 0 and perp <= self.line_tolerance:
                 keep.append(m)
         return keep
 
@@ -180,6 +184,13 @@ class EventBuilder:
         if direct:
             conf = min(1.0, conf + 0.15)
         est.status = 'observed' if direct else 'registered'
+        est.consensus_xy = [round(float(center[0]), 1), round(float(center[1]), 1)]  # cluster median
+        if direct:
+            # Seen in the reference frame itself: draw exactly what was detected there. The other
+            # (registered) observations only vote on agreement/confidence; registration error in a
+            # moving frame must not move a directly observed point.
+            own = next(q for (o, q, _) in used if o.frame_index == canvas)
+            center = own
         est.x, est.y = float(center[0]), float(center[1])
         est.confidence = round(conf, 3)
         est.support = support
@@ -201,21 +212,43 @@ class EventBuilder:
         offset = float(np.linalg.norm(p - q))
         hook.registered_xy = [round(float(p[0]), 1), round(float(p[1]), 1)]
         hook.snap_offset_px = round(offset, 1)
-        if np.dot(p - a, u) <= 0 or offset > 2 * self.radius:
+        if np.dot(p - a, u) <= 0 or offset > self.line_tolerance:
             notes.append(f'registered hook is {offset:.0f}px off the visible tape line; not snapped')
             hook.confidence = round(hook.confidence * 0.5, 3)
             return
         hook.x, hook.y = float(q[0]), float(q[1])
         notes.append(f'hook snapped {offset:.0f}px onto the visible tape line (straight-blade prior)')
 
-    def _pick_canvas(self, phase):
-        # Sharp frame from the reading, preferring frames near its temporal middle.
+    def _rank(self, phase):
+        """Reading frames by preference: sharp, near the middle of the reading, confident."""
         mid = (phase[0].t + phase[-1].t) / 2
         span = max(phase[-1].t - phase[0].t, 1e-6)
         sharp = np.array([self.sharpness.get(o.frame_index, 0.0) for o in phase])
         sharp = sharp / (sharp.max() or 1)
-        score = sharp * (1 - 0.5 * np.abs([(o.t - mid) / span for o in phase]))
-        return phase[int(np.argmax(score))]
+        central = 1 - np.abs([(o.t - mid) / span for o in phase])   # 1 at the middle, 0.5 at the ends
+        score = sharp * central * np.array([o.confidence for o in phase])
+        return [phase[i] for i in np.argsort(-score)]
+
+    def _pick_canvas(self, phase):
+        return self._rank(phase)[0]
+
+    def _consistent_canvas(self, phase, provisional, housing, max_candidates=15):
+        """Best-ranked frame whose own housing detection lies at the reading's consensus position,
+        preferring frames that also show the hook. Rejects frames from the approach (housing still
+        moving) or the departure (camera moving away). Returns (obs, shows_hook) or (None, False)."""
+        ranked = self._rank(phase)[:max_candidates]
+        ranked.sort(key=lambda o: not o.hook.visible)  # stable: hook-visible frames first
+        for o in ranked:
+            r = self.reg.register(provisional, o.frame_index)
+            if not r.ok:
+                continue
+            hs = map_points(r.H, [housing.consensus_xy])[0]
+            # Frames that also show the hook are worth more (no chain needed) but are taken with the
+            # camera tilted/panned away, where registration error is larger: allow a full radius.
+            tol = self.radius if o.hook.visible else 0.5 * self.radius
+            if np.linalg.norm(hs - o.housing.xy) <= tol:
+                return o, o.hook.visible
+        return None, False
 
     def build(self, observations):
         episodes = split_episodes(observations)
@@ -235,21 +268,18 @@ class EventBuilder:
                 housing, _ = self._estimate('housing', phase, canvas)
                 hook, k_used = self._estimate('hook', hooks, canvas, canvas_obs)
                 notes = []
-                # Prefer a canvas that directly shows BOTH endpoints, as long as its housing is at
-                # the reading's consensus position (frames from the approach, while the housing is
-                # still moving, are rejected). This avoids long registration chains entirely.
-                both = [o for o in phase if o.hook.visible] if housing.status != 'missing' else []
-                for o in sorted(both, key=lambda o: -self.sharpness.get(o.frame_index, 0)):
-                    r = self.reg.register(canvas, o.frame_index)
-                    if not r.ok:
-                        continue
-                    hs = map_points(r.H, [[housing.x, housing.y]])[0]
-                    if np.linalg.norm(hs - o.housing.xy) <= self.radius:
-                        canvas_obs, canvas = o, o.frame_index
+                # Final reference frame: its own housing must agree with the consensus; prefer one
+                # that directly shows BOTH endpoints (no long registration chain needed).
+                if housing.status != 'missing':
+                    chosen, shows_hook = self._consistent_canvas(phase, canvas, housing)
+                    if chosen is None:
+                        notes.append('no reading frame matched the housing consensus; using the sharpest frame')
+                    elif chosen.frame_index != canvas:
+                        canvas_obs, canvas = chosen, chosen.frame_index
                         housing, _ = self._estimate('housing', phase, canvas)
                         hook, k_used = self._estimate('hook', hooks, canvas, canvas_obs)
+                    if shows_hook and hook.status == 'observed':
                         notes.append('reference frame directly shows both endpoints')
-                        break
                 context = None
                 if hook.status == 'registered':
                     self._snap_to_tape(hook, canvas_obs, notes)
