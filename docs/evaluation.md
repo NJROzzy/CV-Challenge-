@@ -116,7 +116,9 @@ are not precision/recall, pixel-error measurements, or an independently labelled
 | Large Window | No blade-based endpoint pair → none. | Existing components cannot establish a reliable blade-less pair; no fabricated event or endpoints. |
 | Outdoor_Pipes | No complete pair → none; hook remains missing. | One uncertain candidate remains; no validated false positive in either run. |
 
-**No safe recall gain was demonstrated in the five originally zero-result videos.** The common
+**No safe recall gain was demonstrated in the five originally zero-result videos.** Deck-2
+also has zero validated measurements after demotion, so the final snapshot contains **six**
+zero-result videos in total. The common
 blocker is missing trustworthy hook evidence, compounded by detection fragmentation. The broader
 search that recovered Door-1 observations failed cross-video correctness and was rejected. The
 retained changes address a separately reproduced housing-end reliability error. They do not
@@ -142,9 +144,11 @@ no additional clear-frame correspondence was demonstrated and no transform was f
 - SHA-256 checks confirm **all 111 original files under `outputs/` and `results/` are unchanged**,
   including ignored local proxies and diagnostics. Original hashes are recorded in
   [`original-artifact-hashes.json`](../results/accuracy-final/original-artifact-hashes.json).
-- The pre-existing unrelated cleanup is left uncommitted. Only the focused endpoint code/tests,
-  final evaluation documentation and separate evidence are included in this pass's commits.
-  README's prior restructuring is left separate from the appended accuracy findings.
+- At the end of the accuracy pass, the earlier cleanup and README restructuring were left
+  uncommitted. The subsequent repository-verification pass reviews and commits that work
+  separately, without changing predictions, detection algorithms, thresholds or generated files.
+  The existing CPU suite was rerun: **39 passed, 10 skipped**, with the existing CUDA-driver
+  compatibility warning. No video reprocessing or expensive benchmark was repeated.
 
 ## Preserved evaluation before the final accuracy pass
 
@@ -315,3 +319,19 @@ from the original evaluation, not independently relabelled ground truth.
 4. **A learned blade/hook/housing detector,** fine-tuned on frames auto-labelled by the classical detector (high-confidence only), safely exported (ONNX/TensorRT). Compare it with the classical strategy on held-out videos.
 5. **Speed.** Hardware HEVC decoding (NVDEC via GStreamer), fewer full-resolution JPEG caches, and detection only around tape episodes.
 6. **Read the length (stretch goal).** OCR of the housing's LCD.
+
+## Final repository verification
+
+The concise README links the full architecture, recorded stack/setup, measured CPU/CUDA
+comparison, AI usage disclosure and limitations. The final index preserves ten classical result
+JSONs with 12 algorithm-validated measurements; the original 14-entry index and historical
+benchmark/evaluation files are retained. Raw videos and browser proxies, model weights/runtime
+engines, virtual environments, caches and temporary files remain ignored. JSON/JPEG evaluation
+evidence stays tracked; ignored candidate diagnostics are local artifacts, with selected important
+examples preserved under `results/accuracy-final/`.
+
+This verification uses OpenAI Codex for review, documentation consistency checks, artifact/hash
+checks, existing automated tests and local commits. It performs no further accuracy development,
+manual annotation correction, model training, dependency/environment modification or video
+reprocessing. Requirements remain unpinned; recorded software versions and source hashes describe
+the evaluated environments, not a cross-platform reproducibility guarantee. No push is performed.
