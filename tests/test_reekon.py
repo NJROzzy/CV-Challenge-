@@ -134,6 +134,35 @@ def test_rejects_scenes_without_a_tape():
     assert det.detect(solid) is None
 
 
+@pytest.mark.parametrize('turns', [0, 1, 2, 3])
+def test_housing_split_by_a_hand_keeps_entry_at_the_blade(turns):
+    """A longer housing-body fragment must not move B past a shorter entry fragment."""
+    img = draw_tape(textured_background(640, 480), (200, 100), (200, 400))
+    cv2.rectangle(img, (140, 425), (260, 445), (90, 140, 215), -1)
+    hook, entry = np.array([200, 100]), np.array([200, 400])
+    h, w = img.shape[:2]
+    for _ in range(turns):
+        hook = np.array([hook[1], w - 1 - hook[0]])
+        entry = np.array([entry[1], w - 1 - entry[0]])
+        h, w = w, h
+    img = np.ascontiguousarray(np.rot90(img, turns))
+    obs = ClassicalTapeDetector().detect(img)
+    assert obs is not None and obs.housing_detected
+    assert obs.housing.visible
+    assert np.linalg.norm(obs.housing.xy - entry) < 10
+    assert np.linalg.norm(obs.hook.xy - hook) < 15
+
+
+def test_housing_body_without_a_supported_entry_is_not_an_observed_endpoint():
+    img = draw_tape(textured_background(640, 480), (200, 100), (200, 400))
+    # Most of the entry-side housing is covered; only a distant body fragment remains.
+    cv2.rectangle(img, (140, 407), (260, 455), (90, 140, 215), -1)
+    obs = ClassicalTapeDetector().detect(img)
+    assert obs is not None and obs.housing_detected
+    assert not obs.housing.visible
+    assert obs.evidence['end_not_seen_because']['housing'] == 'entry_not_supported'
+
+
 def test_blade_running_into_frame_edge_has_no_visible_hook():
     # Blade from the housing down to just past the bottom border (end only ~0.5 widths inside).
     img = draw_tape(textured_background(640, 480), hook=(260, 646), housing_end=(240, 260))
@@ -251,6 +280,26 @@ def test_builder_reports_measurement_and_never_invents_a_hook():
     ms = EventBuilder(IdentityRegistrar(), sharp, (480, 1000)).build(no_hook)
     assert len(ms) == 1 and ms[0].hook.status == 'missing' and ms[0].hook.x is None
     assert ms[0].confidence == 0.0
+
+
+def test_unsupported_housing_entry_keeps_the_reading_uncertain():
+    """Seeing a housing body is not evidence of the blade's physical entry point."""
+    obs = [_obs(i, i * 0.1, (200, 100), (200, 900)) for i in range(30)]
+    for o in obs:
+        o.housing.visible = False
+    sharp = {o.frame_index: 1.0 for o in obs}
+    m = EventBuilder(IdentityRegistrar(), sharp, (480, 1000)).build(obs)[0]
+    assert m.hook.status == 'observed'
+    assert m.housing.status == 'missing' and m.housing.x is None
+    assert m.status == 'uncertain' and 'housing end not localised' in m.reasons
+
+    # Even many agreeing body positions cannot outvote the few observed entries.
+    for o in obs[-5:]:
+        o.housing.visible = True
+        o.housing.y = 700
+    m = EventBuilder(IdentityRegistrar(), sharp, (480, 1000)).build(obs)[0]
+    assert m.housing.y == 700 and m.housing.support == 5
+    assert m.canvas_frame in {o.frame_index for o in obs[-5:]}
 
 
 def test_hook_sightings_of_another_placement_are_rejected():

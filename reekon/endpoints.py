@@ -66,6 +66,8 @@ class EndpointLocalizer:
         mapped = []
         for o in observations:
             ep = getattr(o, kind)
+            if not ep.visible:
+                continue
             r = self.reg.register(o.frame_index, canvas)
             if not r.ok:
                 continue

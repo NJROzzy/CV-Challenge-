@@ -191,12 +191,18 @@ class ClassicalTapeDetector:
 
         reach = max(4, int(15 * w / bin_px))  # housing must lie within ~15 blade widths of an extreme
 
+        min_run = max(2, int(1.5 * w / bin_px))
+
         def housing_run(order):
-            """Longest run of wide bins (1-bin dips allowed) within `reach` of an extreme.
-            Returns (run length, index of the run's innermost bin = blade/housing transition).
-            Hands and shadows can leave a ragged, partly wide tail beyond the housing."""
+            """Find housing support and its blade-facing entry (1-bin dips allowed).
+
+            The longest wide run establishes which end contains the housing. A hand/LCD can
+            split that housing into several runs: its entry is the innermost run that itself
+            meets min_run, rather than the inner edge of the longest body fragment.
+            """
             order = list(order)[:reach]
             best, cur, inner, dip = (0, None), 0, None, 0
+            entry = None
             for k in order:
                 if is_housing[k]:
                     cur, inner, dip = cur + 1, k, 0
@@ -205,13 +211,14 @@ class ClassicalTapeDetector:
                     continue
                 else:
                     cur, dip = 0, 0
+                if cur >= min_run:
+                    entry = inner
                 if cur > best[0]:
                     best = (cur, inner)
-            return best
+            return best[0], entry
 
         run_hi, end_hi = housing_run(range(nb - 1, -1, -1))
         run_lo, end_lo = housing_run(range(nb))
-        min_run = max(2, int(1.5 * w / bin_px))
         housing_detected = max(run_hi, run_lo) >= min_run
         housing_at_hi = run_hi >= run_lo
 
@@ -290,6 +297,16 @@ class ClassicalTapeDetector:
         transitions, two_sided = self._strip_evidence(v, ref, p_hook, p_housing, w)
         if transitions < self.min_transitions or two_sided < self.min_two_sided:
             return None
+
+        if housing_detected:
+            # A split housing can have a blade-width body fragment. The whole-blade
+            # score can pass while B is on that body. Require local strip contrast
+            # on the blade side of B before treating the entry itself as observed.
+            _, entry_contrast = self._strip_evidence(
+                v, ref, p_housing, p_housing + hook_dir * min(blade_len, 6 * w), w)
+            if entry_contrast < self.min_two_sided:
+                housing_visible = False
+                occlusion['housing'] = 'entry_not_supported'
 
         inv = 1.0 / scale
         angle = (math.degrees(math.atan2(d[1], d[0])) + 180) % 180

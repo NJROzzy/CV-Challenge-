@@ -155,7 +155,7 @@ class EventBuilder:
         """Best-ranked frame whose own housing detection lies at the reading's consensus position,
         preferring frames that also show the hook. Rejects frames from the approach (housing still
         moving) or the departure (camera moving away). Returns (obs, shows_hook) or (None, False)."""
-        ranked = self._rank(phase)[:max_candidates]
+        ranked = [o for o in self._rank(phase) if o.housing.visible][:max_candidates]
         ranked.sort(key=lambda o: not o.hook.visible)  # stable: hook-visible frames first
         for o in ranked:
             r = self.reg.register(provisional, o.frame_index)
