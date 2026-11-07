@@ -1,0 +1,7 @@
+# Use NVIDIA-compatible PyTorch for the installed JetPack release on Jetson.
+# This file describes dependencies; do not blindly replace a Jetson torch build.
+numpy
+opencv-python
+psutil
+torch
+pytest
