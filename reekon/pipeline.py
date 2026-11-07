@@ -15,13 +15,14 @@ import time
 import cv2
 import numpy as np
 
+from .config import SAMPLE_FPS, JPEG_QUALITY
 from .annotate import render, render_scene
 from .detect import ClassicalTapeDetector
 from .events import EventBuilder
 from .labels import label_measurements
 from .register import KeyframeMatcher, Registrar
 from .scene import SceneBuilder
-from .video import VideoInfo, iter_frames
+from .video import VideoInfo, iter_frames, validate_sample_fps
 
 
 def make_detector(name):
@@ -59,7 +60,9 @@ def make_proxy(video, out_path, height=960):
     return out_path
 
 
-def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=print):
+def run(video, out_dir, sample_fps=SAMPLE_FPS, detector='classical', proxy=True, log=print):
+    if sample_fps is not None:
+        validate_sample_fps(sample_fps)
     video, out_dir = Path(video), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     timer = StageTimer()
@@ -89,10 +92,15 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
         timer.add('registration_prep', time.perf_counter() - t0)
 
         t0 = time.perf_counter()
-        cache[f.index] = (f.t, cv2.imencode('.jpg', f.image, [cv2.IMWRITE_JPEG_QUALITY, 90])[1])
+        ok, encoded = cv2.imencode('.jpg', f.image, [cv2.IMWRITE_JPEG_QUALITY, JPEG_QUALITY])
+        if not ok:
+            raise OSError(f'cannot cache frame {f.index} of {video}')
+        cache[f.index] = (f.t, encoded)
         timer.add('frame_cache', time.perf_counter() - t0)
         if obs is not None:
             observations.append(obs)
+    if not cache:
+        raise ValueError(f'no frames decoded from {video}')
     samples = len(cache)
     log(f'{video.name}: {info.frame_count} frames, {info.duration_s:.1f}s; {samples} samples, '
         f'tape detected in {len(observations)}')
@@ -142,7 +150,7 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
         else:
             name = f'diagnostics/candidate_{m.id:02d}.jpg'
             candidates.append(md)
-        cv2.imwrite(str(out_dir / name), img, [cv2.IMWRITE_JPEG_QUALITY, 90])
+        _write_image(out_dir / name, img)
         md['image'] = name
     by_id = {md['id']: md for md in validated}
     scene_dicts = []
@@ -153,8 +161,7 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
             sd['image'] = by_id[sc.placements[0].measurement_id]['image']
         else:
             sd['image'] = f'scene_{i:02d}.jpg'
-            cv2.imwrite(str(out_dir / sd['image']), render_scene(sd, decode(sc.frame), by_id, video.name),
-                        [cv2.IMWRITE_JPEG_QUALITY, 90])
+            _write_image(out_dir / sd['image'], render_scene(sd, decode(sc.frame), by_id, video.name))
         scene_dicts.append(sd)
     timer.add('annotate', time.perf_counter() - t0)
 
@@ -201,6 +208,12 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
     log(f'  {len(measurements)} candidate event(s): {len(validated)} validated, '
         f'{len(candidates)} uncertain/rejected; {len(scene_dicts)} scene image(s); outputs in {out_dir}')
     return results
+
+
+def _write_image(path: Path, image: np.ndarray) -> None:
+    """Do not publish a result that claims an image was saved when the writer failed."""
+    if not cv2.imwrite(str(path), image, [cv2.IMWRITE_JPEG_QUALITY, JPEG_QUALITY]):
+        raise OSError(f'cannot write image {path}')
 
 
 def _json_default(o):

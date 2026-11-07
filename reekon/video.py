@@ -4,8 +4,11 @@ Frames are timestamped with the decoder's presentation timestamp (PTS), never in
 phone footage is often variable-frame-rate (Cabinet-1.MOV declares 120 fps but averages 30 fps,
 with 25-42 ms frame gaps). Sampling is by time, so the requested rate holds on VFR video.
 """
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 import json
+import math
 import shutil
 import subprocess
 
@@ -23,8 +26,8 @@ class VideoInfo:
     frame_count: int = 0          # frames actually decoded
     duration_s: float = 0.0       # last PTS + mean frame interval
     measured_fps: float = 0.0     # frames decoded / duration: the real average rate
-    container_declared_fps: float = None   # ffprobe r_frame_rate
-    container_average_fps: float = None    # ffprobe avg_frame_rate
+    container_declared_fps: float | None = None   # ffprobe r_frame_rate
+    container_average_fps: float | None = None    # ffprobe avg_frame_rate
 
     def as_dict(self):
         return dict(self.__dict__)
@@ -47,8 +50,16 @@ def open_video(path):
     return cap, info
 
 
+def validate_sample_fps(sample_fps: float) -> None:
+    """Reject rates that cannot define a forward-moving sampling schedule."""
+    if not math.isfinite(sample_fps) or sample_fps <= 0:
+        raise ValueError('sample_fps must be finite and positive')
+
+
 def iter_frames(path, sample_fps=None, info=None):
     """Yield sampled Frames in decode order. If `info` is given it is completed after the last frame."""
+    if sample_fps is not None:
+        validate_sample_fps(sample_fps)
     cap, opened = open_video(path)
     if info is not None:
         info.__dict__.update(opened.__dict__)
