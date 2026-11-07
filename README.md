@@ -29,10 +29,34 @@ Everything is automatic: no manual annotation, no hard-coded coordinates or time
 | Hardware | NVIDIA Jetson Orin Nano Developer Kit (8 GB), JetPack 6 / L4T R36.3 (CUDA 12.2, cuDNN 8.9, TensorRT 8.6.2) |
 | Main environment (`.venv`) | Python 3.11, OpenCV 5.0.0, NumPy 2.4.6, pytest. Used for the pipeline, viewer server and tests. Its PyTorch 2.15 is a CUDA 13.2 build and cannot use this JetPack's GPU |
 | System `python3` (JetPack) | Python 3.10.12, OpenCV 4.8.0, NumPy 1.26.4, **PyTorch 2.1.0 with CUDA 12.2 (GPU works)**, `jetson-inference` with TensorRT running NVIDIA's pretrained Pose-ResNet18-Hand |
+| GPU environment (`.venv-jetson`) | A venv that inherits the system packages above unchanged, plus `pytest` 9.2.0 and `psutil` 7.2.2 installed into the venv only. Used for TensorRT inference, the CPU/GPU benchmark and the CUDA parity tests |
 | Video tools | FFmpeg / ffprobe 4.4.2 |
 | Viewer | Static HTML/CSS/JavaScript (no frameworks or CDNs) served by Python's `http.server` with added Range support |
 
 ## Quick start (Jetson)
+
+### Which Python environment to use
+
+| Task | Environment | Why |
+|---|---|---|
+| Classical measurement pipeline, viewer server, tests | `.venv` | The pipeline is OpenCV/NumPy on the CPU and needs no CUDA |
+| AI-assisted strategy (TensorRT hand pose) | `.venv-jetson` | Needs JetPack's `jetson_inference`/TensorRT, which only the system Python provides |
+| CPU vs GPU benchmark, CUDA parity tests | `.venv-jetson` | Needs a PyTorch that can use this JetPack's GPU: the system PyTorch 2.1 / CUDA 12.2 |
+
+The `.venv` PyTorch (2.15, built for CUDA 13.2) cannot initialise CUDA on JetPack 6's CUDA 12.2 driver, which is why there are two environments. Neither environment's packages were replaced.
+
+Set up `.venv-jetson` (once, about a minute; no system changes):
+
+```bash
+cd ~/Desktop/CV-Challenge-
+# JetPack's Python lacks ensurepip (python3.10-venv), so create the venv without its own pip and use
+# the system pip from inside it; installs go into the venv only.
+python3 -m venv --system-site-packages --without-pip .venv-jetson
+.venv-jetson/bin/python -m pip install pytest psutil
+.venv-jetson/bin/python -c "import torch; print(torch.__version__, torch.cuda.is_available())"   # 2.1.0 True
+```
+
+### Running
 
 ```bash
 cd ~/Desktop/CV-Challenge-
@@ -40,14 +64,15 @@ cd ~/Desktop/CV-Challenge-
 # 2. run the pipeline (classical CPU strategy)
 .venv/bin/python -m reekon data/inbox
 #    optional: AI-assisted strategy (adds NVIDIA's hand-pose model on the GPU via TensorRT)
-python3 -m reekon data/inbox --detector hand-assisted      # system python3: has jetson_inference
+.venv-jetson/bin/python -m reekon data/inbox --detector hand-assisted
 # 3. look at the results in a browser
 .venv/bin/python -m reekon.serve                            # prints http://<jetson-ip>:8000/
-# 4. tests (25 pass; 9 CUDA-parity tests skip in .venv because its PyTorch cannot use CUDA)
+# 4. tests: in .venv 25 pass and the 9 CUDA-parity tests skip; in .venv-jetson all 34 pass (CUDA tests run)
 .venv/bin/python -m pytest -q
+.venv-jetson/bin/python -m pytest -q
 REEKON_FOOTAGE_TESTS=1 .venv/bin/python -m pytest -q -k footage   # ~80 s regression on Cabinet-1.MOV
-# 5. CPU vs GPU preprocessing benchmark, measured with the CUDA-capable system PyTorch
-python3 -m cvbench --backend both --output results/gpu_system_python.json
+# 5. CPU vs GPU preprocessing benchmark (needs the CUDA-capable PyTorch)
+.venv-jetson/bin/python -m cvbench --backend both --output results/gpu_venv_jetson.json
 ```
 
 To view the results from a Mac on the same network, open the address the server prints (here `http://192.168.1.16:8000/`). With VS Code Remote, `http://localhost:8000/` also works through port forwarding.
@@ -168,7 +193,12 @@ This is resize, grayscale and Gaussian blur on synthetic frames, not the measure
 | 1080p, 1 | 20.48 | 14.27 | 1.44× | 8.2 / 4.2 / 0.2 |
 | 1080p, 8 | 218.92 | 88.55 | 2.47× | 19.2 / 8.3 / 0.3 |
 
-All 9 cases are in the JSON. Key findings:
+All 9 cases are in the JSON. A second run in `.venv-jetson` (`results/gpu_venv_jetson.json`, with `psutil`) agreed:
+- **Parity:** all 9 cases were within tolerance.
+- **Speed:** 0.83× at 480p batch 1, up to 2.51× at 1080p batch 8.
+- **Variation:** single small inputs vary most between runs.
+
+Key findings:
 - **Parity:** every case is within the 2×10⁻⁵ tolerance (maximum difference 1.8×10⁻⁷).
 - **Small inputs:** the GPU loses on small single frames, because of overhead.
 - **Batched HD:** it wins about 2.4×.
@@ -180,11 +210,16 @@ All 9 cases are in the JSON. Key findings:
 |---|---|
 | Platform | JetPack 6 (L4T R36.3) ships CUDA 12.2 |
 | Cause of the mismatch | The `.venv` PyTorch 2.15 is a CUDA 13.2 build, so it fails with "driver too old" (`results/cuda-diagnostics.log`) |
-| Already working | The system `python3` has NVIDIA's JetPack PyTorch 2.1.0 (CUDA 12.2). `cvbench` now runs there without `psutil`, using standard-library fallbacks |
-| Recommended isolated environment | `python3 -m venv --system-site-packages .venv-jetson`, which inherits the working JetPack PyTorch, OpenCV and TensorRT without touching them. The alternative is the `l4t-pytorch` container for r36 from `~/jetson-containers`; that needs the user added to the `docker` group, which wasn't done. |
-| Changed? | Nothing in drivers, JetPack or existing environments was modified |
+| Already working | The system `python3` has NVIDIA's JetPack PyTorch 2.1.0 (CUDA 12.2). `cvbench` runs there even without `psutil`, using standard-library fallbacks |
+| Isolated GPU environment: what was done | `.venv-jetson` created with `python3 -m venv --system-site-packages --without-pip` (plain `venv` fails: JetPack lacks `ensurepip`). It inherits, from system paths: PyTorch 2.1.0 (`/usr/local/lib/python3.10/dist-packages`), OpenCV 4.8.0 (`/usr/lib/python3.10/dist-packages`), NumPy 1.26.4 (`~/.local`) and `jetson_inference`/`jetson_utils` (`~/jetson-inference`). Only `pytest` and `psutil` (plus their small dependencies) were installed, into the venv |
+| Isolated GPU environment: verified | <ul><li>CUDA available on the Orin.</li><li>A 2048×2048 fp32 matrix multiply ran on `cuda:0`: 66.6 ms/iteration (258 GFLOP/s), relative error 1.4×10⁻⁶ against a float64 CPU reference.</li><li>TensorRT 8.6.2 hand-pose inference ran on the GPU at 18.0 ms/frame on a real frame.</li><li>`cvbench`: all 9 cases within tolerance.</li><li>Full test suite: 34 passed, 1 opt-in skip.</li></ul> |
+| Not available | TensorRT's own Python module (`import tensorrt`) isn't installed; `jetson_inference` reaches TensorRT itself. OpenCV 4.8 has no CUDA module. `pip check` reports `pynacl` missing `cffi` in the plain system Python too, so it predates this environment |
+| Alternative | NVIDIA's `l4t-pytorch` container for r36 (`~/jetson-containers`). It needs the user added to the `docker` group, which wasn't done |
+| Changed? | Nothing in drivers, JetPack, system packages or `.venv` was modified |
 
 ## Limitations
+
+- **Cached TensorRT engine:** the hand-pose engine cached under `~/jetson-inference/data/networks` triggers a TensorRT warning that the plan was built for a different device model. Inference ran correctly on the GPU. Rebuilding the engine (delete the `.engine` file and let jetson-inference rebuild it) would remove the warning, but that changes a shared model folder, so it wasn't done.
 
 - **Four videos, no ground truth.** Correctness is a visual judgement, and the thresholds were set on these same videos.
 - **Hidden hook ends.** A blade end hidden behind over-exposed fingers looks like a white surface, so it can be taken for the hook (Deck-1 #2, #4).
