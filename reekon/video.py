@@ -18,10 +18,13 @@ class VideoInfo:
     path: str
     width: int
     height: int
-    header_fps: float
+    opencv_reported_fps: float    # CAP_PROP_FPS: OpenCV 4.8 returns the declared rate (120 for
+                                  # Cabinet-1.MOV), OpenCV 5.0 the average (30) - not reliable
     frame_count: int = 0          # frames actually decoded
     duration_s: float = 0.0       # last PTS + mean frame interval
-    measured_fps: float = 0.0
+    measured_fps: float = 0.0     # frames decoded / duration: the real average rate
+    container_declared_fps: float = None   # ffprobe r_frame_rate
+    container_average_fps: float = None    # ffprobe avg_frame_rate
 
     def as_dict(self):
         return dict(self.__dict__)
@@ -40,6 +43,7 @@ def open_video(path):
         raise IOError(f'cannot open video {path}')
     info = VideoInfo(str(path), int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
                      int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)), float(cap.get(cv2.CAP_PROP_FPS) or 0))
+    info.container_declared_fps, info.container_average_fps = container_rates(path)
     return cap, info
 
 
@@ -68,6 +72,28 @@ def iter_frames(path, sample_fps=None, info=None):
         info.frame_count = index
         info.duration_s = t + t / max(index - 1, 1)
         info.measured_fps = index / info.duration_s if info.duration_s else 0.0
+
+
+def _rate(text):
+    num, _, den = text.partition('/')
+    try:
+        return float(num) / float(den or 1) if float(den or 1) else None
+    except ValueError:
+        return None
+
+
+def container_rates(path):
+    """(declared, average) frame rate from the container via ffprobe, or (None, None)."""
+    if not shutil.which('ffprobe'):
+        return None, None
+    out = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries',
+                          'stream=r_frame_rate,avg_frame_rate', '-of', 'json', str(path)],
+                         capture_output=True, text=True)
+    try:
+        st = json.loads(out.stdout)['streams'][0]
+    except (ValueError, KeyError, IndexError):
+        return None, None
+    return _rate(st.get('r_frame_rate', '')), _rate(st.get('avg_frame_rate', ''))
 
 
 def ffprobe_timestamps(path):
