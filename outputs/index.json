@@ -10,5 +10,41 @@
   "detector": "hand-assisted",
   "results": "Cabinet-1/hand-assisted/results.json",
   "measurements": 4
+ },
+ {
+  "video": "Countertop-1.MOV",
+  "detector": "classical",
+  "results": "Countertop-1/classical/results.json",
+  "measurements": 2
+ },
+ {
+  "video": "Countertop-1.MOV",
+  "detector": "hand-assisted",
+  "results": "Countertop-1/hand-assisted/results.json",
+  "measurements": 3
+ },
+ {
+  "video": "Deck-1.MOV",
+  "detector": "classical",
+  "results": "Deck-1/classical/results.json",
+  "measurements": 6
+ },
+ {
+  "video": "Deck-1.MOV",
+  "detector": "hand-assisted",
+  "results": "Deck-1/hand-assisted/results.json",
+  "measurements": 4
+ },
+ {
+  "video": "Deck-2.MOV",
+  "detector": "classical",
+  "results": "Deck-2/classical/results.json",
+  "measurements": 1
+ },
+ {
+  "video": "Deck-2.MOV",
+  "detector": "hand-assisted",
+  "results": "Deck-2/hand-assisted/results.json",
+  "measurements": 2
  }
 ]

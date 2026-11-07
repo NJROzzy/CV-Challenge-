@@ -1,0 +1,3495 @@
+{
+ "schema": "reekon.results/2",
+ "created_utc": "2026-11-07T14:41:45.158896+00:00",
+ "video": {
+  "path": "data/inbox/Deck-2.MOV",
+  "width": 1360,
+  "height": 1808,
+  "opencv_reported_fps": 30.0,
+  "frame_count": 597,
+  "duration_s": 19.896661073825502,
+  "measured_fps": 30.00503440174526,
+  "container_declared_fps": 30.0,
+  "container_average_fps": 30.005025967498742,
+  "name": "Deck-2.MOV"
+ },
+ "config": {
+  "sample_fps": 10.0,
+  "detector": "hand-assisted",
+  "python": "3.10.12",
+  "opencv": "4.8.0",
+  "numpy": "1.26.4"
+ },
+ "pipeline_seconds": 92.83,
+ "pipeline_seconds_excluding_proxy": 79.17,
+ "stage_timings": {
+  "decode_and_sample": {
+   "total_ms": 2865.6,
+   "calls": 199,
+   "mean_ms": 14.4
+  },
+  "detect": {
+   "total_ms": 32878.0,
+   "calls": 199,
+   "mean_ms": 165.22
+  },
+  "registration_prep": {
+   "total_ms": 4716.7,
+   "calls": 199,
+   "mean_ms": 23.7
+  },
+  "frame_cache": {
+   "total_ms": 4940.2,
+   "calls": 199,
+   "mean_ms": 24.83
+  },
+  "events_endpoints_registration": {
+   "total_ms": 3564.1,
+   "calls": 1,
+   "mean_ms": 3564.11
+  },
+  "scene_registration": {
+   "total_ms": 18913.2,
+   "calls": 1,
+   "mean_ms": 18913.17
+  },
+  "annotate": {
+   "total_ms": 167.0,
+   "calls": 1,
+   "mean_ms": 167.02
+  },
+  "viewer_proxy_encode": {
+   "total_ms": 13662.5,
+   "calls": 1,
+   "mean_ms": 13662.46
+  }
+ },
+ "counts": {
+  "samples": 199,
+  "tape_observations": 80,
+  "candidate_events": 2,
+  "measurements": 2,
+  "uncertain": 0,
+  "rejected": 0,
+  "scene_images": 2,
+  "registered_view_scenes": 1
+ },
+ "identity": {
+  "relabelled": 2,
+  "conflicts": 1
+ },
+ "episodes": [
+  [
+   1.8,
+   4.231666666666667,
+   14
+  ],
+  [
+   5.231666666666667,
+   5.5,
+   4
+  ],
+  [
+   6.1000000000000005,
+   6.300000000000001,
+   3
+  ],
+  [
+   6.9316666666666675,
+   7.331666666666667,
+   5
+  ],
+  [
+   7.4316666666666675,
+   8.231666666666667,
+   3
+  ],
+  [
+   9.13,
+   9.331666666666667,
+   2
+  ],
+  [
+   9.431666666666667,
+   9.531666666666668,
+   2
+  ],
+  [
+   9.631666666666668,
+   9.631666666666668,
+   1
+  ],
+  [
+   9.731666666666667,
+   10.031666666666668,
+   4
+  ],
+  [
+   10.131666666666668,
+   10.131666666666668,
+   1
+  ],
+  [
+   10.231666666666667,
+   10.231666666666667,
+   1
+  ],
+  [
+   10.331666666666667,
+   10.331666666666667,
+   1
+  ],
+  [
+   10.431666666666667,
+   10.631666666666668,
+   3
+  ],
+  [
+   10.731666666666667,
+   10.731666666666667,
+   1
+  ],
+  [
+   10.831666666666667,
+   10.931666666666667,
+   2
+  ],
+  [
+   11.031666666666668,
+   11.131666666666668,
+   2
+  ],
+  [
+   11.231666666666667,
+   11.231666666666667,
+   1
+  ],
+  [
+   11.331666666666667,
+   11.431666666666667,
+   2
+  ],
+  [
+   12.031666666666668,
+   12.131666666666668,
+   2
+  ],
+  [
+   12.531666666666668,
+   13.131666666666668,
+   4
+  ],
+  [
+   13.231666666666667,
+   14.931666666666668,
+   15
+  ],
+  [
+   15.930000000000001,
+   16.630000000000003,
+   4
+  ],
+  [
+   17.23,
+   17.23,
+   1
+  ],
+  [
+   18.73,
+   18.73,
+   1
+  ],
+  [
+   19.03,
+   19.03,
+   1
+  ]
+ ],
+ "measurements": [
+  {
+   "id": 1,
+   "start_t": 1.8,
+   "end_t": 3.1,
+   "canvas_frame": 84,
+   "canvas_t": 2.8,
+   "confidence": 0.427,
+   "angle_deg": 24.75,
+   "notes": [
+    "hook snapped 93px onto the visible tape line (straight-blade prior)"
+   ],
+   "context_frame": null,
+   "status": "validated",
+   "reasons": [],
+   "blade_length_frac": 0.369,
+   "episode": 0,
+   "hook": {
+    "kind": "hook",
+    "status": "registered",
+    "x": 406.3425532665041,
+    "y": 1391.0526872860562,
+    "confidence": 0.43,
+    "support": 5,
+    "candidates": 8,
+    "spread_px": 35.8,
+    "source_frames": [
+     66,
+     69,
+     91,
+     93,
+     96
+    ],
+    "alternatives": [],
+    "rejected_off_tape_line": 1,
+    "consensus_xy": [
+     348.1,
+     1463.7
+    ],
+    "weakest_link_inliers": 526,
+    "registered_xy": [
+     348.1,
+     1463.7
+    ],
+    "snap_offset_px": 93.1
+   },
+   "housing": {
+    "kind": "housing",
+    "status": "observed",
+    "x": 718.8741276682179,
+    "y": 1641.4505828422548,
+    "confidence": 0.425,
+    "support": 4,
+    "candidates": 8,
+    "spread_px": 39.0,
+    "source_frames": [
+     84,
+     87,
+     91,
+     93
+    ],
+    "alternatives": [],
+    "consensus_xy": [
+     775.6,
+     1629.1
+    ],
+    "weakest_link_inliers": 612
+   },
+   "image": "measurement_01.jpg"
+  },
+  {
+   "id": 2,
+   "start_t": 13.232,
+   "end_t": 14.932,
+   "canvas_frame": 415,
+   "canvas_t": 13.832,
+   "confidence": 0.898,
+   "angle_deg": 94.6,
+   "notes": [
+    "reference frame directly shows both endpoints"
+   ],
+   "context_frame": null,
+   "status": "validated",
+   "reasons": [],
+   "blade_length_frac": 0.575,
+   "episode": 20,
+   "hook": {
+    "kind": "hook",
+    "status": "observed",
+    "x": 707.3693447688285,
+    "y": 1746.1867102759577,
+    "confidence": 0.883,
+    "support": 7,
+    "candidates": 7,
+    "spread_px": 24.9,
+    "source_frames": [
+     397,
+     403,
+     406,
+     409,
+     412,
+     415,
+     418
+    ],
+    "alternatives": [],
+    "rejected_off_tape_line": 0,
+    "consensus_xy": [
+     700.8,
+     1746.2
+    ],
+    "weakest_link_inliers": 583
+   },
+   "housing": {
+    "kind": "housing",
+    "status": "observed",
+    "x": 757.8115582594338,
+    "y": 965.8152927535273,
+    "confidence": 0.914,
+    "support": 14,
+    "candidates": 15,
+    "spread_px": 32.9,
+    "source_frames": [
+     397,
+     403,
+     406,
+     409,
+     412,
+     415,
+     418,
+     427,
+     430,
+     433,
+     436,
+     442,
+     445,
+     448
+    ],
+    "alternatives": [],
+    "consensus_xy": [
+     764.6,
+     960.6
+    ],
+    "weakest_link_inliers": 583
+   },
+   "image": "measurement_02.jpg"
+  }
+ ],
+ "candidates": [],
+ "scenes": [
+  {
+   "frame": 84,
+   "t": 2.8,
+   "kind": "reading_frame",
+   "clarity": 0.676,
+   "placements": [
+    {
+     "measurement_id": 1,
+     "hook_xy": [
+      406.3425532665041,
+      1391.0526872860562
+     ],
+     "housing_xy": [
+      718.8741276682179,
+      1641.4505828422548
+     ],
+     "cycle_error_px": [
+      0.0,
+      0.0
+     ],
+     "links": 0,
+     "local_moves": 0,
+     "global_moves": 0,
+     "source": "reading_frame"
+    }
+   ],
+   "image": "measurement_01.jpg"
+  },
+  {
+   "frame": 421,
+   "t": 14.032,
+   "kind": "registered_view",
+   "clarity": 0.373,
+   "placements": [
+    {
+     "measurement_id": 2,
+     "hook_xy": [
+      697.9,
+      1782.4
+     ],
+     "housing_xy": [
+      754.3,
+      994.4
+     ],
+     "cycle_error_px": [
+      5.1,
+      0.6
+     ],
+     "links": 2,
+     "local_moves": 2,
+     "global_moves": 0,
+     "source": "registered"
+    }
+   ],
+   "image": "scene_02.jpg"
+  }
+ ],
+ "scene_log": [
+  {
+   "measurement": 1,
+   "views_tried": 24,
+   "views_ok": 0,
+   "rejected_because": {
+    "no_chain": 10,
+    "round_trip_error": 1,
+    "endpoint_outside_frame": 6,
+    "appearance_mismatch": 7
+   }
+  },
+  {
+   "measurement": 2,
+   "views_tried": 30,
+   "views_ok": 3,
+   "rejected_because": {
+    "no_chain": 2,
+    "round_trip_error": 7,
+    "endpoint_outside_frame": 15,
+    "appearance_mismatch": 3
+   }
+  }
+ ],
+ "observations": [
+  {
+   "frame_index": 54,
+   "t": 1.8,
+   "detector": "hand-assisted",
+   "confidence": 0.636,
+   "angle_deg": 16.0,
+   "blade_width_px": 34.7,
+   "hook": {
+    "x": 156.23223387247512,
+    "y": 1674.5696938659144,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 434.0209800506252,
+    "y": 1754.284245374341,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 289.0,
+    "tick_texture": 0.284,
+    "straightness_rms_widths": 0.418,
+    "coverage": 1.0,
+    "length_score": 0.607,
+    "texture_score": 1.0,
+    "straight_score": 0.83,
+    "tick_transitions_per_width": 1.08,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 57,
+   "t": 1.9000000000000001,
+   "detector": "hand-assisted",
+   "confidence": 0.96,
+   "angle_deg": 16.2,
+   "blade_width_px": 39.8,
+   "hook": {
+    "x": 15.361743627175226,
+    "y": 1613.730208453391,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 513.1764034610833,
+    "y": 1758.7226465760211,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 518.5,
+    "tick_texture": 0.43,
+    "straightness_rms_widths": 0.472,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.696,
+    "tick_transitions_per_width": 2.15,
+    "two_sided_dark_fraction": 0.92,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 60,
+   "t": 2.0,
+   "detector": "hand-assisted",
+   "confidence": 0.849,
+   "angle_deg": 17.5,
+   "blade_width_px": 38.7,
+   "hook": {
+    "x": -10.030356879576072,
+    "y": 1584.4635591955498,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 760.6586427352655,
+    "y": 1827.5776782481528,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 808.1,
+    "tick_texture": 0.349,
+    "straightness_rms_widths": 0.462,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.721,
+    "tick_transitions_per_width": 1.63,
+    "two_sided_dark_fraction": 0.94,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 63,
+   "t": 2.1,
+   "detector": "hand-assisted",
+   "confidence": 0.841,
+   "angle_deg": 18.5,
+   "blade_width_px": 41.4,
+   "hook": {
+    "x": 41.941306802686206,
+    "y": 1531.6428494345978,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 924.7899922710137,
+    "y": 1826.8909702063777,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 930.9,
+    "tick_texture": 0.344,
+    "straightness_rms_widths": 0.451,
+    "coverage": 0.945,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.748,
+    "tick_transitions_per_width": 1.11,
+    "two_sided_dark_fraction": 0.8,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 66,
+   "t": 2.2,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 29.3,
+   "blade_width_px": 32.0,
+   "hook": {
+    "x": 150.04178951714033,
+    "y": 1405.8928067932368,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 609.4849470708131,
+    "y": 1664.0419896493197,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 527.0,
+    "tick_texture": 0.271,
+    "straightness_rms_widths": 0.389,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.902,
+    "tick_transitions_per_width": 1.28,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 69,
+   "t": 2.3000000000000003,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 37.4,
+   "blade_width_px": 45.3,
+   "hook": {
+    "x": 199.90160049146354,
+    "y": 1357.721035938988,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 598.1059171373242,
+    "y": 1662.5743785615066,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 501.5,
+    "tick_texture": 0.438,
+    "straightness_rms_widths": 0.293,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.35,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 84,
+   "t": 2.8000000000000003,
+   "detector": "hand-assisted",
+   "confidence": 0.987,
+   "angle_deg": 38.7,
+   "blade_width_px": 35.6,
+   "hook": {
+    "x": 340.76320527203484,
+    "y": 1338.5110176605226,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 718.8741276682179,
+    "y": 1641.4505828422548,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 484.5,
+    "tick_texture": 0.536,
+    "straightness_rms_widths": 0.322,
+    "coverage": 0.737,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.84,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 87,
+   "t": 2.9000000000000004,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 34.6,
+   "blade_width_px": 42.1,
+   "hook": {
+    "x": 395.54281039137766,
+    "y": 1394.067951957412,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 801.3114373793117,
+    "y": 1674.0694227616266,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 493.0,
+    "tick_texture": 0.441,
+    "straightness_rms_widths": 0.304,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.3,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 91,
+   "t": 3.0333333333333337,
+   "detector": "hand-assisted",
+   "confidence": 0.972,
+   "angle_deg": 20.2,
+   "blade_width_px": 47.6,
+   "hook": {
+    "x": 382.20607493916543,
+    "y": 1506.5597249964642,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 852.9499365548231,
+    "y": 1679.4829907218384,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 501.5,
+    "tick_texture": 0.518,
+    "straightness_rms_widths": 0.464,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.714,
+    "tick_transitions_per_width": 2.85,
+    "two_sided_dark_fraction": 0.93,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 93,
+   "t": 3.1,
+   "detector": "hand-assisted",
+   "confidence": 0.892,
+   "angle_deg": 18.6,
+   "blade_width_px": 47.6,
+   "hook": {
+    "x": 358.70964865248794,
+    "y": 1533.2353254312889,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 834.1542836264906,
+    "y": 1692.780413171114,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 501.5,
+    "tick_texture": 0.545,
+    "straightness_rms_widths": 0.509,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.602,
+    "tick_transitions_per_width": 2.09,
+    "two_sided_dark_fraction": 0.93,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 96,
+   "t": 3.2,
+   "detector": "hand-assisted",
+   "confidence": 0.904,
+   "angle_deg": 18.5,
+   "blade_width_px": 41.4,
+   "hook": {
+    "x": 244.49804395957383,
+    "y": 1550.147290692423,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1059.288312279034,
+    "y": 1822.8920253315928,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 859.2,
+    "tick_texture": 0.338,
+    "straightness_rms_widths": 0.423,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.816,
+    "tick_transitions_per_width": 1.54,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 100,
+   "t": 3.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.858,
+   "angle_deg": 13.6,
+   "blade_width_px": 43.4,
+   "hook": {
+    "x": 45.24898292962521,
+    "y": 1595.8710728198628,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 933.4673799176945,
+    "y": 1811.1565176125503,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 913.9,
+    "tick_texture": 0.389,
+    "straightness_rms_widths": 0.456,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.736,
+    "tick_transitions_per_width": 1.47,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 124,
+   "t": 4.131666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.684,
+   "angle_deg": 41.2,
+   "blade_width_px": 43.3,
+   "hook": {
+    "x": -6.186253733232731,
+    "y": 7.063104667776239,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1080.8317279748169,
+    "y": 959.1224767352276,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1445.0,
+    "tick_texture": 0.512,
+    "straightness_rms_widths": 0.59,
+    "coverage": 0.882,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.4,
+    "tick_transitions_per_width": 1.08,
+    "two_sided_dark_fraction": 0.46,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 127,
+   "t": 4.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.803,
+   "angle_deg": 44.9,
+   "blade_width_px": 42.9,
+   "hook": {
+    "x": 28.119486449791186,
+    "y": -5.4698231775669885,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1051.4762060628664,
+    "y": 1014.7096082608789,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1445.0,
+    "tick_texture": 0.425,
+    "straightness_rms_widths": 0.529,
+    "coverage": 0.882,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.552,
+    "tick_transitions_per_width": 1.34,
+    "two_sided_dark_fraction": 0.66,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 157,
+   "t": 5.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 12.0,
+   "blade_width_px": 46.2,
+   "hook": {
+    "x": 130.92681814181162,
+    "y": 1130.542751688839,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1170.1844153200323,
+    "y": 1351.5628476704965,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1062.5,
+    "tick_texture": 0.288,
+    "straightness_rms_widths": 0.323,
+    "coverage": 0.976,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 3.26,
+    "two_sided_dark_fraction": 0.9,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 4
+   }
+  },
+  {
+   "frame_index": 160,
+   "t": 5.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.987,
+   "angle_deg": 3.4,
+   "blade_width_px": 54.1,
+   "hook": {
+    "x": -1.6872943325489727,
+    "y": 1244.2333624111554,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1358.2769550204005,
+    "y": 1324.0927068628698,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1362.3,
+    "tick_texture": 0.361,
+    "straightness_rms_widths": 0.334,
+    "coverage": 0.975,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.91,
+    "two_sided_dark_fraction": 0.88,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 163,
+   "t": 5.431666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 173.9,
+   "blade_width_px": 57.0,
+   "hook": {
+    "x": -2.791899874804495,
+    "y": 1339.3907725751249,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1129.832511410119,
+    "y": 1219.04568009226,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1139.0,
+    "tick_texture": 0.296,
+    "straightness_rms_widths": 0.374,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.94,
+    "tick_transitions_per_width": 1.95,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 165,
+   "t": 5.5,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 165.8,
+   "blade_width_px": 64.0,
+   "hook": {
+    "x": -4.068953298399198,
+    "y": 1380.7578953670072,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 688.1020874749925,
+    "y": 1205.557341919999,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 714.0,
+    "tick_texture": 0.272,
+    "straightness_rms_widths": 0.296,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 3.5,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 183,
+   "t": 6.1000000000000005,
+   "detector": "hand-assisted",
+   "confidence": 0.844,
+   "angle_deg": 161.6,
+   "blade_width_px": 81.2,
+   "hook": {
+    "x": 1127.2653268810286,
+    "y": 970.4694353797947,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": -12.247560210228949,
+    "y": 1348.5905913433314,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1200.6,
+    "tick_texture": 0.307,
+    "straightness_rms_widths": 0.465,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.713,
+    "tick_transitions_per_width": 4.53,
+    "two_sided_dark_fraction": 0.78,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 186,
+   "t": 6.2,
+   "detector": "hand-assisted",
+   "confidence": 0.942,
+   "angle_deg": 173.0,
+   "blade_width_px": 74.5,
+   "hook": {
+    "x": 1366.3444632271305,
+    "y": 1216.8126453318603,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": -4.274152961680452,
+    "y": 1384.5818051512358,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1380.8,
+    "tick_texture": 0.288,
+    "straightness_rms_widths": 0.395,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.887,
+    "tick_transitions_per_width": 3.29,
+    "two_sided_dark_fraction": 0.89,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 1,
+    "identity_relabelled": true
+   }
+  },
+  {
+   "frame_index": 189,
+   "t": 6.300000000000001,
+   "detector": "hand-assisted",
+   "confidence": 0.963,
+   "angle_deg": 7.2,
+   "blade_width_px": 71.4,
+   "hook": {
+    "x": 1361.3940983900238,
+    "y": 1374.6048069955016,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": -3.0325465271208993,
+    "y": 1202.7422710369988,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1375.2,
+    "tick_texture": 0.271,
+    "straightness_rms_widths": 0.369,
+    "coverage": 0.975,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.952,
+    "tick_transitions_per_width": 4.26,
+    "two_sided_dark_fraction": 0.94,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0,
+    "identity_relabelled": true
+   }
+  },
+  {
+   "frame_index": 208,
+   "t": 6.9316666666666675,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 14.3,
+   "blade_width_px": 53.4,
+   "hook": {
+    "x": 122.35037521620991,
+    "y": 921.4402218641451,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1119.1148429324267,
+    "y": 1174.9611503438762,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1028.5,
+    "tick_texture": 0.283,
+    "straightness_rms_widths": 0.326,
+    "coverage": 0.975,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 4.05,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 211,
+   "t": 7.031666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 10.3,
+   "blade_width_px": 61.1,
+   "hook": {
+    "x": -3.7140788801431386,
+    "y": 1006.4255501350291,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 840.9354246787309,
+    "y": 1160.0140430500633,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 858.5,
+    "tick_texture": 0.291,
+    "straightness_rms_widths": 0.338,
+    "coverage": 0.96,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 3.92,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 214,
+   "t": 7.131666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.945,
+   "angle_deg": 3.5,
+   "blade_width_px": 71.1,
+   "hook": {
+    "x": -2.464040343428389,
+    "y": 1148.6960030932357,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1359.148386660287,
+    "y": 1230.802549693842,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1364.1,
+    "tick_texture": 0.336,
+    "straightness_rms_widths": 0.393,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.892,
+    "tick_transitions_per_width": 2.76,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 217,
+   "t": 7.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 174.2,
+   "blade_width_px": 70.8,
+   "hook": {
+    "x": 1358.166102589,
+    "y": 1117.6366321831392,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 123.09993975225879,
+    "y": 1243.5551900652706,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1241.5,
+    "tick_texture": 0.358,
+    "straightness_rms_widths": 0.33,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.94,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 4,
+    "identity_conflict": true
+   }
+  },
+  {
+   "frame_index": 220,
+   "t": 7.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 169.2,
+   "blade_width_px": 81.2,
+   "hook": {
+    "x": -9.350451811138857,
+    "y": 1274.326186953509,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 975.7587503353911,
+    "y": 1085.72895380708,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1003.0,
+    "tick_texture": 0.303,
+    "straightness_rms_widths": 0.404,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.866,
+    "tick_transitions_per_width": 4.21,
+    "two_sided_dark_fraction": 0.95,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 223,
+   "t": 7.4316666666666675,
+   "detector": "hand-assisted",
+   "confidence": 0.803,
+   "angle_deg": 162.1,
+   "blade_width_px": 106.3,
+   "hook": {
+    "x": -5.538507954819393,
+    "y": 1297.5647015047277,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1374.7771162851927,
+    "y": 850.5445844602452,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1450.9,
+    "tick_texture": 0.473,
+    "straightness_rms_widths": 0.452,
+    "coverage": 0.865,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.745,
+    "tick_transitions_per_width": 4.84,
+    "two_sided_dark_fraction": 0.57,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 5
+   }
+  },
+  {
+   "frame_index": 241,
+   "t": 8.031666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.895,
+   "angle_deg": 170.6,
+   "blade_width_px": 77.6,
+   "hook": {
+    "x": -7.372852776786946,
+    "y": 1125.4567770644767,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1285.7275601942997,
+    "y": 912.2199788568487,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1310.6,
+    "tick_texture": 0.327,
+    "straightness_rms_widths": 0.429,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.801,
+    "tick_transitions_per_width": 3.73,
+    "two_sided_dark_fraction": 0.88,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 247,
+   "t": 8.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.994,
+   "angle_deg": 7.1,
+   "blade_width_px": 45.7,
+   "hook": {
+    "x": 745.3558767072025,
+    "y": 1097.8174335251922,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": -3.352794641345942,
+    "y": 1004.3601084576566,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 754.5,
+    "tick_texture": 0.361,
+    "straightness_rms_widths": 0.286,
+    "coverage": 0.989,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.88,
+    "two_sided_dark_fraction": 0.86,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 274,
+   "t": 9.13,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 24.7,
+   "blade_width_px": 40.8,
+   "hook": {
+    "x": 1356.7363086750713,
+    "y": 1805.770480110771,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 415.390402993979,
+    "y": 1373.4956561542838,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1035.9,
+    "tick_texture": 0.385,
+    "straightness_rms_widths": 0.34,
+    "coverage": 0.975,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.13,
+    "two_sided_dark_fraction": 0.93,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 4
+   }
+  },
+  {
+   "frame_index": 280,
+   "t": 9.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 177.8,
+   "blade_width_px": 39.6,
+   "hook": {
+    "x": -0.38322202292144897,
+    "y": 1695.7209879853317,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 840.4927709010534,
+    "y": 1663.3202726100126,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 841.5,
+    "tick_texture": 0.36,
+    "straightness_rms_widths": 0.315,
+    "coverage": 0.929,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.46,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 6
+   }
+  },
+  {
+   "frame_index": 283,
+   "t": 9.431666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 161.8,
+   "blade_width_px": 45.4,
+   "hook": {
+    "x": -2.413208746716397,
+    "y": 1771.9935054584582,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 490.1477851035147,
+    "y": 1610.0492839618764,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 518.5,
+    "tick_texture": 0.345,
+    "straightness_rms_widths": 0.3,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.63,
+    "two_sided_dark_fraction": 0.95,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 4
+   }
+  },
+  {
+   "frame_index": 286,
+   "t": 9.531666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 10.3,
+   "blade_width_px": 85.1,
+   "hook": {
+    "x": -3.559609508762046,
+    "y": 246.16710974156285,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1066.7549275395777,
+    "y": 441.5407011645975,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1088.0,
+    "tick_texture": 0.209,
+    "straightness_rms_widths": 0.374,
+    "coverage": 0.922,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.941,
+    "tick_transitions_per_width": 1.09,
+    "two_sided_dark_fraction": 0.52,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 289,
+   "t": 9.631666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 9.0,
+   "blade_width_px": 90.8,
+   "hook": {
+    "x": -6.496258158356823,
+    "y": 307.5049802698963,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 841.5126968136718,
+    "y": 441.3074188568466,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 858.5,
+    "tick_texture": 0.2,
+    "straightness_rms_widths": 0.361,
+    "coverage": 0.911,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.973,
+    "tick_transitions_per_width": 1.48,
+    "two_sided_dark_fraction": 0.5,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 292,
+   "t": 9.731666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 144.7,
+   "blade_width_px": 30.2,
+   "hook": {
+    "x": -1.0552859329871134,
+    "y": 1749.5072392213353,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 436.2120036757298,
+    "y": 1440.3833827662477,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 535.5,
+    "tick_texture": 0.381,
+    "straightness_rms_widths": 0.35,
+    "coverage": 0.952,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.47,
+    "two_sided_dark_fraction": 0.9,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 295,
+   "t": 9.831666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 141.7,
+   "blade_width_px": 29.4,
+   "hook": {
+    "x": 1.091347501063095,
+    "y": 1806.215709107198,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 501.45408423283067,
+    "y": 1411.1924399009126,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 637.5,
+    "tick_texture": 0.356,
+    "straightness_rms_widths": 0.343,
+    "coverage": 0.987,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.38,
+    "two_sided_dark_fraction": 0.9,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 298,
+   "t": 9.931666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 140.5,
+   "blade_width_px": 27.1,
+   "hook": {
+    "x": 74.16557077800697,
+    "y": 1812.3067821031764,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 565.9169815901464,
+    "y": 1406.6137994295316,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 637.5,
+    "tick_texture": 0.353,
+    "straightness_rms_widths": 0.362,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.969,
+    "tick_transitions_per_width": 1.28,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 301,
+   "t": 10.031666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 139.9,
+   "blade_width_px": 26.8,
+   "hook": {
+    "x": 151.41259311667463,
+    "y": 1809.6709213325726,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 625.7725038432218,
+    "y": 1409.6672345468746,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 620.5,
+    "tick_texture": 0.342,
+    "straightness_rms_widths": 0.345,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.21,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 304,
+   "t": 10.131666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 2.9,
+   "blade_width_px": 73.9,
+   "hook": {
+    "x": -3.7073047227369305,
+    "y": 454.52906375472435,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 751.7926239007008,
+    "y": 493.41456033756026,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 756.5,
+    "tick_texture": 0.181,
+    "straightness_rms_widths": 0.406,
+    "coverage": 0.899,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.859,
+    "tick_transitions_per_width": 1.37,
+    "two_sided_dark_fraction": 0.57,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 307,
+   "t": 10.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 138.6,
+   "blade_width_px": 25.2,
+   "hook": {
+    "x": 261.14410947815384,
+    "y": 1808.5848835865102,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 707.2627479936261,
+    "y": 1414.8804704109273,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 595.0,
+    "tick_texture": 0.349,
+    "straightness_rms_widths": 0.357,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.983,
+    "tick_transitions_per_width": 1.31,
+    "two_sided_dark_fraction": 0.9,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 310,
+   "t": 10.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 1.9,
+   "blade_width_px": 87.8,
+   "hook": {
+    "x": -1.9908007519997992,
+    "y": 478.5532877072032,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 771.072500334426,
+    "y": 504.5414056833173,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 773.5,
+    "tick_texture": 0.219,
+    "straightness_rms_widths": 0.367,
+    "coverage": 0.901,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.958,
+    "tick_transitions_per_width": 1.93,
+    "two_sided_dark_fraction": 0.5,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 5
+   }
+  },
+  {
+   "frame_index": 313,
+   "t": 10.431666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 137.2,
+   "blade_width_px": 28.9,
+   "hook": {
+    "x": 315.5685201379982,
+    "y": 1812.1084360015366,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 727.2369375321593,
+    "y": 1430.9915040266487,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 561.0,
+    "tick_texture": 0.358,
+    "straightness_rms_widths": 0.354,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.99,
+    "tick_transitions_per_width": 1.34,
+    "two_sided_dark_fraction": 0.89,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 316,
+   "t": 10.531666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 137.5,
+   "blade_width_px": 28.8,
+   "hook": {
+    "x": 318.55344625934976,
+    "y": 1809.2503623839602,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 731.8870528601111,
+    "y": 1429.9400297876582,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 561.0,
+    "tick_texture": 0.375,
+    "straightness_rms_widths": 0.339,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.44,
+    "two_sided_dark_fraction": 0.89,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 319,
+   "t": 10.631666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 137.6,
+   "blade_width_px": 26.8,
+   "hook": {
+    "x": 311.4073259432776,
+    "y": 1807.6554111896648,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 732.1759839554293,
+    "y": 1423.8794720827236,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 569.5,
+    "tick_texture": 0.341,
+    "straightness_rms_widths": 0.369,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.951,
+    "tick_transitions_per_width": 1.23,
+    "two_sided_dark_fraction": 0.92,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 322,
+   "t": 10.731666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.997,
+   "angle_deg": 0.5,
+   "blade_width_px": 73.7,
+   "hook": {
+    "x": -0.5304905710911403,
+    "y": 475.43443925329757,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 772.9409709336065,
+    "y": 482.0775542042711,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 773.5,
+    "tick_texture": 0.189,
+    "straightness_rms_widths": 0.416,
+    "coverage": 0.901,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.834,
+    "tick_transitions_per_width": 1.62,
+    "two_sided_dark_fraction": 0.54,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 325,
+   "t": 10.831666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 136.9,
+   "blade_width_px": 24.9,
+   "hook": {
+    "x": 311.96685689748534,
+    "y": 1808.1860398678139,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 734.2447336322189,
+    "y": 1413.5147923855143,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 578.0,
+    "tick_texture": 0.325,
+    "straightness_rms_widths": 0.384,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.914,
+    "tick_transitions_per_width": 1.04,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 328,
+   "t": 10.931666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 135.6,
+   "blade_width_px": 24.9,
+   "hook": {
+    "x": 323.19869562935014,
+    "y": 1810.8326696127042,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 730.4179292316355,
+    "y": 1412.708651778041,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 569.5,
+    "tick_texture": 0.317,
+    "straightness_rms_widths": 0.343,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.23,
+    "two_sided_dark_fraction": 0.93,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 331,
+   "t": 11.031666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.981,
+   "angle_deg": 0.4,
+   "blade_width_px": 96.4,
+   "hook": {
+    "x": -0.4177741218729854,
+    "y": 478.5139440120304,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 798.5602711628751,
+    "y": 484.4377007059859,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 799.0,
+    "tick_texture": 0.269,
+    "straightness_rms_widths": 0.432,
+    "coverage": 0.915,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.795,
+    "tick_transitions_per_width": 2.53,
+    "two_sided_dark_fraction": 0.53,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 334,
+   "t": 11.131666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.995,
+   "angle_deg": 179.4,
+   "blade_width_px": 73.7,
+   "hook": {
+    "x": -0.6126558497659288,
+    "y": 497.52795749312145,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 772.8393035814054,
+    "y": 488.907827042191,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 773.5,
+    "tick_texture": 0.198,
+    "straightness_rms_widths": 0.422,
+    "coverage": 0.912,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.821,
+    "tick_transitions_per_width": 1.33,
+    "two_sided_dark_fraction": 0.53,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 337,
+   "t": 11.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 135.9,
+   "blade_width_px": 26.9,
+   "hook": {
+    "x": 415.4818914018352,
+    "y": 1775.5392171817903,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 745.0488408885676,
+    "y": 1456.0605348425988,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 459.0,
+    "tick_texture": 0.358,
+    "straightness_rms_widths": 0.371,
+    "coverage": 1.0,
+    "length_score": 0.964,
+    "texture_score": 1.0,
+    "straight_score": 0.947,
+    "tick_transitions_per_width": 1.52,
+    "two_sided_dark_fraction": 0.86,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 340,
+   "t": 11.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 177.9,
+   "blade_width_px": 87.9,
+   "hook": {
+    "x": -1.7783435470377307,
+    "y": 540.8242496419416,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 796.6853137129034,
+    "y": 511.552881458746,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 799.0,
+    "tick_texture": 0.24,
+    "straightness_rms_widths": 0.383,
+    "coverage": 0.904,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.919,
+    "tick_transitions_per_width": 1.87,
+    "two_sided_dark_fraction": 0.5,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 343,
+   "t": 11.431666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 177.5,
+   "blade_width_px": 93.8,
+   "hook": {
+    "x": -2.204344646020639,
+    "y": 558.4717984362801,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 796.04133705707,
+    "y": 523.7616138845046,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 799.0,
+    "tick_texture": 0.245,
+    "straightness_rms_widths": 0.364,
+    "coverage": 0.915,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.964,
+    "tick_transitions_per_width": 2.0,
+    "two_sided_dark_fraction": 0.48,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 361,
+   "t": 12.031666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 144.8,
+   "blade_width_px": 61.8,
+   "hook": {
+    "x": 123.60072403732438,
+    "y": 1823.4182722771022,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 596.0239080745329,
+    "y": 1490.4012295210216,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 578.0,
+    "tick_texture": 0.207,
+    "straightness_rms_widths": 0.286,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 3.63,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 364,
+   "t": 12.131666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 135.7,
+   "blade_width_px": 54.9,
+   "hook": {
+    "x": 218.51156047988195,
+    "y": 1816.8134161987764,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 711.5255888204599,
+    "y": 1336.2206264594063,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 688.5,
+    "tick_texture": 0.206,
+    "straightness_rms_widths": 0.316,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 3.03,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 376,
+   "t": 12.531666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 4.9,
+   "blade_width_px": 48.0,
+   "hook": {
+    "x": 725.8987958119961,
+    "y": 276.73093977273487,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1356.9855806591574,
+    "y": 330.7810882528813,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 633.4,
+    "tick_texture": 0.107,
+    "straightness_rms_widths": 0.304,
+    "coverage": 0.947,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 0.91,
+    "two_sided_dark_fraction": 0.9,
+    "end_not_seen_because": {
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 7,
+    "hand_at_hook": true
+   }
+  },
+  {
+   "frame_index": 379,
+   "t": 12.631666666666668,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 4.9,
+   "blade_width_px": 45.9,
+   "hook": {
+    "x": 720.6299140994739,
+    "y": 274.96442264178535,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1359.2552132381688,
+    "y": 329.8770349329601,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 641.0,
+    "tick_texture": 0.105,
+    "straightness_rms_widths": 0.307,
+    "coverage": 0.96,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 0.93,
+    "two_sided_dark_fraction": 0.92,
+    "end_not_seen_because": {
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 3,
+    "hand_at_hook": true
+   }
+  },
+  {
+   "frame_index": 382,
+   "t": 12.731666666666667,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 4.6,
+   "blade_width_px": 43.1,
+   "hook": {
+    "x": 740.8107506464471,
+    "y": 275.7065819073776,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1358.9993605505892,
+    "y": 325.9510279246165,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 620.2,
+    "tick_texture": 0.121,
+    "straightness_rms_widths": 0.321,
+    "coverage": 0.973,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 0.9,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 2,
+    "hand_at_hook": true
+   }
+  },
+  {
+   "frame_index": 394,
+   "t": 13.131666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.919,
+   "angle_deg": 11.6,
+   "blade_width_px": 52.9,
+   "hook": {
+    "x": 699.7333212168404,
+    "y": 453.8208651697677,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1287.6490976577447,
+    "y": 574.419025669352,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 600.2,
+    "tick_texture": 0.156,
+    "straightness_rms_widths": 0.304,
+    "coverage": 0.845,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.06,
+    "two_sided_dark_fraction": 0.93,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 397,
+   "t": 13.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.948,
+   "angle_deg": 92.5,
+   "blade_width_px": 37.2,
+   "hook": {
+    "x": 719.4222237139061,
+    "y": 1731.6540541656416,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 751.8946718300743,
+    "y": 992.8673625297946,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 739.5,
+    "tick_texture": 0.32,
+    "straightness_rms_widths": 0.462,
+    "coverage": 0.943,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.72,
+    "tick_transitions_per_width": 1.31,
+    "two_sided_dark_fraction": 0.73,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 400,
+   "t": 13.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.733,
+   "angle_deg": 96.5,
+   "blade_width_px": 37.6,
+   "hook": {
+    "x": 683.8579111141595,
+    "y": 1806.5710116055843,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 855.8060573307308,
+    "y": 303.3735057142613,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1513.0,
+    "tick_texture": 0.451,
+    "straightness_rms_widths": 0.517,
+    "coverage": 0.697,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.583,
+    "tick_transitions_per_width": 1.02,
+    "two_sided_dark_fraction": 0.42,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 4
+   }
+  },
+  {
+   "frame_index": 403,
+   "t": 13.431666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.824,
+   "angle_deg": 95.4,
+   "blade_width_px": 36.9,
+   "hook": {
+    "x": 698.290818279241,
+    "y": 1718.1935547152307,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 775.8990698508962,
+    "y": 897.3542443373946,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 824.5,
+    "tick_texture": 0.414,
+    "straightness_rms_widths": 0.533,
+    "coverage": 0.948,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.542,
+    "tick_transitions_per_width": 1.57,
+    "two_sided_dark_fraction": 0.62,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 406,
+   "t": 13.531666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.947,
+   "angle_deg": 94.3,
+   "blade_width_px": 39.8,
+   "hook": {
+    "x": 707.1527925038641,
+    "y": 1743.473319719077,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 767.5071534791891,
+    "y": 938.2319995858678,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 807.5,
+    "tick_texture": 0.364,
+    "straightness_rms_widths": 0.461,
+    "coverage": 0.937,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.723,
+    "tick_transitions_per_width": 1.23,
+    "two_sided_dark_fraction": 0.75,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 409,
+   "t": 13.631666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.953,
+   "angle_deg": 92.6,
+   "blade_width_px": 40.0,
+   "hook": {
+    "x": 720.8734207423679,
+    "y": 1686.1400286551072,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 753.835180192282,
+    "y": 947.3749791379529,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 739.5,
+    "tick_texture": 0.35,
+    "straightness_rms_widths": 0.459,
+    "coverage": 0.943,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.728,
+    "tick_transitions_per_width": 1.62,
+    "two_sided_dark_fraction": 0.72,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 412,
+   "t": 13.731666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.953,
+   "angle_deg": 93.2,
+   "blade_width_px": 39.8,
+   "hook": {
+    "x": 717.2193946604738,
+    "y": 1705.8483896657058,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 759.3726723854551,
+    "y": 959.0370955868791,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 748.0,
+    "tick_texture": 0.34,
+    "straightness_rms_widths": 0.459,
+    "coverage": 0.943,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.727,
+    "tick_transitions_per_width": 1.91,
+    "two_sided_dark_fraction": 0.73,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 4
+   }
+  },
+  {
+   "frame_index": 415,
+   "t": 13.831666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.957,
+   "angle_deg": 93.7,
+   "blade_width_px": 40.0,
+   "hook": {
+    "x": 707.3693447688285,
+    "y": 1746.1867102759577,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 757.8115582594338,
+    "y": 965.8152927535273,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 782.0,
+    "tick_texture": 0.364,
+    "straightness_rms_widths": 0.457,
+    "coverage": 0.946,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.733,
+    "tick_transitions_per_width": 1.28,
+    "two_sided_dark_fraction": 0.72,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 5
+   }
+  },
+  {
+   "frame_index": 418,
+   "t": 13.931666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.837,
+   "angle_deg": 94.4,
+   "blade_width_px": 34.2,
+   "hook": {
+    "x": 696.7761709533361,
+    "y": 1751.634641410718,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 762.4164766102758,
+    "y": 895.6477313059667,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 858.5,
+    "tick_texture": 0.31,
+    "straightness_rms_widths": 0.527,
+    "coverage": 0.95,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.557,
+    "tick_transitions_per_width": 1.48,
+    "two_sided_dark_fraction": 0.64,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 427,
+   "t": 14.231666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.94,
+   "angle_deg": 95.4,
+   "blade_width_px": 37.2,
+   "hook": {
+    "x": 687.5508547295277,
+    "y": 1806.617610697866,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 764.3101163376514,
+    "y": 994.2359406996969,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 816.0,
+    "tick_texture": 0.319,
+    "straightness_rms_widths": 0.468,
+    "coverage": 0.948,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.705,
+    "tick_transitions_per_width": 1.69,
+    "two_sided_dark_fraction": 0.72,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 430,
+   "t": 14.331666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.862,
+   "angle_deg": 95.1,
+   "blade_width_px": 37.2,
+   "hook": {
+    "x": 696.5745801998751,
+    "y": 1806.8013152591523,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 766.9973058773653,
+    "y": 1010.9108363501367,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 799.0,
+    "tick_texture": 0.345,
+    "straightness_rms_widths": 0.512,
+    "coverage": 0.947,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.594,
+    "tick_transitions_per_width": 1.58,
+    "two_sided_dark_fraction": 0.66,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 433,
+   "t": 14.431666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.833,
+   "angle_deg": 95.0,
+   "blade_width_px": 37.4,
+   "hook": {
+    "x": 707.6658529234534,
+    "y": 1807.0199913198821,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 776.2605676246291,
+    "y": 1028.034267228352,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 782.0,
+    "tick_texture": 0.355,
+    "straightness_rms_widths": 0.528,
+    "coverage": 0.946,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.555,
+    "tick_transitions_per_width": 1.44,
+    "two_sided_dark_fraction": 0.63,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 436,
+   "t": 14.531666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.831,
+   "angle_deg": 95.0,
+   "blade_width_px": 40.0,
+   "hook": {
+    "x": 723.8800554524279,
+    "y": 1807.2053573049047,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 790.3791149023093,
+    "y": 1053.6337866998654,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 756.5,
+    "tick_texture": 0.372,
+    "straightness_rms_widths": 0.529,
+    "coverage": 0.944,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.553,
+    "tick_transitions_per_width": 1.53,
+    "two_sided_dark_fraction": 0.62,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 442,
+   "t": 14.731666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.786,
+   "angle_deg": 95.4,
+   "blade_width_px": 40.3,
+   "hook": {
+    "x": 738.6293676261985,
+    "y": 1807.4345315443359,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 807.5590035756313,
+    "y": 1079.6916377292955,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 731.0,
+    "tick_texture": 0.312,
+    "straightness_rms_widths": 0.552,
+    "coverage": 0.942,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.496,
+    "tick_transitions_per_width": 1.1,
+    "two_sided_dark_fraction": 0.61,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 445,
+   "t": 14.831666666666667,
+   "detector": "hand-assisted",
+   "confidence": 0.784,
+   "angle_deg": 94.6,
+   "blade_width_px": 39.9,
+   "hook": {
+    "x": 729.5862610548471,
+    "y": 1807.215061488646,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 787.2386889815067,
+    "y": 1087.018961462277,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 722.5,
+    "tick_texture": 0.331,
+    "straightness_rms_widths": 0.555,
+    "coverage": 0.953,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.488,
+    "tick_transitions_per_width": 1.33,
+    "two_sided_dark_fraction": 0.61,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 4
+   }
+  },
+  {
+   "frame_index": 448,
+   "t": 14.931666666666668,
+   "detector": "hand-assisted",
+   "confidence": 0.844,
+   "angle_deg": 93.1,
+   "blade_width_px": 39.9,
+   "hook": {
+    "x": 701.0393371871731,
+    "y": 1806.4563131203854,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 740.2096694625042,
+    "y": 1093.5315763821807,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 714.0,
+    "tick_texture": 0.402,
+    "straightness_rms_widths": 0.524,
+    "coverage": 0.952,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.566,
+    "tick_transitions_per_width": 1.73,
+    "two_sided_dark_fraction": 0.61,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 4
+   }
+  },
+  {
+   "frame_index": 478,
+   "t": 15.930000000000001,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 99.1,
+   "blade_width_px": 40.1,
+   "hook": {
+    "x": 480.7097075120789,
+    "y": 1807.857126948251,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 550.6216772631985,
+    "y": 1371.4211916893858,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 442.0,
+    "tick_texture": 0.133,
+    "straightness_rms_widths": 0.348,
+    "coverage": 1.0,
+    "length_score": 0.929,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.36,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 481,
+   "t": 16.03,
+   "detector": "hand-assisted",
+   "confidence": 1.0,
+   "angle_deg": 101.1,
+   "blade_width_px": 41.7,
+   "hook": {
+    "x": 525.0439118787108,
+    "y": 1807.2327252844964,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 618.4620168998299,
+    "y": 1331.8241524020827,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 484.5,
+    "tick_texture": 0.135,
+    "straightness_rms_widths": 0.312,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 3.19,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 493,
+   "t": 16.43,
+   "detector": "hand-assisted",
+   "confidence": 0.883,
+   "angle_deg": 96.5,
+   "blade_width_px": 37.6,
+   "hook": {
+    "x": 563.0844203951115,
+    "y": 1654.5809309291683,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 604.6548779839927,
+    "y": 1291.4526527035082,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 365.5,
+    "tick_texture": 0.228,
+    "straightness_rms_widths": 0.284,
+    "coverage": 1.0,
+    "length_score": 0.768,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.98,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 0
+   }
+  },
+  {
+   "frame_index": 499,
+   "t": 16.630000000000003,
+   "detector": "hand-assisted",
+   "confidence": 0.883,
+   "angle_deg": 90.9,
+   "blade_width_px": 36.9,
+   "hook": {
+    "x": 617.5951766402034,
+    "y": 1663.2108104143367,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 623.4357344473285,
+    "y": 1297.757474950336,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 365.5,
+    "tick_texture": 0.212,
+    "straightness_rms_widths": 0.312,
+    "coverage": 1.0,
+    "length_score": 0.768,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.93,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 2
+   }
+  },
+  {
+   "frame_index": 517,
+   "t": 17.23,
+   "detector": "hand-assisted",
+   "confidence": 0.489,
+   "angle_deg": 62.0,
+   "blade_width_px": 53.0,
+   "hook": {
+    "x": 735.7391914778641,
+    "y": 1696.196227758086,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 396.6802767270357,
+    "y": 1058.3809303427029,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 722.3,
+    "tick_texture": 0.568,
+    "straightness_rms_widths": 0.603,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 0.703,
+    "straight_score": 0.367,
+    "tick_transitions_per_width": 1.1,
+    "two_sided_dark_fraction": 0.45,
+    "end_not_seen_because": {},
+    "hand_keypoint_sets": 1
+   }
+  },
+  {
+   "frame_index": 562,
+   "t": 18.73,
+   "detector": "hand-assisted",
+   "confidence": 0.743,
+   "angle_deg": 86.2,
+   "blade_width_px": 54.3,
+   "hook": {
+    "x": 784.3254774298746,
+    "y": 1806.5586955246758,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 749.5740687690231,
+    "y": 1282.7270306918847,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 525.0,
+    "tick_texture": 0.345,
+    "straightness_rms_widths": 0.551,
+    "coverage": 0.839,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.498,
+    "tick_transitions_per_width": 1.24,
+    "two_sided_dark_fraction": 0.45,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    },
+    "hand_keypoint_sets": 3
+   }
+  },
+  {
+   "frame_index": 571,
+   "t": 19.03,
+   "detector": "hand-assisted",
+   "confidence": 0.748,
+   "angle_deg": 178.4,
+   "blade_width_px": 130.4,
+   "hook": {
+    "x": 306.1970486093878,
+    "y": 531.0769820969424,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1361.0301933231742,
+    "y": 501.00037778628086,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 1055.3,
+    "tick_texture": 0.407,
+    "straightness_rms_widths": 0.511,
+    "coverage": 0.935,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.599,
+    "tick_transitions_per_width": 4.7,
+    "two_sided_dark_fraction": 0.4,
+    "end_not_seen_because": {
+     "housing": "frame_edge"
+    },
+    "hand_keypoint_sets": 0
+   }
+  }
+ ],
+ "sampled_times": [
+  0.0,
+  0.1,
+  0.2,
+  0.3,
+  0.4,
+  0.5,
+  0.6,
+  0.7,
+  0.8,
+  0.9,
+  1.0,
+  1.1,
+  1.2,
+  1.3,
+  1.4,
+  1.5,
+  1.6,
+  1.7,
+  1.8,
+  1.9,
+  2.0,
+  2.1,
+  2.2,
+  2.3,
+  2.4,
+  2.5,
+  2.6,
+  2.7,
+  2.8,
+  2.9,
+  3.0333,
+  3.1,
+  3.2,
+  3.3317,
+  3.4317,
+  3.5317,
+  3.6317,
+  3.7317,
+  3.8317,
+  3.9317,
+  4.0317,
+  4.1317,
+  4.2317,
+  4.3317,
+  4.4317,
+  4.5317,
+  4.6317,
+  4.7317,
+  4.8317,
+  4.9317,
+  5.0317,
+  5.1317,
+  5.2317,
+  5.3317,
+  5.4317,
+  5.5,
+  5.6,
+  5.7,
+  5.8,
+  5.9,
+  6.0,
+  6.1,
+  6.2,
+  6.3,
+  6.4,
+  6.5317,
+  6.6317,
+  6.7317,
+  6.8317,
+  6.9317,
+  7.0317,
+  7.1317,
+  7.2317,
+  7.3317,
+  7.4317,
+  7.5317,
+  7.6317,
+  7.7317,
+  7.8317,
+  7.9317,
+  8.0317,
+  8.1317,
+  8.2317,
+  8.3317,
+  8.4317,
+  8.5317,
+  8.6317,
+  8.7317,
+  8.8317,
+  8.9317,
+  9.0317,
+  9.13,
+  9.23,
+  9.3317,
+  9.4317,
+  9.5317,
+  9.6317,
+  9.7317,
+  9.8317,
+  9.9317,
+  10.0317,
+  10.1317,
+  10.2317,
+  10.3317,
+  10.4317,
+  10.5317,
+  10.6317,
+  10.7317,
+  10.8317,
+  10.9317,
+  11.0317,
+  11.1317,
+  11.2317,
+  11.3317,
+  11.4317,
+  11.5317,
+  11.6317,
+  11.7317,
+  11.8317,
+  11.9317,
+  12.0317,
+  12.1317,
+  12.2317,
+  12.3317,
+  12.4317,
+  12.5317,
+  12.6317,
+  12.7317,
+  12.8317,
+  12.9317,
+  13.0317,
+  13.1317,
+  13.2317,
+  13.3317,
+  13.4317,
+  13.5317,
+  13.6317,
+  13.7317,
+  13.8317,
+  13.9317,
+  14.0317,
+  14.1317,
+  14.2317,
+  14.3317,
+  14.4317,
+  14.5317,
+  14.6317,
+  14.7317,
+  14.8317,
+  14.9317,
+  15.0317,
+  15.1317,
+  15.2317,
+  15.3317,
+  15.4317,
+  15.53,
+  15.63,
+  15.73,
+  15.83,
+  15.93,
+  16.03,
+  16.13,
+  16.23,
+  16.33,
+  16.43,
+  16.53,
+  16.63,
+  16.73,
+  16.83,
+  16.93,
+  17.03,
+  17.13,
+  17.23,
+  17.33,
+  17.43,
+  17.53,
+  17.63,
+  17.73,
+  17.83,
+  17.93,
+  18.03,
+  18.13,
+  18.23,
+  18.33,
+  18.43,
+  18.53,
+  18.63,
+  18.73,
+  18.83,
+  18.93,
+  19.03,
+  19.13,
+  19.23,
+  19.33,
+  19.43,
+  19.53,
+  19.63,
+  19.73,
+  19.83
+ ],
+ "proxy_video": "video.mp4"
+}

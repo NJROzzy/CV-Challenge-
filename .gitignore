@@ -5,3 +5,4 @@ data/inbox/*
 data/outbox/
 !data/inbox/.gitkeep
 outputs/**/video.mp4
+outputs/**/diagnostics/
