@@ -321,6 +321,41 @@ def test_scene_builder_groups_measurements_and_falls_back_safely():
     assert all(p.source == 'registered' for p in clear[0].placements)
 
 
+def test_scene_builder_prefers_validated_clean_views():
+    from types import SimpleNamespace as NS
+    from reekon.scene import SceneBuilder
+
+    class Matcher:
+        """Clean frame 40 shows measurements 1 and 2; nothing maps measurement 3 cleanly."""
+        def map_validated(self, src, dst, pts):
+            pts = np.asarray(pts, float)
+            if dst == 40 and src in (2, 5):
+                return pts + 10, True, {'cycle_error_px': [1.0, 1.0]}
+            return None, False, {'reason': 'too_few_matches'}
+
+    class Reg:
+        def map_validated(self, src, dst, pts, tol):
+            return np.asarray(pts, float), np.array([True, True]), np.array([0.0, 0.0]), {'links': 0}
+
+    def meas(i, canvas):
+        e = lambda y: NS(x=100.0, y=y)
+        return NS(id=i, status='validated', start_t=1.0, end_t=2.0, canvas_frame=canvas, canvas_t=canvas * 0.1,
+                  hook=e(100), housing=e(800))
+    times = {f: f * 0.1 for f in (2, 5, 9, 40)}
+    clutter = {2: 0.3, 5: 0.3, 9: 0.3, 40: 0.01}
+    sb = SceneBuilder(Reg(), {f: 1.0 for f in times}, clutter, times, window_s=10,
+                      matcher=Matcher(), tape_frames={2, 5, 9})
+    scenes = sb.build([meas(1, 2), meas(2, 5), meas(3, 9)])
+    clean = [s for s in scenes if s.kind == 'clean_view']
+    assert len(clean) == 1 and clean[0].frame == 40
+    assert sorted(p.measurement_id for p in clean[0].placements) == [1, 2]
+    assert clean[0].placements[0].hook_xy == [110.0, 110.0]
+    # Measurement 3 had no clean mapping: it goes through the existing stages instead.
+    assert [p.measurement_id for s in scenes if s.kind != 'clean_view' for p in s.placements] == [3]
+    log = {(l['measurement'], l['stage']): l for l in sb.log}
+    assert log[(3, 'clean_view')]['rejected_because'] == {'too_few_matches': 1}
+
+
 # ---------------------------------------------------------------------------- annotation
 def test_render_adds_caption_band_and_skips_missing_endpoint():
     canvas = np.full((400, 300, 3), 200, np.uint8)
@@ -396,3 +431,27 @@ def test_footage_cabinet1_regression(tmp_path):
     assert all(m['hook']['status'] != 'missing' and m['housing']['status'] != 'missing' for m in ms)
     vertical = [m for m in ms if 60 < m['angle_deg'] < 120]
     assert len(vertical) == 2                                      # the two door heights
+
+
+# ---------------------------------------------------------------------------- labels
+def test_measurement_labels_type_direction_and_validated_position():
+    from types import SimpleNamespace as NS
+    from reekon.labels import kind_and_direction, label_measurements
+
+    def meas(i, hook, housing, canvas):
+        return NS(id=i, status='validated', canvas_frame=canvas, hook=NS(x=hook[0], y=hook[1]),
+                  housing=NS(x=housing[0], y=housing[1]))
+    assert kind_and_direction(meas(1, (100, 50), (110, 900), 0)) == ('height', 'top → bottom')
+    assert kind_and_direction(meas(1, (900, 500), (100, 520), 0)) == ('width', 'right → left')
+    assert kind_and_direction(meas(1, (100, 100), (600, 600), 0))[0] == 'diagonal'
+
+    class Reg:
+        """Frames 1 and 2 share a viewpoint (identity); frame 3 cannot be mapped anywhere."""
+        def map_validated(self, src, dst, pts, tol_frac=0.02):
+            if 3 in (src, dst):
+                return None, np.array([False]), np.array([np.inf]), {}
+            return np.asarray(pts, float), np.array([True]), np.array([0.0]), {}
+    ms = [meas(1, (700, 50), (700, 900), 1), meas(2, (200, 60), (200, 880), 2), meas(3, (400, 40), (400, 800), 3)]
+    label_measurements(ms, Reg())
+    assert ms[0].label['text'] == '#1 Height (right)' and ms[1].label['text'] == '#2 Height (left)'
+    assert ms[2].label['position'] is None and ms[2].label['text'] == '#3 Height'   # no validated view: no guess

@@ -247,25 +247,9 @@ class Registrar:
         point on different surfaces in the two frames and fails here. None if too few scene pixels."""
         gs, ms, s = self.frames[src]
         gd, _, sd = self.frames[dst]
-        c = np.asarray(point_full, dtype=np.float64) * s
-        r = radius_frac * self.work_width
-        ys, xs = np.mgrid[-r:r:40j, -r:r:40j]
-        P = np.stack([xs.ravel() + c[0], ys.ravel() + c[1]], 1)
-        inside = (P[:, 0] >= 0) & (P[:, 0] < gs.shape[1] - 1) & (P[:, 1] >= 0) & (P[:, 1] < gs.shape[0] - 1)
-        P = P[inside]
-        if len(P) < 100:
-            return None
-        valid = ms[P[:, 1].astype(int), P[:, 0].astype(int)] > 0
-        P = P[valid]
-        if len(P) < 100:
-            return None
-        Q = cv2.perspectiveTransform(P.reshape(-1, 1, 2), H_small).reshape(-1, 2) * (sd / s)
-        okq = (Q[:, 0] >= 0) & (Q[:, 0] < gd.shape[1] - 1) & (Q[:, 1] >= 0) & (Q[:, 1] < gd.shape[0] - 1)
-        if okq.sum() < 100:
-            return None
-        sample = lambda g, X: cv2.remap(g, X[:, 0].astype(np.float32).reshape(-1, 1),
-                                        X[:, 1].astype(np.float32).reshape(-1, 1), cv2.INTER_LINEAR).ravel()
-        return _ncc(sample(gs, P[okq]).astype(np.float64), sample(gd, Q[okq]).astype(np.float64))
+        S = np.diag([sd / s, sd / s, 1.0])            # work-scale src coords -> work-scale dst coords
+        return masked_patch_ncc(gs, ms, gd, S @ H_small, np.asarray(point_full, dtype=np.float64) * s,
+                                radius_frac * self.work_width)
 
     def map_validated(self, src, dst, points, tol_frac=0.02):
         """track_points src->dst, then back dst->src through independently computed reverse links.
@@ -297,6 +281,126 @@ class Registrar:
                   inside=[bool(x) for x in inside], cycle_ok=[bool(x) for x in cycle_ok], patch_ncc=[None if c is None else round(c, 2) for c in ncc])
         st.pop('H_small', None)
         return fwd, ok, err, st
+
+
+def masked_patch_ncc(gs, ms, gd, H, center, r, min_pixels=100):
+    """NCC between scene pixels (ms > 0) of a (2r)^2 patch around `center` in gs and the same samples
+    mapped by H into gd. None if fewer than min_pixels usable samples (inconclusive, not a failure)."""
+    ys, xs = np.mgrid[-r:r:40j, -r:r:40j]
+    P = np.stack([xs.ravel() + center[0], ys.ravel() + center[1]], 1)
+    P = P[(P[:, 0] >= 0) & (P[:, 0] < gs.shape[1] - 1) & (P[:, 1] >= 0) & (P[:, 1] < gs.shape[0] - 1)]
+    if len(P) < min_pixels:
+        return None
+    P = P[ms[P[:, 1].astype(int), P[:, 0].astype(int)] > 0]
+    if len(P) < min_pixels:
+        return None
+    Q = cv2.perspectiveTransform(P.reshape(-1, 1, 2), H).reshape(-1, 2)
+    ok = (Q[:, 0] >= 0) & (Q[:, 0] < gd.shape[1] - 1) & (Q[:, 1] >= 0) & (Q[:, 1] < gd.shape[0] - 1)
+    if ok.sum() < min_pixels:
+        return None
+    sample = lambda g, X: cv2.remap(g, X[:, 0].astype(np.float32).reshape(-1, 1),
+                                    X[:, 1].astype(np.float32).reshape(-1, 1), cv2.INTER_LINEAR).ravel()
+    return _ncc(sample(gs, P[ok]).astype(np.float64), sample(gd, Q[ok]).astype(np.float64))
+
+
+class KeyframeMatcher:
+    """Direct wide-baseline mapping from a reading frame to a CLEAN frame (no tape, no hands) anywhere in
+    the video, for scene canvases that look like the measured scene rather than the act of measuring.
+
+    Frame-to-frame chains rarely survive the head turns between measuring and looking at the whole
+    object, so the two frames are matched directly: SIFT at ~half resolution with a low contrast
+    threshold (white cabinet faces give only 27-115 keypoints at 640 px, 200-950 at 776 px; measured
+    on Cabinet-1), tape/housing/skin masked out, RANSAC homography. A mapping is accepted only if:
+      * >= min_inliers RANSAC inliers in each direction and an inlier ratio >= min_ratio;
+      * the forward and the independently estimated backward homography agree (round trip);
+      * the homography is plausible (orientation preserved, area scale within [1/20, 20]);
+      * both endpoints land inside the clean frame;
+      * every endpoint with enough visible scene around it passes the masked-patch NCC check, and at
+        least one endpoint is checkable.
+    A homography is exact only for one plane; these checks reject the cases where the measured
+    surface is not the plane that dominated the fit."""
+
+    def __init__(self, load_image, masks, work_width=776, min_inliers=25, min_ratio=0.2,
+                 tol_frac=0.02, min_ncc=0.5):
+        self.load_image = load_image      # frame -> full-resolution BGR (or None)
+        self.masks = masks                # frame -> scene mask at any resolution (255 = scene)
+        self.work_width = work_width
+        self.min_inliers = min_inliers
+        self.min_ratio = min_ratio
+        self.tol_frac = tol_frac
+        self.min_ncc = min_ncc
+        self._sift = cv2.SIFT_create(6000, contrastThreshold=0.02)
+        self._feat = {}
+        self._H = {}
+
+    def _features(self, f):
+        if f not in self._feat:
+            img = self.load_image(f)
+            if img is None:
+                self._feat[f] = None
+                return None
+            scale = self.work_width / img.shape[1]
+            gray = cv2.cvtColor(cv2.resize(img, (self.work_width, round(img.shape[0] * scale)),
+                                           interpolation=cv2.INTER_AREA), cv2.COLOR_BGR2GRAY)
+            mask = self.masks.get(f)
+            mask = (np.full(gray.shape, 255, np.uint8) if mask is None else
+                    cv2.resize(mask, (gray.shape[1], gray.shape[0]), interpolation=cv2.INTER_NEAREST))
+            kp, des = self._sift.detectAndCompute(gray, mask)
+            self._feat[f] = (gray, mask, scale, kp, des)
+        return self._feat[f]
+
+    def _homography(self, a, b):
+        key = (a, b)
+        if key not in self._H:
+            fa, fb = self._features(a), self._features(b)
+            res = (None, 0, 0.0)
+            if fa and fb and fa[4] is not None and fb[4] is not None and len(fa[3]) >= 8 and len(fb[3]) >= 8:
+                pairs = cv2.BFMatcher(cv2.NORM_L2).knnMatch(fa[4], fb[4], k=2)
+                good = [m for m, n in (x for x in pairs if len(x) == 2) if m.distance < 0.75 * n.distance]
+                if len(good) >= self.min_inliers:
+                    P0 = np.float32([fa[3][m.queryIdx].pt for m in good])
+                    P1 = np.float32([fb[3][m.trainIdx].pt for m in good])
+                    H, inl = cv2.findHomography(P0, P1, cv2.RANSAC, 3.0)
+                    n = int(inl.sum()) if inl is not None else 0
+                    res = (H, n, n / len(good))
+            self._H[key] = res
+        return self._H[key]
+
+    def map_validated(self, src, dst, points):
+        """Returns (points in dst full-res coords or None, ok, stats with the failure reason)."""
+        pts = np.asarray(points, dtype=np.float64).reshape(-1, 2)
+        Hf, nf, rf = self._homography(src, dst)
+        Hb, nb, rb = self._homography(dst, src)
+        st = {'method': 'direct', 'inliers': [nf, nb], 'inlier_ratio': [round(rf, 2), round(rb, 2)]}
+        if Hf is None or Hb is None or min(nf, nb) < self.min_inliers or min(rf, rb) < self.min_ratio:
+            st['reason'] = 'too_few_matches'
+            return None, False, st
+        A = Hf[:2, :2] / Hf[2, 2]
+        det = float(np.linalg.det(A))
+        if not 1 / 20 <= det <= 20:
+            st['reason'] = 'implausible_homography'
+            return None, False, st
+        gs, ms, ss = self._features(src)[:3]
+        gd, _, sd = self._features(dst)[:3]
+        q = cv2.perspectiveTransform((pts * ss).reshape(-1, 1, 2), Hf).reshape(-1, 2)
+        back = cv2.perspectiveTransform(q.reshape(-1, 1, 2), Hb).reshape(-1, 2) / ss
+        err = np.linalg.norm(back - pts, axis=1)
+        out = q / sd
+        H_img, W_img = gd.shape[0] / sd, gd.shape[1] / sd
+        inside = (out[:, 0] >= 0) & (out[:, 0] < W_img) & (out[:, 1] >= 0) & (out[:, 1] < H_img)
+        st.update(cycle_error_px=[round(float(e), 1) for e in err], inside=[bool(x) for x in inside])
+        if not inside.all():
+            st['reason'] = 'endpoint_outside_frame'
+            return out, False, st
+        if not (err <= self.tol_frac * np.hypot(W_img, H_img)).all():
+            st['reason'] = 'round_trip_error'
+            return out, False, st
+        ncc = [masked_patch_ncc(gs, ms, gd, Hf, p * ss, 0.12 * self.work_width) for p in pts]
+        st['patch_ncc'] = [None if c is None else round(c, 2) for c in ncc]
+        if not (all(c is None or c >= self.min_ncc for c in ncc) and any(c is not None for c in ncc)):
+            st['reason'] = 'appearance_mismatch'
+            return out, False, st
+        return out, True, st
 
 
 def _ncc(a, b):

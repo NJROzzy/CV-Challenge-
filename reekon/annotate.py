@@ -90,7 +90,7 @@ def draw_measurement(img, m, T, scale_ref):
         _label(img, f"{m['id']}{letter}", (p[0] + r + 6, p[1] - r - 6), scale_ref / 900, color, th)
     if len(pts) == 2:
         mid = ((pts['hook'][0] + pts['housing'][0]) // 2, (pts['hook'][1] + pts['housing'][1]) // 2)
-        _label(img, f"#{m['id']}", (mid[0] + r, mid[1] - r), scale_ref / 700, color, th + 1)
+        _label(img, (m.get('label') or {}).get('text', f"#{m['id']}"), (mid[0] + r, mid[1] - r), scale_ref / 700, color, th + 1)
     return pts
 
 
@@ -120,7 +120,8 @@ def render(m, canvas_img, context_img=None, H_context=None, video_name=''):
     describe = lambda e: e['status'] if e['status'] == 'missing' else f"{e['status']} (conf {e['confidence']:.2f}, {e['support']}/{e['candidates']} frames agree)"
     status = m.get('status', 'validated')
     label = 'measurement #' if status == 'validated' else f'{status.upper()} candidate C'
-    lines = [f"{video_name}  {label}{m['id']}  {m['start_t']:.1f}-{m['end_t']:.1f}s  reference t={m['canvas_t']:.2f}s",
+    lines = [f"{video_name}  {label}{m['id']}  {m['start_t']:.1f}-{m['end_t']:.1f}s  reference t={m['canvas_t']:.2f}s"
+             + (f"  -  {m['label']['detail']}" if m.get('label') else ''),
              f"A hook: {describe(m['hook'])}",
              f"B housing: {describe(m['housing'])}"]
     if outline is not None:
@@ -152,14 +153,16 @@ def render_scene(canvas, image, measurements_by_id, video_name=''):
         placed.update(hook=hook, housing=housing)
         draw_measurement(img, placed, np.eye(3), scale_ref)
         ids.append(m['id'])
-    kind = ('another frame of the scene, chosen for less obstruction: endpoints carried here from the reading '
-            'frame and accepted only after round-trip and appearance checks' if canvas['kind'] == 'registered_view'
-            else 'reading frame (no other view registered reliably)')
+    kind = {'clean_view': 'clean view of the scene (no tape or hands): endpoints mapped here directly from each '
+                          'reading frame, accepted only after two-way match, round-trip and appearance checks',
+            'registered_view': 'another frame of the scene, chosen for less obstruction: endpoints carried here from '
+                               'the reading frame and accepted only after round-trip and appearance checks',
+            }.get(canvas['kind'], 'reading frame (no other view registered reliably)')
     lines = [f"{video_name}  scene image t={canvas['t']:.2f}s  measurements " + ', '.join(f'#{i}' for i in ids),
              kind]
     for pl in canvas['placements']:
         m = measurements_by_id[pl['measurement_id']]
-        lines.append(f"#{m['id']}: {m['start_t']:.1f}-{m['end_t']:.1f}s, conf {m['confidence']:.2f}"
+        lines.append(f"#{m['id']}" + (f" {m['label']['detail']}" if m.get('label') else '') + f": {m['start_t']:.1f}-{m['end_t']:.1f}s, conf {m['confidence']:.2f}"
                      + (f", max round-trip error {max(pl['cycle_error_px']):.0f}px over {pl['links']} links"
                         if pl.get('source', 'registered') == 'registered' else ', localised in this frame'))
     return caption(img, lines)

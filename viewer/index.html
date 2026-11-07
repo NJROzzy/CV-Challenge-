@@ -45,7 +45,12 @@
   .notes { color: var(--muted); font-size: 12px; margin: 6px 0 8px; padding-left: 16px; }
   .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
   .gallery figure { margin: 0; background: var(--panel2); border-radius: 8px; overflow: hidden; cursor: zoom-in; border: 1px solid var(--line); }
-  .gallery img { width: 100%; display: block; }
+  .gallery img { width: 100%; max-height: 340px; object-fit: contain; background: #000; display: block; }
+  .pair { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .pair figure { margin: 0; flex: 0 1 260px; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; cursor: zoom-in; }
+  .pair img { width: 100%; max-height: 340px; object-fit: contain; background: #000; display: block; }
+  .pair figcaption { padding: 6px 8px; font-size: 12px; color: var(--muted); }
+  .pair .why { flex: 1 1 220px; font-size: 12px; color: var(--muted); }
   .gallery figcaption { padding: 6px 8px; font-size: 12px; color: var(--muted); }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th, td { text-align: right; padding: 5px 8px; border-bottom: 1px solid var(--line); }
@@ -119,8 +124,14 @@
 
   <section>
     <h2>Scene images (final output)</h2>
-    <p class="muted" style="margin-top:0">Numbered measurement lines on the measured surfaces. "Registered view": another frame of the scene, chosen for less obstruction, with endpoints carried over from the reading frame and accepted only after a round-trip registration check and an appearance check. "Reading frame": no other view registered reliably, so the frame the measurement was read in is used.</p>
+    <p class="muted" style="margin-top:0">Numbered measurement lines on the measured surfaces. "Clean view": a frame without tape or hands, with endpoints mapped directly from the reading frame and accepted only after a two-way match, round-trip and appearance check. "Registered view": another frame of the scene, chosen for less obstruction, with endpoints carried over from the reading frame and accepted only after a round-trip registration check and an appearance check. "Reading frame": no other view registered reliably, so the frame the measurement was read in is used.</p>
     <div class="gallery" id="scenes"></div>
+  </section>
+
+  <section>
+    <h2>Scene placement per measurement (before → after)</h2>
+    <p class="muted" style="margin-top:0">Left: the frame the measurement was read in. Right: where it was placed on a scene image, or why it could not be placed. Placements are never forced: a measurement without a validated mapping keeps its reading frame.</p>
+    <div id="placement"></div>
   </section>
 
   <section>
@@ -209,6 +220,7 @@ function selectRun(det) {
   renderMeasurements();
   renderCandidates();
   renderScenes();
+  renderPlacement();
   renderAlgo();
   renderGallery();
   drawAll();
@@ -363,7 +375,11 @@ function chip(e) {
   return `<span class="chip ${e.status}">${e.status === 'observed' ? 'seen in reference frame' : 'mapped from other frames'} · conf ${fmt(e.confidence, 2)} · ${e.support}/${e.candidates} frames agree · ±${fmt(e.spread_px, 0)} px</span>`;
 }
 function renderMeasurements() {
-  if (!R.measurements.length) { $('measList').innerHTML = '<p class="muted">No measurement events were detected in this video.</p>'; return; }
+  if (!R.measurements.length) {
+    const n = (R.candidates || []).length;
+    $('measList').innerHTML = `<p><b>No validated measurements in this video.</b></p><p class="muted">${n ? `${n} unconfirmed candidate event(s) were found; see "Candidates (not confirmed)" below and their diagnostic images. They are not presented as measurements because an endpoint could not be localised or confidence was too low.` : 'No measurement events were found: the tape was rarely detected in this footage (see the timeline above).'}</p>`;
+    return;
+  }
   $('measList').innerHTML = R.measurements.map(m => {
     const c = COLORS[(m.id - 1) % COLORS.length];
     return `<div class="card" style="--c:${c}">
@@ -405,10 +421,29 @@ function renderCandidates() {
 function renderScenes() {
   const sc = R.scenes || [];
   $('scenes').innerHTML = sc.length ? sc.map(s => `<figure data-src="${base + esc(s.image)}"><img loading="lazy" src="${base + esc(s.image)}" alt="scene">
-     <figcaption><b>${s.kind === 'registered_view' ? 'Registered view' : 'Reading frame'}</b> · t=${fmt(s.t, 2)} s · measurements ${s.placements.map(p => '#' + p.measurement_id).join(', ')}
-     ${s.kind === 'registered_view' ? ' · max round-trip error ' + fmt(Math.max(...s.placements.flatMap(p => p.cycle_error_px)), 0) + ' px' : ''}</figcaption></figure>`).join('')
+     <figcaption><b>${({clean_view: 'Clean view', registered_view: 'Registered view'})[s.kind] || 'Reading frame'}</b> · t=${fmt(s.t, 2)} s · measurements ${s.placements.map(p => '#' + p.measurement_id).join(', ')}
+     ${s.kind !== 'reading_frame' ? ' · max round-trip error ' + fmt(Math.max(...s.placements.flatMap(p => p.cycle_error_px)), 0) + ' px' : ''}</figcaption></figure>`).join('')
     : '<p class="muted">No scene images: no validated measurements in this video.</p>';
   $('scenes').querySelectorAll('figure').forEach(f => f.onclick = () => openImg(f.dataset.src));
+}
+function renderPlacement() {
+  const ms = R.measurements || [], scenes = R.scenes || [], log = R.scene_log || [];
+  if (!ms.length) { $('placement').innerHTML = '<p class="muted">No validated measurements, so nothing to place.</p>'; return; }
+  const label = {clean_view: 'clean view', registered_view: 'registered view', reading_frame: 'reading frame'};
+  const why = id => log.filter(l => l.measurement === id).map(l =>
+    `${esc(l.stage || 'nearby_view')}: ${l.views_ok}/${l.views_tried} ok` +
+    (Object.keys(l.rejected_because || {}).length ? ' — rejected: ' + Object.entries(l.rejected_because).filter(([, n]) => n).map(([k, n]) => `${esc(k.replace(/_/g, ' '))} ×${n}`).join(', ') : '')).join('<br>');
+  $('placement').innerHTML = ms.map(m => {
+    const sc = scenes.find(s => s.placements.some(p => p.measurement_id === m.id));
+    const kind = sc ? sc.kind : 'reading_frame';
+    const after = sc && sc.image !== m.image
+      ? `<figure data-src="${base + esc(sc.image)}"><img loading="lazy" src="${base + esc(sc.image)}"><figcaption><b>after:</b> ${label[kind]} t=${fmt(sc.t, 2)} s</figcaption></figure>`
+      : `<div class="card" style="--c:#ff6b6b;flex:0 1 260px"><b>Not placed on another view</b> — kept on its reading frame</div>`;
+    return `<div class="pair">
+      <figure data-src="${base + esc(m.image)}"><img loading="lazy" src="${base + esc(m.image)}"><figcaption><b>before:</b> #${m.id} reading frame t=${fmt(m.canvas_t, 2)} s</figcaption></figure>
+      ${after}<div class="why"><b>#${m.id} placement attempts</b><br>${why(m.id) || 'none logged'}</div></div>`;
+  }).join('');
+  $('placement').querySelectorAll('figure').forEach(f => f.onclick = () => openImg(f.dataset.src));
 }
 function renderAlgo() {
   const dets = Object.keys(runs);
@@ -418,7 +453,7 @@ function renderAlgo() {
     row('candidate events', r => r.counts.candidate_events ?? r.counts.measurements) +
     row('validated measurements', r => r.counts.measurements) +
     row('uncertain / rejected', r => `${r.counts.uncertain ?? '–'} / ${r.counts.rejected ?? '–'}`) +
-    row('scene images (registered views)', r => `${r.counts.scene_images ?? '–'} (${r.counts.registered_view_scenes ?? r.counts.clear_view_scenes ?? '–'})`) +
+    row('scene images (clean / registered views)', r => `${r.counts.scene_images ?? '–'} (${r.counts.clean_view_scenes ?? '–'} / ${r.counts.registered_view_scenes ?? r.counts.clear_view_scenes ?? '–'})`) +
     row('hook/housing labels relabelled / conflicting', r => r.identity ? `${r.identity.relabelled} / ${r.identity.conflicts}` : '–') +
     row('software', r => `Python ${esc(r.config.python)}, OpenCV ${esc(r.config.opencv)}`) +
     '</table><p class="muted">Counts only: accuracy needs ground truth that does not exist for these videos; see the README for the visual checks. Strategies ran in different Python/OpenCV environments, which also changes results.</p>';

@@ -35,7 +35,7 @@ class Placement:
 class SceneCanvas:
     frame: int
     t: float
-    kind: str                     # 'registered_view' or 'reading_frame' (fallback)
+    kind: str                     # 'clean_view', 'registered_view' or 'reading_frame' (fallback)
     clarity: float
     placements: list = field(default_factory=list)
 
@@ -46,7 +46,12 @@ class SceneCanvas:
 
 class SceneBuilder:
     def __init__(self, registrar, sharpness, clutter, times, window_s=10.0, candidates_per_measurement=30,
-                 min_separation_s=0.4, tol_frac=0.02):
+                 min_separation_s=0.4, tol_frac=0.02, matcher=None, tape_frames=None,
+                 clean_max_clutter=0.05, clean_candidates=25):
+        self.matcher = matcher            # KeyframeMatcher for direct mapping into clean frames (optional)
+        self.tape_frames = set(tape_frames or ())
+        self.clean_max_clutter = clean_max_clutter
+        self.clean_k = clean_candidates
         self.reg = registrar
         self.sharpness = sharpness      # frame -> variance of Laplacian
         self.clutter = clutter          # frame -> fraction covered by tape/housing/skin
@@ -73,13 +78,69 @@ class SceneBuilder:
                 break
         return chosen
 
+    def clean_frames(self, ref_sharp):
+        """Frames that show the scene without the act of measuring: no tape detected and almost no
+        tape/housing/skin pixels. Sharpest first, at least min_sep apart; taken from the whole video
+        (wide views are usually at the start/end, far from the readings)."""
+        frames = [f for f in self.times if f not in self.tape_frames
+                  and self.clutter.get(f, 1.0) <= self.clean_max_clutter]
+        frames.sort(key=lambda f: -self.clarity(f, ref_sharp))
+        chosen = []
+        for f in frames:
+            if all(abs(self.times[f] - self.times[g]) >= self.min_sep for g in chosen):
+                chosen.append(f)
+            if len(chosen) == self.clean_k:
+                break
+        return chosen
+
+    def _clean_options(self, valid, ref_sharp):
+        options = {}
+        if self.matcher is None:
+            return options
+        clean = self.clean_frames(ref_sharp)
+        for m in valid:
+            pts = [[m.hook.x, m.hook.y], [m.housing.x, m.housing.y]]
+            why, ok_n = {}, 0
+            for f in clean:
+                mapped, ok, st = self.matcher.map_validated(m.canvas_frame, f, pts)
+                if not ok:
+                    why[st['reason']] = why.get(st['reason'], 0) + 1
+                    continue
+                ok_n += 1
+                options.setdefault(f, {})[m.id] = Placement(
+                    m.id, [round(float(v), 1) for v in mapped[0]], [round(float(v), 1) for v in mapped[1]],
+                    st['cycle_error_px'], 1, 0, 0, 'registered')
+            self.log.append({'measurement': m.id, 'stage': 'clean_view', 'views_tried': len(clean),
+                             'views_ok': ok_n, 'rejected_because': why})
+        return options
+
+    def _cover(self, options, unplaced, ref_sharp, kind_if_registered):
+        canvases = []
+        while unplaced:
+            best = max(options, default=None, key=lambda f: (len(unplaced & options[f].keys()),
+                                                             self.clarity(f, ref_sharp)))
+            if best is None or not unplaced & options[best].keys():
+                break
+            ids = sorted(unplaced & options[best].keys())
+            placements = [options[best][i] for i in ids]
+            kind = kind_if_registered if any(pl.source == 'registered' for pl in placements) else 'reading_frame'
+            canvases.append(SceneCanvas(best, round(self.times[best], 3), kind,
+                                        self.clarity(best, ref_sharp), placements))
+            unplaced -= set(ids)
+        return canvases
+
     def build(self, measurements):
         valid = [m for m in measurements if m.status == 'validated']
         if not valid:
             return []
         ref_sharp = float(np.percentile(list(self.sharpness.values()), 90))
+        # 1) clean views (no tape, no hands), mapped directly from each reading frame and validated.
+        unplaced = {m.id for m in valid}
+        canvases = self._cover(self._clean_options(valid, ref_sharp), unplaced, ref_sharp, 'clean_view')
+        # 2) remaining measurements: nearby less-obstructed frames reached by validated chains.
+        valid_rest = [m for m in valid if m.id in unplaced]
         options = {}                     # frame -> {measurement id: Placement}
-        for m in valid:
+        for m in valid_rest:
             pts = [[m.hook.x, m.hook.y], [m.housing.x, m.housing.y]]
             tried = ok_n = 0
             why = {'no_chain': 0, 'round_trip_error': 0, 'endpoint_outside_frame': 0, 'appearance_mismatch': 0}
@@ -102,22 +163,10 @@ class SceneBuilder:
                     m.id, [round(float(v), 1) for v in mapped[0]], [round(float(v), 1) for v in mapped[1]],
                     [round(float(e), 1) for e in err], st.get('links', 0), st.get('local_moves', 0),
                     st.get('global_moves', 0), 'reading_frame' if f == m.canvas_frame else 'registered')
-            self.log.append({'measurement': m.id, 'views_tried': tried, 'views_ok': ok_n, 'rejected_because': why})
-
-        # Greedy cover: the frame placing the most still-unplaced measurements, ties -> clearer frame.
-        canvases, unplaced = [], {m.id for m in valid}
-        while unplaced:
-            best = max(options, default=None, key=lambda f: (len(unplaced & options[f].keys()),
-                                                             self.clarity(f, ref_sharp)))
-            if best is None or not unplaced & options[best].keys():
-                break
-            ids = sorted(unplaced & options[best].keys())
-            placements = [options[best][i] for i in ids]
-            kind = 'registered_view' if any(pl.source == 'registered' for pl in placements) else 'reading_frame'
-            canvases.append(SceneCanvas(best, round(self.times[best], 3), kind,
-                                        self.clarity(best, ref_sharp), placements))
-            unplaced -= set(ids)
-        # Fallback: the reading frame itself (endpoints exactly as localised there).
+            self.log.append({'measurement': m.id, 'stage': 'nearby_view', 'views_tried': tried, 'views_ok': ok_n,
+                             'rejected_because': why})
+        canvases += self._cover(options, unplaced, ref_sharp, 'registered_view')
+        # 3) Fallback: the reading frame itself (endpoints exactly as localised there).
         for m in valid:
             if m.id in unplaced:
                 canvases.append(SceneCanvas(m.canvas_frame, m.canvas_t, 'reading_frame',

@@ -18,7 +18,8 @@ import numpy as np
 from .annotate import render, render_scene
 from .detect import ClassicalTapeDetector
 from .events import EventBuilder
-from .register import Registrar
+from .labels import label_measurements
+from .register import KeyframeMatcher, Registrar
 from .scene import SceneBuilder
 from .video import VideoInfo, iter_frames
 
@@ -99,10 +100,14 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
     t0 = time.perf_counter()
     builder = EventBuilder(reg, sharpness, (info.width, info.height))
     measurements = builder.build(observations)
+    label_measurements(measurements, reg)
     timer.add('events_endpoints_registration', time.perf_counter() - t0)
 
     t0 = time.perf_counter()
-    scene_builder = SceneBuilder(reg, sharpness, reg.clutter, {k: v[0] for k, v in cache.items()})
+    matcher = KeyframeMatcher(lambda idx: cv2.imdecode(cache[idx][1], cv2.IMREAD_COLOR) if idx in cache else None,
+                              {k: v[1] for k, v in reg.frames.items()})
+    scene_builder = SceneBuilder(reg, sharpness, reg.clutter, {k: v[0] for k, v in cache.items()},
+                                 matcher=matcher, tape_frames={o.frame_index for o in observations})
     scenes = scene_builder.build(measurements)
     timer.add('scene_registration', time.perf_counter() - t0)
 
@@ -180,7 +185,8 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
                    'uncertain': sum(c['status'] == 'uncertain' for c in candidates),
                    'rejected': sum(c['status'] == 'rejected' for c in candidates),
                    'scene_images': len(scene_dicts),
-                   'registered_view_scenes': sum(sd['kind'] == 'registered_view' for sd in scene_dicts)},
+                   'registered_view_scenes': sum(sd['kind'] == 'registered_view' for sd in scene_dicts),
+                   'clean_view_scenes': sum(sd['kind'] == 'clean_view' for sd in scene_dicts)},
         'identity': builder.identity,
         'episodes': builder.log[0]['episodes'] if builder.log else [],
         'measurements': validated,
