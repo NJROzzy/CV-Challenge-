@@ -1,0 +1,27 @@
+NvRmMemInitNvmap failed with No such file or directory
+356: Memory Manager Not supported
+
+
+
+****NvRmMemMgrInit failed**** error type: 196626
+
+
+libnvrm_gpu.so: NvRmGpuLibOpen failed, error=196626
+NvRmMemInitNvmap failed with No such file or directory
+356: Memory Manager Not supported
+
+
+
+****NvRmMemMgrInit failed**** error type: 196626
+
+
+libnvrm_gpu.so: NvRmGpuLibOpen failed, error=196626
+NvRmMemInitNvmap failed with No such file or directory
+356: Memory Manager Not supported
+
+
+
+****NvRmMemMgrInit failed**** error type: 196626
+
+
+libnvrm_gpu.so: NvRmGpuLibOpen failed, error=196626
