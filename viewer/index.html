@@ -138,7 +138,7 @@
   <section>
     <h2>Performance (actual runs on this Jetson)</h2>
     <div class="scroll" id="perf"></div>
-    <h2 style="margin-top:16px">Synthetic preprocessing benchmark (cvbench, Phase 1)</h2>
+    <h2 style="margin-top:16px">CPU vs GPU preprocessing benchmark (cvbench)</h2>
     <div class="scroll" id="bench"></div>
   </section>
 </main>
@@ -451,17 +451,46 @@ function renderPerf() {
 }
 
 async function loadBench() {
-  let b;
-  try { b = await getJSON('/bench/baseline.json'); } catch { $('bench').innerHTML = '<p class="muted">No cvbench baseline found.</p>'; return; }
-  let html = '<table><tr><th>Input</th><th>Batch</th><th>CPU median ms</th><th>CPU frames/s</th><th>GPU</th><th>Speedup</th></tr>';
-  for (const c of b.cases) {
-    const cpu = c.backends.cpu || {}, gpu = c.backends.gpu || {};
-    html += `<tr><td>${c.resolution}</td><td>${c.input_shape[0]}</td><td>${cpu.status === 'ok' ? fmt(cpu.end_to_end.median_ms, 2) : '–'}</td>` +
-      `<td>${cpu.status === 'ok' ? fmt(cpu.throughput_fps, 1) : '–'}</td>` +
-      `<td class="${gpu.status === 'ok' ? '' : 'bad'}">${gpu.status === 'ok' ? fmt(gpu.end_to_end.median_ms, 2) + ' ms' : esc(gpu.status || 'not run')}</td>` +
-      `<td>${c.comparison ? fmt(c.comparison.speedup_cpu_over_gpu, 2) + '×' : '<span class="muted">not measured</span>'}</td></tr>`;
+  // Measured CPU vs GPU run first (JetPack PyTorch with working CUDA); the original .venv baseline,
+  // whose PyTorch could not use CUDA, is shown afterwards and labelled as historical.
+  const sources = [
+    ['/bench/gpu_venv_jetson.json', 'Measured CPU vs GPU (.venv-jetson: JetPack PyTorch 2.1 / CUDA 12.2)'],
+    ['/bench/gpu_system_python.json', 'Measured CPU vs GPU (system python3: JetPack PyTorch 2.1 / CUDA 12.2)'],
+  ];
+  let html = '', measured = null;
+  for (const [url, label] of sources) {
+    try { measured = {b: await getJSON(url), label}; break; } catch { /* try the next file */ }
   }
-  $('bench').innerHTML = html + '</table><p class="muted">Resize + grayscale + blur on synthetic noise (not the measurement pipeline). GPU entries are "unavailable" because PyTorch cannot initialise CUDA here; no GPU number is shown that was not measured.</p>';
+  const table = (b, withGpu) => {
+    let t = '<table><tr><th>Input</th><th>Batch</th><th>CPU median ms</th>' +
+      (withGpu ? '<th>GPU median ms</th><th>Speedup (CPU/GPU)</th><th>GPU = CPU within tolerance</th>' : '<th>CPU frames/s</th><th>GPU</th>') + '</tr>';
+    for (const c of b.cases) {
+      const cpu = c.backends.cpu || {}, gpu = c.backends.gpu || {};
+      t += `<tr><td>${c.resolution}</td><td>${c.input_shape[0]}</td><td>${cpu.status === 'ok' ? fmt(cpu.end_to_end.median_ms, 2) : '–'}</td>`;
+      if (withGpu) {
+        const sim = gpu.similarity || {};
+        t += `<td>${gpu.status === 'ok' ? fmt(gpu.end_to_end.median_ms, 2) : esc(gpu.status || 'not run')}</td>` +
+             `<td>${c.comparison ? fmt(c.comparison.speedup_cpu_over_gpu, 2) + '×' : '<span class="muted">not measured</span>'}</td>` +
+             `<td>${sim.within_tolerance === undefined ? '–' : (sim.within_tolerance ? 'yes' : '<span class="bad">no</span>')}</td>`;
+      } else {
+        t += `<td>${cpu.status === 'ok' ? fmt(cpu.throughput_fps, 1) : '–'}</td><td class="${gpu.status === 'ok' ? '' : 'bad'}">${esc(gpu.status || 'not run')}</td>`;
+      }
+      t += '</tr>';
+    }
+    return t + '</table>';
+  };
+  if (measured) {
+    const e = measured.b.environment;
+    html += `<p><b>${esc(measured.label)}</b> · torch ${esc(e.torch)}, CUDA available: ${e.cuda_available}, OpenCV ${esc(e.opencv)}</p>` + table(measured.b, true);
+  } else {
+    html += '<p class="muted">No measured GPU benchmark found.</p>';
+  }
+  try {
+    const base = await getJSON('/bench/baseline.json');
+    html += `<p style="margin-top:14px"><b>Historical: original CPU-only baseline</b> · .venv torch ${esc(base.environment.torch)}, CUDA available: ${base.environment.cuda_available}. ` +
+            'Its GPU cases are "unavailable" because that PyTorch (built for CUDA 13.2) cannot use this JetPack 6 / CUDA 12.2 driver; the GPU was measured afterwards with JetPack\'s PyTorch (above).</p>' + table(base, false);
+  } catch { /* no baseline file */ }
+  $('bench').innerHTML = html + '<p class="muted">Resize + grayscale + blur on synthetic noise: a hardware benchmark, not the measurement pipeline (which runs on the CPU and needs no CUDA). Only measured numbers are shown.</p>';
 }
 
 // ---------------------------------------------------------------- playback plumbing
