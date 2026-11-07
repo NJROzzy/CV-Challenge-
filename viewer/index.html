@@ -90,13 +90,13 @@
         </div>
         <div class="readout" id="readout"></div>
         <div id="sampleStatus"></div>
-        <canvas id="timeline"></canvas>
+        <canvas id="timeline" style="height:92px"></canvas>
         <div class="legend">
           <span><span class="sw" style="background:#3b4048"></span>no tape</span>
           <span><span class="sw" style="background:#5b8def"></span>blade only</span>
           <span><span class="sw" style="background:#3ddc84"></span>blade + housing</span>
           <span><span class="sw" style="background:#ff9f1a;border-radius:50%"></span>hook end visible</span>
-          <span>bars = detected measurements (click to seek)</span>
+          <span>coloured bars = validated measurements; grey bars = unconfirmed candidates (click to seek)</span>
         </div>
         <div class="legend">
           <span>Overlay: magenta line = detected blade; ● orange = hook end in view; ○ grey = blade cut off by the frame edge (true end not seen); ■ green = blade enters housing.</span>
@@ -106,15 +106,33 @@
     </div>
     <div>
       <section>
-        <h2>Detected measurements</h2>
+        <h2>Validated measurements</h2>
         <div id="measList"></div>
+      </section>
+      <section>
+        <h2>Candidates (not confirmed)</h2>
+        <p class="muted" style="margin-top:0">Events the pipeline saw but could not confirm. Kept for diagnosis; not drawn on scene images.</p>
+        <div id="candList"></div>
       </section>
     </div>
   </div>
 
   <section>
-    <h2>Annotated output images</h2>
+    <h2>Scene images (final output)</h2>
+    <p class="muted" style="margin-top:0">Numbered measurement lines on the measured surfaces. "Registered view": another frame of the scene, chosen for less obstruction, with endpoints carried over from the reading frame and accepted only after a round-trip registration check and an appearance check. "Reading frame": no other view registered reliably, so the frame the measurement was read in is used.</p>
+    <div class="gallery" id="scenes"></div>
+  </section>
+
+  <section>
+    <h2>Per-measurement images</h2>
     <div class="gallery" id="gallery"></div>
+    <h2 style="margin-top:16px">Diagnostic images of unconfirmed candidates</h2>
+    <div class="gallery" id="diagGallery"></div>
+  </section>
+
+  <section>
+    <h2>Algorithm comparison (detection results, not hardware)</h2>
+    <div class="scroll" id="algo"></div>
   </section>
 
   <section>
@@ -181,12 +199,17 @@ function selectRun(det) {
     [`${v.width}×${v.height}`, 'frame size'],
     [R.counts.samples, `samples analysed (${R.config.sample_fps}/s)`],
     [R.counts.tape_observations, 'samples with tape detected'],
-    [R.counts.measurements, 'measurements found'],
+    [R.counts.measurements, 'validated measurements'],
+    [(R.counts.candidate_events ?? R.counts.measurements) - R.counts.measurements, 'unconfirmed candidates'],
+    [R.counts.scene_images ?? '–', 'scene images'],
     [fmt(R.pipeline_seconds_excluding_proxy, 1) + ' s', 'pipeline time'],
   ].map(([b, s]) => `<div class="stat"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('');
   if (R.proxy_video) { video.src = base + R.proxy_video; }
   else { showError('This run has no browser video (it was run with --no-proxy); images and data are still shown.'); }
   renderMeasurements();
+  renderCandidates();
+  renderScenes();
+  renderAlgo();
   renderGallery();
   drawAll();
 }
@@ -289,7 +312,9 @@ function drawOverlay() {
   else if (!cur.obs) st = '<span class="muted">No tape detected in this sample.</span>';
   else {
     const o = cur.obs;
-    st = `Tape detected (confidence ${fmt(o.confidence, 2)}): hook end ${o.hook.visible ? '<b>in view</b>' : '<span class="muted">cut off by the frame edge</span>'}; ` +
+    const why = (o.evidence && o.evidence.end_not_seen_because) || {};
+    const reason = k => ({frame_edge: 'runs into the frame edge', hand_or_sleeve: 'hidden behind a hand/sleeve'})[why[k]] || 'not seen';
+    st = `Tape detected (confidence ${fmt(o.confidence, 2)}): hook end ${o.hook.visible ? '<b>in view</b>' : '<span class="muted">' + reason('hook') + ' — not a hook</span>'}; ` +
          `housing ${o.housing_detected ? '<b>detected</b>' : '<span class="muted">not seen</span>'}.`;
   }
   const atRef = R.measurements.filter(m => Math.abs(t - m.canvas_t) <= 0.03);
@@ -319,8 +344,12 @@ function drawTimeline() {
     ctx.fillStyle = '#000'; ctx.font = '600 11px sans-serif'; ctx.fillText('#' + m.id, x(m.start_t) + 4, 54);
     ctx.fillStyle = c; ctx.fillRect(x(m.canvas_t) - 1, 40, 2, 20);
   }
+  for (const c of (R.candidates || [])) {
+    ctx.fillStyle = c.status === 'rejected' ? '#4a4f57' : '#7d838c';
+    ctx.fillRect(x(c.start_t), 60, Math.max(3, x(c.end_t) - x(c.start_t)), 6);
+  }
   ctx.fillStyle = '#9aa0a6'; ctx.font = '11px sans-serif';
-  for (let s = 0; s <= D; s += 5) { ctx.fillRect(x(s), 62, 1, 5); ctx.fillText(s + 's', x(s) + 2, 78); }
+  for (let s = 0; s <= D; s += 5) { ctx.fillRect(x(s), 68, 1, 5); ctx.fillText(s + 's', x(s) + 2, 82); }
   ctx.fillStyle = '#fff'; ctx.fillRect(x(video.currentTime) - 1, 0, 2, H);
 }
 tl.addEventListener('click', ev => {
@@ -357,6 +386,43 @@ function renderGallery() {
     : '<p class="muted">No annotated images: no measurements were detected.</p>';
   $('gallery').querySelectorAll('figure').forEach(f => f.onclick = () => openImg(f.dataset.src));
 }
+function renderCandidates() {
+  const cs = R.candidates || [];
+  $('candList').innerHTML = cs.length ? cs.map(c => `<div class="card" style="--c:${c.status === 'rejected' ? '#4a4f57' : '#7d838c'}">
+      <h3><span>C${c.id} · ${fmt(c.start_t, 1)}–${fmt(c.end_t, 1)} s</span><span class="chip ${c.status === 'rejected' ? 'missing' : 'registered'}">${esc(c.status)}</span></h3>
+      <ul class="notes">${(c.reasons || []).map(r => `<li>${esc(r)}</li>`).join('')}</ul>
+      <div><b>A</b> hook: ${chip(c.hook)}</div><div><b>B</b> housing: ${chip(c.housing)}</div>
+      <button data-seek="${c.canvas_t}">Show frame (t=${fmt(c.canvas_t, 2)} s)</button>
+      <button data-img="${esc(c.image)}">Diagnostic image</button></div>`).join('')
+    : '<p class="muted">None.</p>';
+  $('candList').querySelectorAll('[data-seek]').forEach(b => b.onclick = () => seek(+b.dataset.seek));
+  $('candList').querySelectorAll('[data-img]').forEach(b => b.onclick = () => openImg(base + b.dataset.img));
+  $('diagGallery').innerHTML = cs.length ? cs.map(c => `<figure data-src="${base + esc(c.image)}"><img loading="lazy" src="${base + esc(c.image)}" alt="candidate ${c.id}">
+     <figcaption>C${c.id} · ${esc(c.status)} · ${esc((c.reasons || [])[0] || '')}</figcaption></figure>`).join('')
+    : '<p class="muted">No unconfirmed candidates.</p>';
+  $('diagGallery').querySelectorAll('figure').forEach(f => f.onclick = () => openImg(f.dataset.src));
+}
+function renderScenes() {
+  const sc = R.scenes || [];
+  $('scenes').innerHTML = sc.length ? sc.map(s => `<figure data-src="${base + esc(s.image)}"><img loading="lazy" src="${base + esc(s.image)}" alt="scene">
+     <figcaption><b>${s.kind === 'registered_view' ? 'Registered view' : 'Reading frame'}</b> · t=${fmt(s.t, 2)} s · measurements ${s.placements.map(p => '#' + p.measurement_id).join(', ')}
+     ${s.kind === 'registered_view' ? ' · max round-trip error ' + fmt(Math.max(...s.placements.flatMap(p => p.cycle_error_px)), 0) + ' px' : ''}</figcaption></figure>`).join('')
+    : '<p class="muted">No scene images: no validated measurements in this video.</p>';
+  $('scenes').querySelectorAll('figure').forEach(f => f.onclick = () => openImg(f.dataset.src));
+}
+function renderAlgo() {
+  const dets = Object.keys(runs);
+  const row = (label, f) => `<tr><td>${label}</td>${dets.map(d => `<td>${f(runs[d].data)}</td>`).join('')}</tr>`;
+  $('algo').innerHTML = `<table><tr><th>${esc(R.video.name)}</th>${dets.map(d => `<th>${esc(d)}</th>`).join('')}</tr>` +
+    row('samples with tape detected', r => `${r.counts.tape_observations} / ${r.counts.samples}`) +
+    row('candidate events', r => r.counts.candidate_events ?? r.counts.measurements) +
+    row('validated measurements', r => r.counts.measurements) +
+    row('uncertain / rejected', r => `${r.counts.uncertain ?? '–'} / ${r.counts.rejected ?? '–'}`) +
+    row('scene images (registered views)', r => `${r.counts.scene_images ?? '–'} (${r.counts.registered_view_scenes ?? r.counts.clear_view_scenes ?? '–'})`) +
+    row('hook/housing labels relabelled / conflicting', r => r.identity ? `${r.identity.relabelled} / ${r.identity.conflicts}` : '–') +
+    row('software', r => `Python ${esc(r.config.python)}, OpenCV ${esc(r.config.opencv)}`) +
+    '</table><p class="muted">Counts only: accuracy needs ground truth that does not exist for these videos; see the README for the visual checks. Strategies ran in different Python/OpenCV environments, which also changes results.</p>';
+}
 function openImg(src) { const lb = $('lightbox'); lb.querySelector('img').src = src; lb.hidden = false; }
 $('lightbox').onclick = () => $('lightbox').hidden = true;
 
@@ -380,7 +446,7 @@ function renderPerf() {
   };
   html += '<p class="muted">' + dets.map(d => notes[d] || '').join(' ') +
     (dets.length < 2 ? ' Only one strategy has been run for this video; run the other to compare.' : '') +
-    ' PyTorch CUDA is unavailable in this environment (driver/runtime mismatch), so no PyTorch GPU path was timed.</p>';
+    ' The pipeline uses no PyTorch; GPU work here is TensorRT only.</p>';
   $('perf').innerHTML = html;
 }
 
