@@ -50,6 +50,9 @@ class Measurement:
     angle_deg: float
     notes: list = field(default_factory=list)
     context_frame: int = None     # frame to mosaic in when an endpoint lies outside the canvas
+    status: str = 'candidate'     # 'validated' | 'uncertain' | 'rejected' after validate()
+    reasons: list = field(default_factory=list)
+    blade_length_frac: float = 0.0   # median visible blade length / shorter frame side, in the reading
 
     def as_dict(self):
         d = {k: v for k, v in self.__dict__.items() if k not in ('hook', 'housing')}
@@ -75,6 +78,52 @@ def split_episodes(observations, max_gap=0.8, max_turn=30.0):
     if cur:
         episodes.append(cur)
     return episodes
+
+
+def enforce_identity(episode, max_dt=0.5, diag=None):
+    """Keep hook/housing labels consistent over an episode.
+
+    Consecutive observations are linked by whether their ends keep or exchange labels (whichever
+    pairing moves the ends less). That gives each observation a parity relative to the first one in
+    its chain; the chain's orientation is then set by majority vote of the observations that
+    actually SAW the wide housing. Observations that disagree with the vote are relabelled if their
+    labels were only inferred (no housing seen), or marked as conflicting (excluded from endpoint
+    voting) if the detector saw a housing at the other end. Returns the number of relabelled and
+    conflicting observations."""
+    relabelled = conflicts = 0
+    chains, cur = [], []
+    for o in episode:
+        if cur:
+            p = cur[-1][0]
+            same = np.linalg.norm(o.hook.xy - p.hook.xy) + np.linalg.norm(o.housing.xy - p.housing.xy)
+            swap = np.linalg.norm(o.hook.xy - p.housing.xy) + np.linalg.norm(o.housing.xy - p.hook.xy)
+            jump = diag is not None and min(same, swap) > 0.3 * diag
+            if o.t - p.t > max_dt or jump:
+                chains.append(cur)
+                cur = []
+            else:
+                cur.append((o, cur[-1][1] ^ (swap < 0.7 * same)))
+                continue
+        cur.append((o, False))
+    if cur:
+        chains.append(cur)
+    for chain in chains:
+        vote = sum((1 if par else -1) for o, par in chain if o.housing_detected)
+        flip_parity = vote > 0          # True: observations with parity=True carry the right labels
+        for o, par in chain:
+            if par == flip_parity:
+                continue
+            if o.housing_detected:
+                o.evidence['identity_conflict'] = True
+                conflicts += 1
+            else:
+                o.hook, o.housing = o.housing, o.hook
+                o.hook.kind, o.housing.kind = 'hook', 'housing'
+                o.hook.visible = False              # this end was never established as the real tip
+                o.housing.visible = False
+                o.evidence['identity_relabelled'] = True
+                relabelled += 1
+    return relabelled, conflicts
 
 
 def housing_phases(episode, max_gap=0.8, min_duration=0.8, min_obs=5):
@@ -254,9 +303,15 @@ class EventBuilder:
         episodes = split_episodes(observations)
         self.log.append({'episodes': [(e[0].t, e[-1].t, len(e)) for e in episodes]})
         results = []
+        diag = math.hypot(self.W, self.H)
+        self.identity = {'relabelled': 0, 'conflicts': 0}
         for ep_id, episode in enumerate(episodes):
-            phases = housing_phases(episode)
-            all_hooks = [o for o in episode if o.hook.visible and o.confidence >= self.min_hook_confidence]
+            r, c = enforce_identity(episode, diag=diag)
+            self.identity['relabelled'] += r
+            self.identity['conflicts'] += c
+            usable = [o for o in episode if not o.evidence.get('identity_conflict')]
+            phases = housing_phases(usable)
+            all_hooks = [o for o in usable if o.hook.visible and o.confidence >= self.min_hook_confidence]
             for k, phase in enumerate(phases):
                 # The hook may be re-placed between readings (e.g. the next door), so a reading only
                 # uses hook sightings between the neighbouring readings, not the whole episode.
@@ -301,11 +356,45 @@ class EventBuilder:
                                 angle_deg=float(np.median([o.angle_deg for o in phase])), notes=notes,
                                 context_frame=context)
                 m.episode = ep_id
+                m.blade_length_frac = round(float(np.median(
+                    [np.linalg.norm(o.hook.xy - o.housing.xy) for o in phase])) / min(self.W, self.H), 3)
                 results.append(m)
         results = self._merge(results)
-        for i, m in enumerate(results, 1):
-            m.id = i
+        for m in results:
+            self.validate(m)
+        # Validated measurements are numbered 1..n; candidates keep separate numbering (C1, C2, ...).
+        n = c = 0
+        for m in results:
+            if m.status == 'validated':
+                n += 1
+                m.id = n
+            else:
+                c += 1
+                m.id = c
         return results
+
+    def validate(self, m, min_confidence=0.4, min_blade_frac=0.2):
+        """Decide whether a reading is a confirmed measurement. Everything else is kept as a
+        diagnostic candidate with its reasons; nothing is silently dropped."""
+        reasons = []
+        if m.hook.status == 'missing' and m.housing.status == 'missing':
+            reasons.append('no endpoint could be localised')
+        elif m.hook.status == 'missing':
+            reasons.append('hook end not localised (never seen clearly, or not mappable)')
+        elif m.housing.status == 'missing':
+            reasons.append('housing end not localised')
+        if m.blade_length_frac < min_blade_frac:
+            reasons.append(f'blade barely extended ({m.blade_length_frac:.2f} of frame) - carrying/repositioning?')
+        if m.confidence < min_confidence and not reasons:
+            reasons.append(f'low confidence {m.confidence:.2f} < {min_confidence}')
+        if not reasons:
+            m.status = 'validated'
+        elif m.hook.status == 'missing' and m.housing.status == 'missing' or m.blade_length_frac < min_blade_frac:
+            m.status = 'rejected'
+        else:
+            m.status = 'uncertain'
+        m.reasons = reasons
+        return m
 
     def _merge(self, ms):
         """Readings in the same episode at the same physical endpoints are one measurement
