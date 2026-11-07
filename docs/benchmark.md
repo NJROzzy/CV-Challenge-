@@ -1,6 +1,8 @@
 # Phase 1: CPU versus CUDA preprocessing benchmark (`cvbench`)
 
 > Moved from the top-level README when the project refocused on the measurement pipeline. Content unchanged; paths are relative to the repository root.
+>
+> **Update:** GPU timings have since been measured with JetPack's system PyTorch 2.1 / CUDA 12.2 (`python3 -m cvbench --backend both`), see [`results/gpu_system_python.json`](../results/gpu_system_python.json) and the README's performance section. The text below describes the original CPU-only baseline from the `.venv`, whose PyTorch cannot use CUDA.
 
 Two independently executable implementations process identical seeded RGB frames:
 
