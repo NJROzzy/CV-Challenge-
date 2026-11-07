@@ -19,6 +19,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
+from .config import DETECTION_WIDTH, HAND_THRESHOLD
 from .detect import ClassicalTapeDetector
 from .video import resize_to_width
 
@@ -26,7 +27,7 @@ from .video import resize_to_width
 class HandAssistedDetector:
     name = 'hand-assisted'
 
-    def __init__(self, models_dir=Path.home() / 'jetson-inference' / 'data', threshold=0.15, proc_width=480):
+    def __init__(self, models_dir=Path.home() / 'jetson-inference' / 'data', threshold=HAND_THRESHOLD, proc_width=DETECTION_WIDTH):
         from jetson_inference import poseNet
         from jetson_utils import cudaFromNumpy
         self.classical = ClassicalTapeDetector(proc_width=proc_width)

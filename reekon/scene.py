@@ -18,6 +18,8 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
+from .config import ROUND_TRIP_TOLERANCE
+
 
 @dataclass
 class Placement:
@@ -46,7 +48,7 @@ class SceneCanvas:
 
 class SceneBuilder:
     def __init__(self, registrar, sharpness, clutter, times, window_s=10.0, candidates_per_measurement=30,
-                 min_separation_s=0.4, tol_frac=0.02, matcher=None, tape_frames=None,
+                 min_separation_s=0.4, tol_frac=ROUND_TRIP_TOLERANCE, matcher=None, tape_frames=None,
                  clean_max_clutter=0.05, clean_candidates=25):
         self.matcher = matcher            # KeyframeMatcher for direct mapping into clean frames (optional)
         self.tape_frames = set(tape_frames or ())

@@ -19,6 +19,7 @@ from dataclasses import dataclass
 import cv2
 import numpy as np
 
+from .config import REGISTRATION_WIDTH, KEYFRAME_WIDTH, ROUND_TRIP_TOLERANCE, MIN_PATCH_NCC
 from .video import resize_to_width
 
 
@@ -36,7 +37,7 @@ class Registration:
 
 
 class Registrar:
-    def __init__(self, work_width=640, min_inliers=12):
+    def __init__(self, work_width=REGISTRATION_WIDTH, min_inliers=12):
         self.work_width = work_width
         self.min_inliers = min_inliers
         self.frames = {}        # frame index -> (gray, feature mask, scale)
@@ -46,7 +47,7 @@ class Registrar:
         self._sift = {}
         self._sift_detector = cv2.SIFT_create(1500)
         self.bridges_tried = self.bridges_ok = 0
-        self.min_patch_ncc = 0.5
+        self.min_patch_ncc = MIN_PATCH_NCC
 
     # ------------------------------------------------------------------ frame store
     def add(self, frame_index, image, observation=None):
@@ -251,7 +252,7 @@ class Registrar:
         return masked_patch_ncc(gs, ms, gd, S @ H_small, np.asarray(point_full, dtype=np.float64) * s,
                                 radius_frac * self.work_width)
 
-    def map_validated(self, src, dst, points, tol_frac=0.02):
+    def map_validated(self, src, dst, points, tol_frac=ROUND_TRIP_TOLERANCE):
         """track_points src->dst, then back dst->src through independently computed reverse links.
         A point is reliable only if it returns within tol_frac of the frame diagonal (cycle check)
         and lands inside the destination frame. Returns (points, ok mask, cycle errors px, stats)."""
@@ -320,8 +321,8 @@ class KeyframeMatcher:
     A homography is exact only for one plane; these checks reject the cases where the measured
     surface is not the plane that dominated the fit."""
 
-    def __init__(self, load_image, masks, work_width=776, min_inliers=25, min_ratio=0.2,
-                 tol_frac=0.02, min_ncc=0.5):
+    def __init__(self, load_image, masks, work_width=KEYFRAME_WIDTH, min_inliers=25, min_ratio=0.2,
+                 tol_frac=ROUND_TRIP_TOLERANCE, min_ncc=MIN_PATCH_NCC):
         self.load_image = load_image      # frame -> full-resolution BGR (or None)
         self.masks = masks                # frame -> scene mask at any resolution (255 = scene)
         self.work_width = work_width

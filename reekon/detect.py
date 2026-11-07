@@ -20,6 +20,7 @@ import math
 import cv2
 import numpy as np
 
+from .config import DETECTION_WIDTH
 from .video import resize_to_width
 
 
@@ -49,8 +50,7 @@ class TapeObservation:
     evidence: dict = field(default_factory=dict)
 
     def as_dict(self):
-        d = asdict(self)
-        return d
+        return asdict(self)
 
 
 def _odd(n):
@@ -61,7 +61,7 @@ def _odd(n):
 class ClassicalTapeDetector:
     name = 'classical'
 
-    def __init__(self, proc_width=480, dark_abs=90, dark_rel=0.45, min_confidence=0.25,
+    def __init__(self, proc_width=DETECTION_WIDTH, dark_abs=90, dark_rel=0.45, min_confidence=0.25,
                  min_transitions=0.9, min_two_sided=0.4):
         # Strip thresholds, measured on 24 frames from the 4 videos: true blades >= 1.38
         # alternations per width (false lines <= 0.79); two-sided fraction true mostly 0.85-1.0
@@ -106,7 +106,7 @@ class ClassicalTapeDetector:
         return centers, extent
 
     @staticmethod
-    def _robust_line(pts, c, d, w, max_points=3000):
+    def _robust_line(pts, max_points=3000):
         """Huber line fit (cv2.fitLine) on a fixed random subsample: the fit cost is linear in the
         number of mask pixels (~10k+ for a near blade), the line itself needs far fewer.
         (A hand-rolled weighted-PCA IRLS was tried and rejected: ~2 deg bias on long blades.)"""
@@ -173,7 +173,7 @@ class ClassicalTapeDetector:
                     members.add(i)
             pts = np.vstack([comps[i] for i in members])
             t_all, s_all = self._frame(pts, c, d)
-            c, d = self._robust_line(pts[np.abs(s_all) <= 1.2 * w], c, d, w)
+            c, d = self._robust_line(pts[np.abs(s_all) <= 1.2 * w])
 
         pts = np.vstack([comps[i] for i in members])
         t_all, s_all = self._frame(pts, c, d)
