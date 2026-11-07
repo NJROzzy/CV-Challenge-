@@ -1,0 +1,151 @@
+[
+  {
+    "name": "seed fallback",
+    "decision": "rejected: new Deck-1 hand-as-housing false validation",
+    "partial_runs": [
+      {
+        "video": "Cabinet-1.MOV",
+        "counts": {
+          "samples": 327,
+          "tape_observations": 253,
+          "candidate_events": 4,
+          "measurements": 4,
+          "uncertain": 0,
+          "rejected": 0,
+          "scene_images": 4,
+          "registered_view_scenes": 2,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 105.24
+      },
+      {
+        "video": "Countertop-1.MOV",
+        "counts": {
+          "samples": 966,
+          "tape_observations": 440,
+          "candidate_events": 8,
+          "measurements": 2,
+          "uncertain": 6,
+          "rejected": 0,
+          "scene_images": 2,
+          "registered_view_scenes": 1,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 254.97
+      },
+      {
+        "video": "Deck-1.MOV",
+        "counts": {
+          "samples": 749,
+          "tape_observations": 407,
+          "candidate_events": 16,
+          "measurements": 5,
+          "uncertain": 10,
+          "rejected": 1,
+          "scene_images": 5,
+          "registered_view_scenes": 2,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 278.26
+      }
+    ],
+    "timing_note": "Exploratory concurrent runs; not performance comparisons"
+  },
+  {
+    "name": "entry selection alone",
+    "decision": "not accepted alone: final Deck-2 reference still puts B on the body",
+    "partial_runs": [
+      {
+        "video": "Cabinet-1.MOV",
+        "counts": {
+          "samples": 327,
+          "tape_observations": 253,
+          "candidate_events": 4,
+          "measurements": 4,
+          "uncertain": 0,
+          "rejected": 0,
+          "scene_images": 4,
+          "registered_view_scenes": 2,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 85.78
+      },
+      {
+        "video": "Countertop-1.MOV",
+        "counts": {
+          "samples": 966,
+          "tape_observations": 439,
+          "candidate_events": 8,
+          "measurements": 2,
+          "uncertain": 6,
+          "rejected": 0,
+          "scene_images": 2,
+          "registered_view_scenes": 1,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 154.81
+      },
+      {
+        "video": "Deck-1.MOV",
+        "counts": {
+          "samples": 749,
+          "tape_observations": 393,
+          "candidate_events": 15,
+          "measurements": 5,
+          "uncertain": 10,
+          "rejected": 0,
+          "scene_images": 4,
+          "registered_view_scenes": 3,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 184.28
+      },
+      {
+        "video": "Deck-2.MOV",
+        "counts": {
+          "samples": 199,
+          "tape_observations": 61,
+          "candidate_events": 3,
+          "measurements": 1,
+          "uncertain": 2,
+          "rejected": 0,
+          "scene_images": 1,
+          "registered_view_scenes": 1,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 54.36
+      },
+      {
+        "video": "Door-1.MOV",
+        "counts": {
+          "samples": 351,
+          "tape_observations": 17,
+          "candidate_events": 0,
+          "measurements": 0,
+          "uncertain": 0,
+          "rejected": 0,
+          "scene_images": 0,
+          "registered_view_scenes": 0,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 55.92
+      },
+      {
+        "video": "Frame Pipes-1.MOV",
+        "counts": {
+          "samples": 155,
+          "tape_observations": 88,
+          "candidate_events": 1,
+          "measurements": 0,
+          "uncertain": 1,
+          "rejected": 0,
+          "scene_images": 0,
+          "registered_view_scenes": 0,
+          "clean_view_scenes": 0
+        },
+        "seconds_excluding_proxy": 38.34
+      }
+    ],
+    "timing_note": "Exploratory concurrent runs; not performance comparisons"
+  }
+]

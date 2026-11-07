@@ -1,0 +1,653 @@
+{
+  "scope": "Ten classical videos, 10 Hz, no proxy encoding; qualitative visual review, no labelled ground truth",
+  "base_commit": "bf29ea8",
+  "source_sha256": {
+    "reekon/config.py": "9cd66422d5ae575f893a396d632ba25fb5ac0ed06ee534a73f8143223a719b6b",
+    "reekon/__init__.py": "b7fd16040ef4b2f3016194310a48e3e2faea8f278d7de950cf3a09341e068fc0",
+    "reekon/scene.py": "2cd943f07dabfd31e7d7858b50cc28bc136042926aeafda32eeeab91c36c2ec9",
+    "reekon/endpoints.py": "742f77d01155ab6ef1ec237828fe089787fe1b215e07dfa11f0abaabee29acb6",
+    "reekon/register.py": "a79b5e2fe0fb8e8fd550a22308aca8c52a5537b33ee27b7427f97021cca7c4d8",
+    "reekon/pipeline.py": "d939c6b48aeef38deb6315b9f8faf2346c501bac57c16fd36bb266a395d98bca",
+    "reekon/video.py": "19120a1230c929c25831d5ff4bf1772a13164b630e6cc83803a3816b325f787d",
+    "reekon/events.py": "51f52273cfca370acdcf43acb9742a90c3eb743ea7a798aa2b699ab055f59615",
+    "reekon/annotate.py": "f111facc077d960c2a2fcfae6f8020be9cfd3860bd20d36573913c72cb32f340",
+    "reekon/hands.py": "74239ed4929ac5a21df0e9a94e1f2b7867787c32d7770e1ead507230874aaf73",
+    "reekon/serve.py": "32924bfc246c467dfe49280d0e3969dd8dffbc6d264476a7fbe2f19e699e56be",
+    "reekon/labels.py": "3de6885ce5cf7ef1fded5afaea199e644518b3a57493c52bdeff08eaf0ce8eb9",
+    "reekon/__main__.py": "0f446755020c70b6eca97d8cf86767ac043765659544717e1974581cc02e6bb2",
+    "reekon/detect.py": "794fae7569da2f2b9b27b07188e9a9d8cebc0235fa7e97d8d71786acb8423d40"
+  },
+  "timeline_and_sample_counts_match_baseline": true,
+  "jetson_focused_tests": {
+    "passed": 9,
+    "deselected": 20,
+    "python": "3.10.12",
+    "opencv": "4.8.0",
+    "numpy": "1.26.4"
+  },
+  "original_artifact_files_verified": 111,
+  "original_artifacts_changed": [],
+  "tests": {
+    "cpu_passed": 39,
+    "skipped": 10,
+    "notes": "9 CUDA cases skip in CPU environment; 1 opt-in footage test. Full Cabinet-1 CLI rerun retains four measurements."
+  },
+  "runs": [
+    {
+      "video": "Cabinet-1.MOV",
+      "before_results": "outputs/Cabinet-1/classical/results.json",
+      "after_results": "outputs/accuracy-final/Cabinet-1/classical/results.json",
+      "before_sha256": "c635e5554e7fbd7a9258cba63fca036b1f2cdc73f2d598f669262c8c49c0a0b5",
+      "after_sha256": "1a29a463d95e5e58a8f05e6243691489c7e4d5f9295fef15b630a4af344063af",
+      "before_counts": {
+        "samples": 327,
+        "tape_observations": 253,
+        "candidate_events": 4,
+        "measurements": 4,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 4,
+        "registered_view_scenes": 2,
+        "clean_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 327,
+        "tape_observations": 253,
+        "candidate_events": 4,
+        "measurements": 4,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 4,
+        "registered_view_scenes": 2,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 86.38,
+      "after_seconds_excluding_proxy": 85.31,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [
+        [
+          3.708,
+          9.107
+        ],
+        [
+          10.732,
+          13.307
+        ],
+        [
+          16.305,
+          21.205
+        ],
+        [
+          23.405,
+          30.303
+        ]
+      ],
+      "after_validated_windows": [
+        [
+          3.708,
+          9.107
+        ],
+        [
+          10.732,
+          13.307
+        ],
+        [
+          16.305,
+          21.205
+        ],
+        [
+          23.405,
+          30.303
+        ]
+      ]
+    },
+    {
+      "video": "Countertop-1.MOV",
+      "before_results": "outputs/Countertop-1/classical/results.json",
+      "after_results": "outputs/accuracy-final/Countertop-1/classical/results.json",
+      "before_sha256": "c75655dd809f9bab9d1c2406ba51924d6d013d3bcd242234da68d89ce6e82138",
+      "after_sha256": "a17f14e2e63122c881eec9d0865bbbc8282e845aefc4131699bfb627337829b8",
+      "before_counts": {
+        "samples": 966,
+        "tape_observations": 439,
+        "candidate_events": 8,
+        "measurements": 2,
+        "uncertain": 6,
+        "rejected": 0,
+        "scene_images": 2,
+        "registered_view_scenes": 1,
+        "clean_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 966,
+        "tape_observations": 439,
+        "candidate_events": 8,
+        "measurements": 2,
+        "uncertain": 6,
+        "rejected": 0,
+        "scene_images": 2,
+        "registered_view_scenes": 1,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 156.74,
+      "after_seconds_excluding_proxy": 153.67,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [
+        [
+          18.93,
+          30.228
+        ],
+        [
+          35.927,
+          42.927
+        ]
+      ],
+      "after_validated_windows": [
+        [
+          18.93,
+          30.228
+        ],
+        [
+          35.927,
+          42.927
+        ]
+      ]
+    },
+    {
+      "video": "Deck-1.MOV",
+      "before_results": "outputs/Deck-1/classical/results.json",
+      "after_results": "outputs/accuracy-final/Deck-1/classical/results.json",
+      "before_sha256": "f4faeb63bf6b586d22a5297c725ebb0640cc70b3fe5c00c3e0d208ab4a0b9570",
+      "after_sha256": "5e6f4897ff002eaadc8e3e3fdcc70d3e2eb6e7ab8a6eedb5492395b11c96028e",
+      "before_counts": {
+        "samples": 749,
+        "tape_observations": 386,
+        "candidate_events": 16,
+        "measurements": 6,
+        "uncertain": 10,
+        "rejected": 0,
+        "scene_images": 5,
+        "registered_view_scenes": 4,
+        "clean_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 749,
+        "tape_observations": 393,
+        "candidate_events": 15,
+        "measurements": 5,
+        "uncertain": 10,
+        "rejected": 0,
+        "scene_images": 4,
+        "registered_view_scenes": 3,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 181.84,
+      "after_seconds_excluding_proxy": 183.48,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [
+        [
+          14.132,
+          14.932
+        ],
+        [
+          46.927,
+          47.927
+        ],
+        [
+          48.827,
+          50.127
+        ],
+        [
+          53.925,
+          54.827
+        ],
+        [
+          55.827,
+          56.627
+        ],
+        [
+          63.525,
+          66.625
+        ]
+      ],
+      "after_validated_windows": [
+        [
+          14.132,
+          14.932
+        ],
+        [
+          46.927,
+          50.127
+        ],
+        [
+          53.925,
+          54.827
+        ],
+        [
+          55.827,
+          56.627
+        ],
+        [
+          64.125,
+          66.625
+        ]
+      ]
+    },
+    {
+      "video": "Deck-2.MOV",
+      "before_results": "outputs/Deck-2/classical/results.json",
+      "after_results": "outputs/accuracy-final/Deck-2/classical/results.json",
+      "before_sha256": "eb7dbc27d4f28d6fa99b5879071d694dc5bb0de5078ae899fd93013fd986fe02",
+      "after_sha256": "b1ad4470d8ffe08fc06926c60796e984f273696d5d64160551d38874c302fc62",
+      "before_counts": {
+        "samples": 199,
+        "tape_observations": 61,
+        "candidate_events": 3,
+        "measurements": 1,
+        "uncertain": 2,
+        "rejected": 0,
+        "scene_images": 1,
+        "registered_view_scenes": 1,
+        "clean_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 199,
+        "tape_observations": 61,
+        "candidate_events": 3,
+        "measurements": 0,
+        "uncertain": 3,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 50.22,
+      "after_seconds_excluding_proxy": 36.34,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [
+        [
+          13.232,
+          14.932
+        ]
+      ],
+      "after_validated_windows": []
+    },
+    {
+      "video": "Door-1.MOV",
+      "before_results": "outputs/Door-1/classical/results.json",
+      "after_results": "outputs/accuracy-final/Door-1/classical/results.json",
+      "before_sha256": "31cd021579ffba873b26ccc0674d37db465dcc7031c13dca6c1a435706424d50",
+      "after_sha256": "6a9f90a399c859ccb463aae0ce06ed38ca13535c788126c17ac4cc96af6996b5",
+      "before_counts": {
+        "samples": 351,
+        "tape_observations": 17,
+        "candidate_events": 0,
+        "measurements": 0,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 351,
+        "tape_observations": 17,
+        "candidate_events": 0,
+        "measurements": 0,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 56.47,
+      "after_seconds_excluding_proxy": 54.55,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [],
+      "after_validated_windows": []
+    },
+    {
+      "video": "Frame Pipes-1.MOV",
+      "before_results": "outputs/Frame Pipes-1/classical/results.json",
+      "after_results": "outputs/accuracy-final/Frame Pipes-1/classical/results.json",
+      "before_sha256": "da1f71462d54afcbe7e5a789cb9db2c6b344848d6c0373d647b78a017eaba078",
+      "after_sha256": "95223cc4e14142264e786e545f6bbfcd6a03e90ba47e26b9c5d6f9317995b754",
+      "before_counts": {
+        "samples": 155,
+        "tape_observations": 90,
+        "candidate_events": 1,
+        "measurements": 0,
+        "uncertain": 1,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 155,
+        "tape_observations": 88,
+        "candidate_events": 1,
+        "measurements": 0,
+        "uncertain": 1,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 37.38,
+      "after_seconds_excluding_proxy": 37.77,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [],
+      "after_validated_windows": []
+    },
+    {
+      "video": "Kitchen Cabinets.MOV",
+      "before_results": "outputs/Kitchen Cabinets/classical/results.json",
+      "after_results": "outputs/accuracy-final/Kitchen Cabinets/classical/results.json",
+      "before_sha256": "54207716b3ca5a9c349e5172dd9af19f4e7da312c033d2115840645f3255024b",
+      "after_sha256": "51005595a809061ebfb244f1d50fc44bee98a8fad43c09aa4436fae92f9b6455",
+      "before_counts": {
+        "samples": 1797,
+        "tape_observations": 242,
+        "candidate_events": 2,
+        "measurements": 0,
+        "uncertain": 1,
+        "rejected": 1,
+        "scene_images": 0,
+        "registered_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 1797,
+        "tape_observations": 246,
+        "candidate_events": 2,
+        "measurements": 0,
+        "uncertain": 1,
+        "rejected": 1,
+        "scene_images": 0,
+        "registered_view_scenes": 0,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 361.62,
+      "after_seconds_excluding_proxy": 325.55,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [],
+      "after_validated_windows": []
+    },
+    {
+      "video": "Kitchen Sink.mov",
+      "before_results": "outputs/Kitchen Sink/classical/results.json",
+      "after_results": "outputs/accuracy-final/Kitchen Sink/classical/results.json",
+      "before_sha256": "f93985007b7b1f4b4a60b20ac2331667476d7e272c63bdf6e73d01de36f01436",
+      "after_sha256": "6a57ddf33a73af63faae9f419193e286ad510df8785d24c5bf927f5d29fe0fe5",
+      "before_counts": {
+        "samples": 387,
+        "tape_observations": 104,
+        "candidate_events": 1,
+        "measurements": 1,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 1,
+        "registered_view_scenes": 1,
+        "clean_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 387,
+        "tape_observations": 104,
+        "candidate_events": 1,
+        "measurements": 1,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 1,
+        "registered_view_scenes": 1,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 92.55,
+      "after_seconds_excluding_proxy": 75.06,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [
+        [
+          0.2,
+          1.6
+        ]
+      ],
+      "after_validated_windows": [
+        [
+          0.2,
+          1.6
+        ]
+      ]
+    },
+    {
+      "video": "Large Window.MOV",
+      "before_results": "outputs/Large Window/classical/results.json",
+      "after_results": "outputs/accuracy-final/Large Window/classical/results.json",
+      "before_sha256": "4d69522e55063f1223adf5cf69d671f4dc36fae900e89268348369a3193f13ba",
+      "after_sha256": "6c4f6178633050171f76be9e75e04798f318efed30b9fe69dfe9beb1f82fa50f",
+      "before_counts": {
+        "samples": 572,
+        "tape_observations": 21,
+        "candidate_events": 0,
+        "measurements": 0,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0,
+        "clean_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 572,
+        "tape_observations": 21,
+        "candidate_events": 0,
+        "measurements": 0,
+        "uncertain": 0,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 80.25,
+      "after_seconds_excluding_proxy": 80.94,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [],
+      "after_validated_windows": []
+    },
+    {
+      "video": "Outdoor_Pipes.mp4",
+      "before_results": "outputs/Outdoor_Pipes/classical/results.json",
+      "after_results": "outputs/accuracy-final/Outdoor_Pipes/classical/results.json",
+      "before_sha256": "547235a492cecc892978036b85c89d0e8e24c9f08cd3e1e2f38117fa0c65d363",
+      "after_sha256": "6cbbd35c61b966524703a3274cc7e7bf50cfa6e93826932196777ddd5ccbdbb2",
+      "before_counts": {
+        "samples": 259,
+        "tape_observations": 44,
+        "candidate_events": 1,
+        "measurements": 0,
+        "uncertain": 1,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0
+      },
+      "after_counts": {
+        "samples": 259,
+        "tape_observations": 44,
+        "candidate_events": 1,
+        "measurements": 0,
+        "uncertain": 1,
+        "rejected": 0,
+        "scene_images": 0,
+        "registered_view_scenes": 0,
+        "clean_view_scenes": 0
+      },
+      "before_seconds_excluding_proxy": 48.57,
+      "after_seconds_excluding_proxy": 48.15,
+      "before_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "after_environment": {
+        "sample_fps": 10.0,
+        "detector": "classical",
+        "python": "3.11.0rc1",
+        "opencv": "5.0.0",
+        "numpy": "2.4.6"
+      },
+      "before_validated_windows": [],
+      "after_validated_windows": []
+    }
+  ],
+  "totals": {
+    "before": {
+      "tape_observations": 1657,
+      "candidate_events": 36,
+      "measurements": 14,
+      "uncertain": 21,
+      "rejected": 1,
+      "scene_images": 13,
+      "registered_view_scenes": 9,
+      "clean_view_scenes": 0
+    },
+    "after": {
+      "tape_observations": 1666,
+      "candidate_events": 35,
+      "measurements": 12,
+      "uncertain": 22,
+      "rejected": 1,
+      "scene_images": 11,
+      "registered_view_scenes": 7,
+      "clean_view_scenes": 0
+    }
+  },
+  "notes": [
+    "No labelled ground truth: counts are algorithm classifications, not accuracy.",
+    "Original five zero-result videos have no new validated measurements.",
+    "All original 111 output/benchmark files retain their hashes.",
+    "The existing uncommitted cleanup predates this pass and is left separate.",
+    "Final videos were run sequentially; historical before timings and exploratory concurrent timings are not a controlled performance benchmark.",
+    "Restricted execution leaves optional ffprobe container-rate fields null; decoded frame counts and sampled PTS timelines match baseline.",
+    "No proxies encoded; original proxies remain in original output directories."
+  ],
+  "code_commit": "fc1265f0759afb34671901ef292c0360dad3cea5",
+  "artifact_checks": {
+    "all_index_entries_checked": 10,
+    "all_referenced_jpegs_decode": true,
+    "each_validated_measurement_placed_once": true
+  }
+}

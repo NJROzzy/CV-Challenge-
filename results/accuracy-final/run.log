@@ -1,0 +1,20 @@
+Cabinet-1.MOV: 981 frames, 32.7s; 327 samples, tape detected in 253
+  4 candidate event(s): 4 validated, 0 uncertain/rejected; 4 scene image(s); outputs in outputs/accuracy-final/Cabinet-1/classical
+Deck-2.MOV: 597 frames, 19.9s; 199 samples, tape detected in 61
+  3 candidate event(s): 0 validated, 3 uncertain/rejected; 0 scene image(s); outputs in outputs/accuracy-final/Deck-2/classical
+Countertop-1.MOV: 2891 frames, 96.6s; 966 samples, tape detected in 439
+  8 candidate event(s): 2 validated, 6 uncertain/rejected; 2 scene image(s); outputs in outputs/accuracy-final/Countertop-1/classical
+Deck-1.MOV: 2247 frames, 74.9s; 749 samples, tape detected in 393
+  15 candidate event(s): 5 validated, 10 uncertain/rejected; 4 scene image(s); outputs in outputs/accuracy-final/Deck-1/classical
+Door-1.MOV: 1054 frames, 35.1s; 351 samples, tape detected in 17
+  0 candidate event(s): 0 validated, 0 uncertain/rejected; 0 scene image(s); outputs in outputs/accuracy-final/Door-1/classical
+Frame Pipes-1.MOV: 464 frames, 15.5s; 155 samples, tape detected in 88
+  1 candidate event(s): 0 validated, 1 uncertain/rejected; 0 scene image(s); outputs in outputs/accuracy-final/Frame Pipes-1/classical
+Kitchen Cabinets.MOV: 5391 frames, 179.7s; 1797 samples, tape detected in 246
+  2 candidate event(s): 0 validated, 2 uncertain/rejected; 0 scene image(s); outputs in outputs/accuracy-final/Kitchen Cabinets/classical
+Kitchen Sink.mov: 1159 frames, 38.6s; 387 samples, tape detected in 104
+  1 candidate event(s): 1 validated, 0 uncertain/rejected; 1 scene image(s); outputs in outputs/accuracy-final/Kitchen Sink/classical
+Large Window.MOV: 1715 frames, 57.2s; 572 samples, tape detected in 21
+  0 candidate event(s): 0 validated, 0 uncertain/rejected; 0 scene image(s); outputs in outputs/accuracy-final/Large Window/classical
+Outdoor_Pipes.mp4: 777 frames, 25.9s; 259 samples, tape detected in 44
+  1 candidate event(s): 0 validated, 1 uncertain/rejected; 0 scene image(s); outputs in outputs/accuracy-final/Outdoor_Pipes/classical

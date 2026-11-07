@@ -320,3 +320,24 @@ results/       benchmark results (baseline.json CPU-only; gpu_system_python.json
 outputs/       pipeline outputs for the provided footage (browser videos and diagnostic images are git-ignored)
 data/inbox/    drop folder for input videos (git-ignored)
 ```
+
+## Final accuracy pass (2026-11-07)
+
+The final ten-video run has **35 candidates: 12 validated, 22 uncertain and 1 rejected**.
+The five originally zero-result videos remain at zero; no safe recall gain was demonstrated.
+
+Fresh classical results live separately in `outputs/accuracy-final/`; the original outputs and
+benchmark evidence are preserved. Housing-entry localization now handles split housing masks,
+checks local blade contrast, and excludes unsupported entries from endpoint voting and reference
+selection. Cabinet-1 retains four measurements. Deck-2's known bad validated line is now an
+uncertain candidate with no invented housing endpoint. Adjacent Deck-1 readings of one continuous
+placement merge into one event.
+
+A broader seed search was reverted after introducing a hand-as-housing false validation on
+Deck-1. Missing/occluded hooks, fragmented tape detections, imprecise housing placement and
+blade-less measuring remain limitations. No reliable new clean scene correspondence was forced.
+See the [final diagnosis, before/after counts, visual review and timings](docs/evaluation.md#final-accuracy-pass-2026-11-07).
+
+Validation: 39 CPU tests passed, 10 skipped; nine focused endpoint tests also passed with the
+existing Jetson/OpenCV 4.8 environment. No packages, CUDA settings or models were changed.
+View the separate results with `.venv/bin/python -m reekon.serve --outputs outputs/accuracy-final`.
