@@ -1,32 +1,36 @@
 # REEKON Challenge #2 — where was each measurement made?
 
-Input: point-of-view videos of someone measuring cabinets, doors, windows, walls or openings with a tape measure.
-Output: for every measurement, an annotated image showing its two endpoints. **A** is the hook end and **B** is where the blade enters the housing. Each image also states how confident the system is, and why.
+Input: point-of-view videos of someone measuring cabinets, countertops, decks, doors, windows, walls or openings with a tape measure.
+Output: scene images with numbered measurement lines on the measured surfaces, plus one image per confirmed measurement. **A** is the hook end and **B** is where the blade enters the housing. Each image states how confident the system is, and why.
 
-Everything is automatic, with no manual annotation and no model trained on the footage. Reading the length is out of scope.
+Everything is automatic: no manual annotation, no hard-coded coordinates or timestamps, and no model trained on the footage. Reading the length is out of scope.
 
 ## Implemented features
 
 - **Video ingestion:** timestamps every frame with its presentation timestamp, so variable-frame-rate phone video is handled correctly. Frames are sampled by time.
-- **Per-frame tape detection:** finds the blade, the hook end and the housing end, and flags ends cut off by the frame edge. A classical CPU strategy is the default; an optional AI-assisted strategy adds GPU hand pose.
-- **Measurement events:** split into episodes and readings, then merged when a reading has the same endpoints as the one before it in that episode.
-- **Endpoint localisation:** votes across many frames and reports confidence, agreement count and spread. An endpoint without enough agreement is reported as `missing`, never invented.
-- **Frame registration:** chains optical-flow homographies across frames. A straight-tape correction and a check against the consensus position choose the reference frame.
-- **Annotated images:** one per measurement, with a registered mosaic when an endpoint lies outside the reference frame.
-- **Browser viewer:** served on the LAN with HTTP Range support. It shows the video with a per-frame overlay, a timeline, measurement cards, the images and performance tables.
-- **Per-stage timings** in every `results.json`, plus the Phase 1 CPU/GPU preprocessing benchmark (`cvbench`).
-- **Tools:** footage inspection (`tools/`) and a pytest suite with an opt-in regression test on the real footage.
+- **Per-frame tape detection:** finds the blade, the hook end and the housing end.
+  - It rejects dark lines that aren't tapes, such as railings, vegetation edges, poles and shadows.
+  - It never takes a blade end that runs into the frame edge, or disappears behind a hand, for the hook.
+- **Measurement events:** episodes and readings, with hook/housing labels kept consistent over time. Each event is `validated`, `uncertain` or `rejected`, with reasons. Only validated events are presented as measurements.
+- **Endpoint localisation:** votes across many frames and reports confidence, agreement and spread. An endpoint without enough agreement is `missing`, never invented.
+- **Scene registration:** measured points are carried between frames using features near the measured object, bridging fast camera motion with keyframe matching. A mapping is accepted only if it passes three checks:
+  - a round trip through independent reverse links;
+  - the points land inside the target frame;
+  - an appearance check confirms the same surface in both frames.
+- **Scene images:** validated measurements are drawn on the least obstructed frame that maps reliably, grouped when several fit one frame. Otherwise the reading frame is used.
+- **Browser viewer:** scene images, validated measurements vs unconfirmed candidates, diagnostic images, the video with a per-frame overlay, a timeline, and classical vs AI-assisted results.
+- **Measurement:** per-stage timings in every `results.json`, and a measured CPU vs CUDA benchmark (`cvbench`).
+- **Tools and tests:** footage inspection tools and a pytest suite (synthetic tests plus an opt-in regression on real footage).
 
 ## Tech stack (as run and tested)
 
 | Component | Version / detail |
 |---|---|
-| Hardware | NVIDIA Jetson Orin Nano Developer Kit (8 GB), JetPack 6 / L4T R36.3 |
-| Main environment (`.venv`) | Python 3.11, OpenCV 5.0.0, NumPy 2.4.6, pytest. Used for the pipeline, viewer server and tests |
-| GPU strategy environment (system `python3`) | Python 3.10.12, OpenCV 4.8.0, NumPy 1.26.4, `jetson-inference` with TensorRT 8.6 running NVIDIA's pretrained Pose-ResNet18-Hand |
-| Video tools | FFmpeg / ffprobe 4.4.2 (browser video copy, timestamp checks) |
+| Hardware | NVIDIA Jetson Orin Nano Developer Kit (8 GB), JetPack 6 / L4T R36.3 (CUDA 12.2, cuDNN 8.9, TensorRT 8.6.2) |
+| Main environment (`.venv`) | Python 3.11, OpenCV 5.0.0, NumPy 2.4.6, pytest. Used for the pipeline, viewer server and tests. Its PyTorch 2.15 is a CUDA 13.2 build and cannot use this JetPack's GPU |
+| System `python3` (JetPack) | Python 3.10.12, OpenCV 4.8.0, NumPy 1.26.4, **PyTorch 2.1.0 with CUDA 12.2 (GPU works)**, `jetson-inference` with TensorRT running NVIDIA's pretrained Pose-ResNet18-Hand |
+| Video tools | FFmpeg / ffprobe 4.4.2 |
 | Viewer | Static HTML/CSS/JavaScript (no frameworks or CDNs) served by Python's `http.server` with added Range support |
-| Phase 1 benchmark | NumPy/OpenCV CPU path and PyTorch 2.15 (CUDA 13.2 build) GPU path. CUDA cannot initialise on this JetPack driver, so GPU timings are unavailable |
 
 ## Quick start (Jetson)
 
@@ -39,139 +43,195 @@ cd ~/Desktop/CV-Challenge-
 python3 -m reekon data/inbox --detector hand-assisted      # system python3: has jetson_inference
 # 3. look at the results in a browser
 .venv/bin/python -m reekon.serve                            # prints http://<jetson-ip>:8000/
-# 4. tests (18 pass; 9 CUDA-parity tests skip because PyTorch CUDA is unavailable here)
+# 4. tests (25 pass; 9 CUDA-parity tests skip in .venv because its PyTorch cannot use CUDA)
 .venv/bin/python -m pytest -q
-REEKON_FOOTAGE_TESTS=1 .venv/bin/python -m pytest -q -k footage   # ~70 s regression on Cabinet-1.MOV
+REEKON_FOOTAGE_TESTS=1 .venv/bin/python -m pytest -q -k footage   # ~80 s regression on Cabinet-1.MOV
+# 5. CPU vs GPU preprocessing benchmark, measured with the CUDA-capable system PyTorch
+python3 -m cvbench --backend both --output results/gpu_system_python.json
 ```
 
-To view the results from a Mac on the same network, open `http://192.168.1.16:8000/`, using the address the server prints. If VS Code Remote is connected, port 8000 is forwarded, so `http://localhost:8000/` also works.
+To view the results from a Mac on the same network, open the address the server prints (here `http://192.168.1.16:8000/`). With VS Code Remote, `http://localhost:8000/` also works through port forwarding.
 
 Outputs go to `outputs/<video>/<strategy>/`:
-- `measurement_NN.jpg`: one annotated image per measurement.
-- `results.json`: endpoints, status, confidence, agreement, notes, every per-frame detection and per-stage timings.
-- `video.mp4`: a browser-playable copy that keeps the original timestamps.
 
-**Requirements.** The existing environments are used unchanged: `.venv` (Python 3.11, OpenCV 5, NumPy 2) for the classical strategy and the tests. Two more pieces are needed:
-- `ffmpeg`/`ffprobe` on the PATH, for the browser video copy and for checking timestamps.
-- JetPack's `jetson-inference` with the `Pose-ResNet18-Hand` model under `~/jetson-inference/data`, but only for `--detector hand-assisted`.
+| File | Contents |
+|---|---|
+| `scene_NN.jpg` | Scene images: one or more measurements drawn on another frame of the scene |
+| `measurement_NN.jpg` | One image per validated measurement, on its reading frame |
+| `diagnostics/candidate_NN.jpg` | Unconfirmed candidates, with the reasons in the caption. Git-ignored and regenerated each run |
+| `results.json` | Everything above, plus every per-frame detection, the scene-registration log and per-stage timings |
+| `video.mp4` | Browser copy of the video, with the original timestamps. Git-ignored |
 
-## Results on `Cabinet-1.MOV` (the only footage provided)
+## Results on the four videos
 
-The video is 32.7 s, 1552×2064 HEVC. It is variable-frame-rate: it declares 120 fps but averages 30 fps. The pipeline found **4 measurements**. I checked every image by eye; that check was used only for evaluation and is not part of the pipeline.
+I judged each image by eye. That check is used only for this evaluation and is not part of the pipeline. Nothing here is a quantitative accuracy figure: there's no ground truth.
 
-| # | Time | What it is (visual check) | A hook | B housing | Image |
-|---|---|---|---|---|---|
-| 1 | 3.7–9.1 s | Right door height: top edge (under the glass) → bottom edge, where the green laser line is | seen in reference frame, 22/51 frames agree | seen, 25/54 agree | `outputs/Cabinet-1/classical/measurement_01.jpg` |
-| 2 | 10.7–13.3 s | Left door height | seen, 21/35 | seen, 10/26 | `…/measurement_02.jpg` |
-| 3 | 16.3–21.2 s | Width: cabinet left edge → gap between the doors | mapped from other frames, 11/41 | seen, 42/50 | `…/measurement_03.jpg` |
-| 4 | 23.3–30.3 s | Width: cabinet left edge → cabinet right edge | mapped from other frames, 17/21 | seen, 58/68 | `…/measurement_04.jpg` |
+| Video | Candidate events | Validated | Visual check of validated | Unconfirmed candidates | Scene images (registered views) | Compared with the previous pipeline |
+|---|---:|---:|---|---|---:|---|
+| Cabinet-1 (33 s, indoor cabinets) | 4 | 4 | 4 correct: both door heights and both widths | none | 4 (2) | Same 4 correct measurements, no regression |
+| Countertop-1 (97 s, marble counters) | 8 | 2 | 2 correct diagonal counter measurements | 6 uncertain: 4 with the housing end right but the hook not localised, 1 low-confidence, 1 correct measurement now unconfirmed (see regression) | 2 (1) | The false "carrying" event is gone. **Regression:** the 31–32 s measurement, correct before, is now uncertain |
+| Deck-1 (75 s, outdoor deck) | 16 | 6 | #3, #5, #6 plausible (vertical rail-to-rail); #2, #4 partial (hook placed where the blade goes behind over-exposed fingers); #1 uncertain | 10 uncertain, mostly the housing end right and the hook not localised | 5 (4), including #4 and #5 grouped on one frame | No longer confirms the railing-gap false line, the swapped-ends case or the frame-edge hooks |
+| Deck-2 (20 s, outdoor deck) | 3 | 1 | **Wrong:** A at the frame edge, B on the housing body | 2 uncertain | 1 (1) | The vegetation-edge and pole false events are gone; the remaining confirmed one is still wrong |
 
-All four are correct by visual inspection. The two strategies found the same four measurements.
+**Scene images, honestly:**
+- **What they are:** the "registered views" are nearby frames chosen for less obstruction. They still show the tape and hands.
+- **What was rejected:** frames that show the measured object unobstructed (approach frames) were rejected by the reliability checks on this footage. The scene-registration log in each `results.json` breaks down why: broken chains during fast head motion, round-trip error, endpoints out of view, or the appearance check. I'd rather show the reading frame than draw a line in the wrong place.
+- **What the appearance check caught:** before it was added, one deck measurement was drawn on the beach instead of the railing. That mapping had passed the round-trip check, because the error was consistent in both directions.
 
-During measurements 3 and 4 the hook is never in the same frame as the housing. Each of those images is therefore a registered mosaic: the frame where the hook was seen is warped, dimmed, around the reference frame.
-
-Accuracy is judged only by eye on this one video. There is no labelled ground truth, so no pixel-error figure is claimed. The opt-in regression test locks in the count, the both-endpoints result and the orientation.
+**Previous vs new pipeline, in short:** fewer confirmed measurements, but far fewer wrong ones presented as confirmed. Everything rejected is kept as a diagnostic candidate with its reason.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  V[video file] --> I["1 Ingestion<br/>decode, per-frame PTS,<br/>sample 10 frames/s by time"]
-  I --> D["2 Detection (per frame)<br/>classical CPU tape detector<br/>or + GPU hand pose"]
-  I --> P["registration prep<br/>grey frames, tape/hands masked"]
-  D --> E["2b Events<br/>episodes → readings<br/>(housing visible)"]
-  E --> L["3 Endpoint voting<br/>densest cluster of all<br/>observations in one frame"]
-  P --> R["4 Registration<br/>chained KLT homographies<br/>+ drift refinement"]
+  V[video file] --> I["1 Ingestion<br/>per-frame PTS,<br/>sample 10 frames/s by time"]
+  I --> D["2 Detection (per frame)<br/>blade / hook / housing<br/>strip check · edge & hand occlusion<br/>(classical CPU or + GPU hand pose)"]
+  I --> P["registration prep<br/>grey frames, tape/housing/skin masked,<br/>clutter score"]
+  D --> E["2b Events<br/>episodes → readings<br/>identity vote"]
+  E --> L["3 Endpoint voting<br/>densest cluster of observations<br/>in the reading frame"]
+  P --> R["4 Registration<br/>KLT links + SIFT keyframe bridges<br/>corridor-local homographies"]
   R --> L
-  L --> C["4b Reference frame<br/>housing at consensus,<br/>both ends visible preferred"]
-  C --> A["5 Annotation<br/>numbered A→B lines,<br/>mosaic for off-frame ends"]
-  A --> O[("outputs/<br/>images · results.json · video.mp4")]
+  L --> Q{"validate<br/>both ends? confident?<br/>blade extended?"}
+  Q -->|validated| S["4c Scene canvases<br/>least obstructed frame that passes<br/>round trip + appearance check;<br/>group measurements"]
+  Q -->|uncertain / rejected| X["diagnostic candidates<br/>(JSON + images, not presented)"]
+  R --> S
+  S --> A["5 Annotation<br/>numbered A→B lines"]
+  A --> O[("outputs/<br/>scene · measurement images,<br/>results.json, video.mp4")]
+  X --> O
   O --> W["browser viewer<br/>reekon.serve"]
 ```
 
 | Stage | Module | What it does |
 |---|---|---|
-| 1 Ingestion | `reekon/video.py` | Decodes with OpenCV and timestamps every frame with its presentation timestamp, checked against ffprobe for all 981 frames. Samples by time, never by index ÷ fps, because this footage's header rate is wrong by 4×. |
-| 2 Detection | `reekon/detect.py`, `reekon/hands.py` | Finds a dark strip relative to the frame's brightness, cleans it up, takes the longest blade-width shape and grows it along its line. The width profile along the line separates the narrow blade from the wide housing. Each end is flagged as visible or cut off by the frame edge. Confidence comes from length, tick-mark texture, straightness and coverage. |
-| 2b Events | `reekon/events.py` | An *episode* is continuous tape visibility in one direction. A *reading* (one measurement) is a stretch of at least 0.8 s with the housing visible. Readings at the same endpoints are merged. |
-| 3 Endpoints | `reekon/events.py` | Every observation of an endpoint is mapped into the reference frame, and the estimate is the densest cluster. Hook sightings must come from between the neighbouring readings and lie on the visible tape line; this rejects the other door's hook. Too little agreement gives `missing`. |
-| 4 Registration | `reekon/register.py` | Tracks corners frame to frame (forward-backward checked), fits a RANSAC homography per step and chains them, then refines to remove drift. The reference frame is the best-ranked frame whose own housing detection matches the consensus. |
-| 5 Annotation | `reekon/annotate.py` | Draws a numbered A→B line. A filled marker means seen in this frame; a hollow marker with a dashed ring means mapped from other frames, with the ring showing the spread. Endpoints outside the frame get a dimmed registered mosaic. The caption sits above the image and states status, agreement and corrections. |
-| Viewer | `viewer/index.html`, `reekon/serve.py` | Shows the video with a per-sample detection overlay, a timeline, measurement cards, the images and performance tables. The server exposes only `viewer/`, `outputs/` and `results/`, and supports HTTP Range requests, which Safari needs to play video. |
+| 1 Ingestion | `reekon/video.py` | Decodes with OpenCV, timestamps every frame with its presentation timestamp (checked against ffprobe) and samples by time. Cabinet-1 declares 120 fps but averages 30 fps. |
+| 2 Detection | `reekon/detect.py`, `reekon/hands.py` | See the detection rules below this table. |
+| 2b Events | `reekon/events.py` | An episode is continuous tape visibility in one direction; a reading is at least 0.8 s with the housing visible. For hook/housing identity, consecutive frames are linked by whether their ends keep or swap labels, and each chain's orientation is the majority vote of frames that actually saw the housing. |
+| 3 Endpoints | `reekon/events.py` | Votes observations into the reading frame. Hook sightings must lie on the visible tape line. Validation: both ends present, confidence ≥ 0.4, and median blade length ≥ 20% of the frame (otherwise the tape is being carried or repositioned). |
+| 4 Registration | `reekon/register.py` | Lucas-Kanade tracks between consecutive samples. When those fail, SIFT keyframe bridges (≥ 25 inliers) span up to 1.5 s. Points move by homographies fitted only to features in a corridor around the measured segment. `map_validated` adds a round trip within 2% of the diagonal, an inside-frame check, and a masked-patch NCC ≥ 0.5 at every checkable endpoint. |
+| 4c Scenes | `reekon/scene.py` | Ranks nearby frames by sharpness and obstruction, maps validated measurements with `map_validated`, and greedily groups them. Falls back to the reading frame. Logs every rejection reason. |
+| 5 Annotation | `reekon/annotate.py` | Numbered A→B lines. A filled marker means seen in that frame; hollow with a dashed ring means mapped there, with the ring showing spread or round-trip error. Candidates are captioned "NOT a confirmed measurement" with their reasons. |
+| Viewer | `viewer/index.html`, `reekon/serve.py` | Serves only `viewer/`, `outputs/` and `results/`, with HTTP Range support (Safari needs it for video). |
 
-The detection strategy is chosen at run time (`--detector classical | hand-assisted`); the rest of the pipeline is shared.
+Detection rules (stage 2), in the order they apply:
+- **Find the tape:** look for a dark strip relative to the frame's brightness and grow the blade along its line. The width profile along the line separates the narrow blade from the wide housing.
+- **Strip check:** keep it only if it is darker than the surface on both sides over at least 40% of its length, and has at least 0.9 bright/dark tick alternations per blade width.
+- **When an end counts as seen:** only if the blade doesn't run into the frame edge (more than 1.1 blade widths from it, measured along the blade), and the area beyond the end is not mostly skin or sleeve.
 
 ## Design choices, and why
 
-- **Classical CV first, no training.** In this footage the blade is a long, straight, dark strip with bright ticks, attached to a much wider housing. That is a strong geometric signal, and there was one video with no labels. A trained detector would need labelled tape footage that doesn't exist here, and it would have to be trained on the test video itself.
-- **Endpoints from many frames, not one.** A PoV camera rarely holds both ends in view. Voting across frames tolerates blur, the housing still moving into place and single-frame errors.
-- **Optical-flow chaining over descriptor matching.** This was measured. SIFT/ORB matching between frames 2–4 s apart kept 0–17 RANSAC inliers on the white, wide-angle footage. Chained Lucas-Kanade steps keep 12–39 inliers per step.
-- **Straight-blade prior.** The blade is straight and visible in the reference frame, so a hook mapped in from another frame must lie on its extension. Registration error over big pans is mostly perpendicular to the tape and measured up to ~290 px; that component is removed. The other door's hook (640 px off) is rejected. Every correction is recorded in the notes and the caption.
-- **Never fabricate.** Statuses are `observed`, `registered` or `missing`. A missing hook is not drawn. The viewer greys out samples that weren't analysed. GPU numbers are shown only where they were measured.
-- **The housing end is the blade's entry into the housing.** On this digital tape measure, the green laser line marks that point, and the detected B markers land on it.
+- **Classical CV first, no training.** The blade is a long, straight, dark strip with bright ticks, attached to a wider housing. That's a strong geometric signal, and there are no labelled tape videos.
+- **Measured thresholds, not guessed ones.** The strip check and the frame-edge rule were set from true and false detections on 24 frames from all four videos. The appearance threshold was set from correct mappings (NCC 0.97–1.0) against wrong-depth mappings (0.20–0.31). The margins are thin, and the code comments record them.
+- **One homography can't cover several depths.** Each link's transform is fitted near the measured object, and appearance is checked afterwards. The round trip alone was not enough: it passed a consistently wrong mapping.
+- **Never present a guess as a measurement.** Endpoints are `observed`, `registered` or `missing`. Events are `validated`, `uncertain` or `rejected`, and reasons are kept. Unreliable transforms fall back to the reading frame.
 
-## Performance (measured on this Jetson Orin Nano, Cabinet-1.MOV, 327 samples)
+## Performance
 
-| Stage | classical (CPU) | hand-assisted (CPU + TensorRT GPU) |
-|---|---:|---:|
-| decode + sample | 22.8 s | 4.7 s |
-| detect | 18.2 s (55.5 ms/sample) | 42.6 s (130.2 ms/sample, includes the hand model) |
-| registration prep | 4.6 s | 7.8 s |
-| frame cache (JPEG) | 7.7 s | 9.1 s |
-| events + endpoints + registration | 15.1 s | 21.2 s |
-| annotate | 0.6 s | 0.7 s |
-| **pipeline wall time** | **69.1 s** | **93.8 s** |
-| measurements found | 4 | 4 |
-| browser video encode (not part of the pipeline) | 21.1 s | 20.9 s |
+### Pipeline, per video (measured on this Jetson; wall-clock seconds; browser video encode excluded)
+
+| Video | Strategy | Decode | Detect | Registration prep | Frame cache | Events + endpoints | Scene registration | Annotate | **Total** |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Cabinet-1 | classical | 23.1 | 19.0 | 4.9 | 7.7 | 14.9 | 10.9 | 0.7 | **81.2** |
+| Cabinet-1 | hand-assisted | 7.0 | 45.5 | 8.0 | 9.1 | 19.5 | 12.7 | 1.1 | **124.3** |
+| Countertop-1 | classical | 55.2 | 40.1 | 13.4 | 18.5 | 17.1 | 7.9 | 0.4 | **152.7** |
+| Countertop-1 | hand-assisted | 13.7 | 97.1 | 20.9 | 21.8 | 21.0 | 19.3 | 0.6 | **205.4** |
+| Deck-1 | classical | 44.1 | 36.0 | 10.6 | 15.8 | 21.4 | 36.9 | 1.3 | **166.1** |
+| Deck-1 | hand-assisted | 10.9 | 86.2 | 16.1 | 18.8 | 27.8 | 31.1 | 1.2 | **206.4** |
+| Deck-2 | classical | 12.6 | 13.5 | 2.8 | 4.1 | 3.7 | 11.9 | 0.2 | **48.8** |
+| Deck-2 | hand-assisted | 2.9 | 32.9 | 4.7 | 4.9 | 3.6 | 18.9 | 0.2 | **79.2** |
 
 How to read these numbers:
-- **The comparison is confounded by environment.** The GPU model is only available to the system Python (OpenCV 4.8 / NumPy 1.26), while the classical run used `.venv` (OpenCV 5.0 / NumPy 2.4). That is why the two runs detected tape in 264 vs 275 samples.
-- **Stage times overlap.** FFmpeg decodes on background threads while detection runs, so per-stage times are not independent. Raw decode is 9.2 ms/frame under OpenCV 5.0 and 14.7 ms/frame under 4.8. Compare the totals, not the decode row.
-- **The GPU strategy gains nothing here.** It costs about +75 ms per sample and found the same 4 measurements. Confidence went up for #2 (0.58 → 0.84) and was 0.01–0.03 lower for the other three.
-- **PyTorch CUDA does not work in this environment.** Its CUDA 13.2 build doesn't match the JetPack 6 driver (see `results/cuda-diagnostics.log`). So no PyTorch GPU path is timed, and the Phase 1 `cvbench` GPU cases remain "unavailable" ([docs/benchmark.md](docs/benchmark.md)).
+- **Stage times overlap.** FFmpeg decodes on background threads while detection runs. The two strategies also run in different environments (OpenCV 5.0 vs 4.8). Compare totals.
+- **The hand-assisted strategy is 24–62% slower and doesn't improve correctness here:**
+  - Cabinet-1: same 4 measurements.
+  - Countertop-1: 3 validated; the third is a doubtful short-tape event.
+  - Deck-1: 4 validated against 6.
+  - Deck-2: 2 validated; one I can't confirm, the other has the same flaw as the classical run.
+
+### Classical vs AI-assisted (algorithm comparison, separate from hardware)
+
+| Video | Classical: tape samples / validated / unconfirmed | Hand-assisted: tape samples / validated / unconfirmed |
+|---|---|---|
+| Cabinet-1 | 253 of 327 / 4 / 0 | 262 of 327 / 4 / 0 |
+| Countertop-1 | 439 of 966 / 2 / 6 | 449 of 966 / 3 / 4 |
+| Deck-1 | 386 of 749 / 6 / 10 | 405 of 749 / 4 / 9 |
+| Deck-2 | 61 of 199 / 1 / 2 | 80 of 199 / 2 / 0 |
+
+### CPU vs CUDA preprocessing (`cvbench`, measured: `results/gpu_system_python.json`)
+
+This is resize, grayscale and Gaussian blur on synthetic frames, not the measurement pipeline. It was run with JetPack's system PyTorch 2.1 / CUDA 12.2, and the CPU path is OpenCV 4.8.
+
+| Input, batch | CPU median ms | GPU median ms | End-to-end speedup | Stage speedup (resize / gray / blur) |
+|---|---:|---:|---:|---|
+| 480p, 1 | 3.17 | 5.00 | 0.63× | 3.4 / 0.6 / 0.1 |
+| 480p, 8 | 25.30 | 15.82 | 1.60× | 12.2 / 4.2 / 0.2 |
+| 720p, 8 | 98.59 | 40.23 | 2.45× | 19.1 / 6.6 / 0.3 |
+| 1080p, 1 | 20.48 | 14.27 | 1.44× | 8.2 / 4.2 / 0.2 |
+| 1080p, 8 | 218.92 | 88.55 | 2.47× | 19.2 / 8.3 / 0.3 |
+
+All 9 cases are in the JSON. Key findings:
+- **Parity:** every case is within the 2×10⁻⁵ tolerance (maximum difference 1.8×10⁻⁷).
+- **Small inputs:** the GPU loses on small single frames, because of overhead.
+- **Batched HD:** it wins about 2.4×.
+- **Blur:** the blur, as two PyTorch convolutions, is 3–10× slower than OpenCV's blur on the CPU.
+
+### GPU compatibility on this Jetson
+
+| Item | Finding |
+|---|---|
+| Platform | JetPack 6 (L4T R36.3) ships CUDA 12.2 |
+| Cause of the mismatch | The `.venv` PyTorch 2.15 is a CUDA 13.2 build, so it fails with "driver too old" (`results/cuda-diagnostics.log`) |
+| Already working | The system `python3` has NVIDIA's JetPack PyTorch 2.1.0 (CUDA 12.2). `cvbench` now runs there without `psutil`, using standard-library fallbacks |
+| Recommended isolated environment | `python3 -m venv --system-site-packages .venv-jetson`, which inherits the working JetPack PyTorch, OpenCV and TensorRT without touching them. The alternative is the `l4t-pytorch` container for r36 from `~/jetson-containers`; that needs the user added to the `docker` group, which wasn't done. |
+| Changed? | Nothing in drivers, JetPack or existing environments was modified |
 
 ## Limitations
 
-- **One video.** Tolerances such as cluster radius, tape-line tolerance and reading length were tuned and checked on `Cabinet-1.MOV` only. Doors, windows, walls and openings were not seen.
-- **Tape appearance.** The detector assumes a dark blade with bright markings and a wider housing. A yellow or white blade needs a different mask (see below).
-- **Lens and parallax.** Homographies ignore the wide-angle distortion and assume a planar scene. Hooks mapped across large pans are approximate. The images say so, and the ±spread ring shows it.
-- **Fixed hook within a reading.** If the hook slides during a reading, the result is the most-agreed position, with alternatives listed in `results.json`.
-- **Endpoint B** is where the blade enters the housing, not the back of the housing. Some tape measures read from the back.
-- **The browser video was not played back here.** WebKitGTK on the Jetson could not load any `<video>`, even a bare tag, in an offscreen session. Range serving, the H.264 file and its timestamps were verified separately (within 3.3 ms of the source). The page itself rendered and ran without errors in WebKit.
+- **Four videos, no ground truth.** Correctness is a visual judgement, and the thresholds were set on these same videos.
+- **Hidden hook ends.** A blade end hidden behind over-exposed fingers looks like a white surface, so it can be taken for the hook (Deck-1 #2, #4).
+- **Colour-based hand test.** It can mistake beige wood next to a hook for skin. That caused the Countertop-1 regression. Hand keypoints from the hand-pose model would be the principled replacement.
+- **Downward-pointing tapes.** Strongly foreshortened tapes, pointing away from the camera and held in hand, are often not detected at all.
+- **Long measurements.** Hooks seen many seconds and large camera moves away from the housing are often not mappable, so those events stay `uncertain`.
+- **Scene images aren't truly clear views yet.** Lens distortion isn't modelled. Truly clear frames registered unreliably, so the accepted views are nearby frames.
+- **Endpoint B** is where the blade enters the housing, not the back of the housing. On vertical deck shots it can land on the housing body (Deck-2).
+- **Browser video not verified in a browser here.** Playback couldn't be tested in a browser on the Jetson: WebKitGTK loads no `<video>` offscreen. Range serving and the H.264 timestamps were verified separately.
 
 ## Alternatives considered
 
 | Option | Outcome |
 |---|---|
 | Colour (yellow) blade mask | Rejected after seeing the footage: the blade is black with yellow numbers. |
-| SIFT / ORB matching for registration | Measured 0–17 inliers across 2–4 s; replaced by chained KLT. |
-| Hand-rolled weighted-PCA line fit (for speed) | ~2° bias on long blades broke detection; kept `cv2.fitLine` on a 3,000-point subsample (120 → 63 ms/frame). |
-| "Hand at an end ⇒ that end is the housing" rule | Fired on 5 of 66 frames, all wrong (hands press the hook in place); replaced by "hand at the hook end ⇒ more confidence". |
-| Training or fine-tuning a detector (e.g. YOLO, available in `.venv`) | Not done: no labelled data, and the classical detector already finds every reading here. It's the next step if new footage breaks the classical masks. |
+| SIFT / ORB matching for whole registration chains | 0–17 inliers across 2–4 s; now used only to bridge failed tracking links. |
+| Whole-frame or very local (77 px) point motion | Whole-frame fits followed the most textured depth layer. Too few features at 77 px. Replaced by a corridor around the measured segment. |
+| Wider foreground mask for registration | Removed so many features that every link failed; rejected. |
+| Round-trip check alone | Passed a consistently wrong mapping (railing onto beach); an appearance check was added. |
+| "Hand at an end ⇒ housing" rule | All 5 firings were wrong (hands press the hook); replaced by a small confidence boost. |
+| Pretrained COCO detector (YOLOv8n) for the housing | Script in `tools/experiment_yolo_housing.py`. **Not run:** the downloaded `.pt` weights are a pickle (they can execute code when loaded), and loading them was blocked pending approval. An ONNX export would be the safer route. No result is claimed. |
+| Open-vocabulary detectors (YOLO-World, OWL-ViT) | Would need new Python packages (CLIP / transformers); not installed without approval. |
+| Training a detector from scratch | Not done, as instructed, and with no labels. |
 
 ## AI usage
 
-- **In the pipeline:** NVIDIA's pretrained Pose-ResNet18-Hand (jetson-inference / TensorRT) in the optional hand-assisted strategy. It is used as-is, not trained or fine-tuned. Everything else is classical CV.
-- **In development:** this code, the tests and this README were written with Claude Code (an AI coding assistant) working on the Jetson. It inspected the footage frame by frame, ran every experiment above and checked every output image. A person should still review the visual judgements.
+- **In the pipeline:** NVIDIA's pretrained Pose-ResNet18-Hand (jetson-inference / TensorRT), used as-is in the optional hand-assisted strategy. No other learned model is used. YOLOv8n was prepared but not run (see above).
+- **In development:** the code, tests and this README were written with Claude Code (an AI coding assistant) working on the Jetson. It inspected the footage frame by frame, ran every experiment and timing above, and checked every output image. Those visual judgements should be reviewed by a person.
 
 ## With two more weeks
 
-1. **More footage.** Run on doors, windows, walls and openings with different tape types; add a small hand-checked endpoint set to report pixel error instead of visual checks.
-2. **Lens self-calibration from the blade.** The blade is physically straight, so its image curvature across many frames fixes a one-parameter radial distortion. Registering undistorted points would shrink the 200–290 px corrections.
-3. **Laser-line refinement of B.** Detect the green line where it crosses the blade for a sub-blade-width estimate of endpoint B.
-4. **Learned blade/hook/housing detector, if needed.** Train or fine-tune a small YOLO segmentation model on frames auto-labelled by the classical detector (high-confidence frames only), then compare the two on held-out videos.
-5. **Speed.** Hardware HEVC decoding (NVDEC through GStreamer), fewer full-resolution JPEG caches, and running detection only around tape episodes. The bottlenecks today are decode, detection and registration.
-6. **Read the length (stretch goal).** OCR the housing's LCD at the reference frame.
+1. **Ground truth.** A small hand-checked endpoint set on held-out videos, to report pixel error and precision/recall instead of visual checks.
+2. **Hand-keypoint occlusion.** Use the hand model's keypoints, rather than colour, to decide whether a blade end is hidden. This fixes the wood-as-skin regression and the over-exposed-finger hooks.
+3. **Lens self-calibration from the blade,** which is physically straight. Registering undistorted points would make clear-view scene images feasible.
+4. **A learned blade/hook/housing detector,** fine-tuned on frames auto-labelled by the classical detector (high-confidence only), safely exported (ONNX/TensorRT). Compare it with the classical strategy on held-out videos.
+5. **Speed.** Hardware HEVC decoding (NVDEC via GStreamer), fewer full-resolution JPEG caches, and detection only around tape episodes.
+6. **Read the length (stretch goal).** OCR of the housing's LCD.
 
 ## Repository layout
 
 ```
-reekon/        measurement pipeline (video, detect, hands, register, events, annotate, pipeline, serve)
+reekon/        measurement pipeline (video, detect, hands, events, register, scene, annotate, pipeline, serve)
 viewer/        browser results viewer (static HTML/JS, no external dependencies)
-tools/         footage inspection: contact sheets, live hand-pose playback
+tools/         footage inspection tools and the YOLO housing experiment
 tests/         pytest suite (synthetic + opt-in real-footage regression)
-cvbench/       Phase 1 CPU/GPU preprocessing benchmark  → docs/benchmark.md
-results/       Phase 1 benchmark results and CUDA diagnostics
-outputs/       pipeline outputs for the provided footage (browser video copies are git-ignored)
+cvbench/       Phase 1 CPU/GPU preprocessing benchmark → docs/benchmark.md
+results/       benchmark results (baseline.json CPU-only; gpu_system_python.json measured CPU vs CUDA) and CUDA diagnostics
+outputs/       pipeline outputs for the provided footage (browser videos and diagnostic images are git-ignored)
 data/inbox/    drop folder for input videos (git-ignored)
 ```
