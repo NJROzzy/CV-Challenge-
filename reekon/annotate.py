@@ -117,13 +117,49 @@ def render(m, canvas_img, context_img=None, H_context=None, video_name=''):
         cv2.rectangle(img, outline[:2], outline[2:], (255, 255, 255), th)
         _label(img, 'reference frame', (outline[0] + 10, outline[3] - 15), scale_ref / 1400, (255, 255, 255), 2)
     draw_measurement(img, m, T, scale_ref)
-    status = lambda e: e['status'] if e['status'] == 'missing' else f"{e['status']} (conf {e['confidence']:.2f}, {e['support']}/{e['candidates']} frames agree)"
-    lines = [f"{video_name}  measurement #{m['id']}  {m['start_t']:.1f}-{m['end_t']:.1f}s  reference t={m['canvas_t']:.2f}s",
-             f"A hook: {status(m['hook'])}",
-             f"B housing: {status(m['housing'])}"]
+    describe = lambda e: e['status'] if e['status'] == 'missing' else f"{e['status']} (conf {e['confidence']:.2f}, {e['support']}/{e['candidates']} frames agree)"
+    status = m.get('status', 'validated')
+    label = 'measurement #' if status == 'validated' else f'{status.upper()} candidate C'
+    lines = [f"{video_name}  {label}{m['id']}  {m['start_t']:.1f}-{m['end_t']:.1f}s  reference t={m['canvas_t']:.2f}s",
+             f"A hook: {describe(m['hook'])}",
+             f"B housing: {describe(m['housing'])}"]
     if outline is not None:
         shift = m.get('context_shift_px')
         extra = f', shifted {shift:.0f}px by the straight-tape correction' if shift else ''
         lines.append(f"dimmed area: frame t={m.get('context_t', 0):.2f}s registered into this view (approximate{extra})")
     lines.append('filled marker = seen in this frame; hollow + dashed ring = mapped from other frames')
+    if status != 'validated':
+        lines.append('NOT a confirmed measurement: ' + '; '.join(m.get('reasons', [])))
+    return caption(img, lines)
+
+
+def render_scene(canvas, image, measurements_by_id, video_name=''):
+    """A scene image with every measurement placed on it (numbered A->B lines).
+    `canvas` is a SceneCanvas dict; endpoints come from its placements."""
+    img = image.copy()
+    scale_ref = math.hypot(*img.shape[:2])
+    ids = []
+    for pl in canvas['placements']:
+        m = measurements_by_id[pl['measurement_id']]
+        placed = dict(m)
+        hook = dict(m['hook'], x=pl['hook_xy'][0], y=pl['hook_xy'][1])
+        housing = dict(m['housing'], x=pl['housing_xy'][0], y=pl['housing_xy'][1])
+        if pl.get('source', 'registered') == 'registered':
+            # Both points were carried here by validated registration, i.e. not seen in this frame.
+            hook['status'] = housing['status'] = 'registered'
+            hook['spread_px'] = max(hook.get('spread_px') or 0, max(pl['cycle_error_px']))
+            housing['spread_px'] = max(housing.get('spread_px') or 0, max(pl['cycle_error_px']))
+        placed.update(hook=hook, housing=housing)
+        draw_measurement(img, placed, np.eye(3), scale_ref)
+        ids.append(m['id'])
+    kind = ('another frame of the scene, chosen for less obstruction: endpoints carried here from the reading '
+            'frame and accepted only after round-trip and appearance checks' if canvas['kind'] == 'registered_view'
+            else 'reading frame (no other view registered reliably)')
+    lines = [f"{video_name}  scene image t={canvas['t']:.2f}s  measurements " + ', '.join(f'#{i}' for i in ids),
+             kind]
+    for pl in canvas['placements']:
+        m = measurements_by_id[pl['measurement_id']]
+        lines.append(f"#{m['id']}: {m['start_t']:.1f}-{m['end_t']:.1f}s, conf {m['confidence']:.2f}"
+                     + (f", max round-trip error {max(pl['cycle_error_px']):.0f}px over {pl['links']} links"
+                        if pl.get('source', 'registered') == 'registered' else ', localised in this frame'))
     return caption(img, lines)

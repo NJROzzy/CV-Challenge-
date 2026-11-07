@@ -177,6 +177,20 @@ def test_chained_registration_recovers_known_motion():
     assert np.linalg.norm(p - (450 - 42, 450 - 21)) < 2.0          # scene point moves opposite to camera
 
 
+def test_validated_mapping_same_frame_and_appearance_check():
+    base = textured_background(900, 900, seed=3)
+    reg = Registrar(work_width=480)
+    for i in range(4):
+        reg.add(i, cv2.warpAffine(base, np.float32([[1, 0, -6.0 * i], [0, 1, -3.0 * i]]), (900, 900),
+                                  borderMode=cv2.BORDER_REFLECT))
+    pts, ok, err, st = reg.map_validated(2, 2, [[450, 450]])        # same frame: identity, no crash
+    assert ok.all() and np.allclose(pts, [[450, 450]]) and st['patch_ncc'][0] > 0.95
+    pts, ok, err, st = reg.map_validated(0, 3, [[450, 450]])
+    assert ok.all() and st['patch_ncc'][0] > 0.9
+    wrong = np.array([[1, 0, 60], [0, 1, 40], [0, 0, 1.0]])         # self-consistent but wrong layer
+    assert reg._patch_ncc(0, 3, [450, 450], wrong) < reg.min_patch_ncc
+
+
 # ---------------------------------------------------------------------------- events
 def _obs(i, t, hook, housing, hook_visible=True, housing_detected=True, angle=90.0, conf=0.9):
     return TapeObservation(i, t, 'test', conf, angle, 10.0,
@@ -246,6 +260,65 @@ def test_hook_sightings_of_another_placement_are_rejected():
     elsewhere = [_obs(30 + i, 3.0 + i * 0.05, (700, 100), (700, 950), housing_detected=False) for i in range(10)]
     ms = EventBuilder(IdentityRegistrar(), sharp, (1000, 1000)).build(reading + elsewhere)
     assert len(ms) == 1 and ms[0].hook.status == 'missing'
+
+
+def test_identity_vote_relabels_inferred_ends_only():
+    from reekon.events import enforce_identity
+    ep = [_obs(i, i * 0.1, (100, 100), (100, 900)) for i in range(6)]
+    # Frame 3: housing not seen, ends inferred the wrong way round.
+    ep[3] = _obs(3, 0.3, (100, 900), (100, 100), housing_detected=False)
+    # Frame 4: the detector "saw" a housing at the hook end - conflicting evidence, not relabelled.
+    ep[4] = _obs(4, 0.4, (100, 900), (100, 100), housing_detected=True)
+    relabelled, conflicts = enforce_identity(ep, diag=1300)
+    assert (relabelled, conflicts) == (1, 1)
+    assert tuple(ep[3].housing.xy) == (100, 900) and not ep[3].hook.visible
+    assert ep[4].evidence.get('identity_conflict')
+
+
+def test_validation_separates_confirmed_from_candidates():
+    sharp = {i: 1.0 for i in range(100)}
+    b = EventBuilder(IdentityRegistrar(), sharp, (480, 1000))
+    ok = [_obs(i, i * 0.1, (200, 100), (200, 900)) for i in range(30)]
+    m = b.build(ok)[0]
+    assert m.status == 'validated' and m.reasons == []
+    short = [_obs(i, i * 0.1, (200, 840), (200, 900)) for i in range(30)]         # blade barely out
+    m = EventBuilder(IdentityRegistrar(), sharp, (480, 1000)).build(short)[0]
+    assert m.status == 'rejected' and any('barely extended' in r for r in m.reasons)
+    no_hook = [_obs(i, i * 0.1, (200, 0), (200, 900), hook_visible=False) for i in range(30)]
+    m = EventBuilder(IdentityRegistrar(), sharp, (480, 1000)).build(no_hook)[0]
+    assert m.status == 'uncertain' and any('hook end not localised' in r for r in m.reasons)
+
+
+def test_scene_builder_groups_measurements_and_falls_back_safely():
+    from types import SimpleNamespace as NS
+    from reekon.scene import SceneBuilder
+
+    class Reg:
+        """Frames 0-9 see the whole scene (identity mapping). Frame 50 is clearer but only shows
+        measurement 1. Measurement 3's reading frame (30) cannot be chained to anything."""
+        def map_validated(self, src, dst, pts, tol):
+            pts = np.asarray(pts, float)
+            if (src == 30) != (dst == 30):
+                return None, np.array([False, False]), np.array([np.inf, np.inf]), {}
+            if dst == 50 and pts[0][0] > 300:
+                return pts, np.array([False, False]), np.array([9.0, 9.0]), {'inside': [False, False]}
+            return pts, np.array([True, True]), np.array([1.0, 2.0]), {'links': 3, 'local_moves': 3, 'global_moves': 0}
+
+    def meas(i, x, canvas):
+        e = lambda y: NS(x=x, y=y)
+        return NS(id=i, status='validated', start_t=1.0, end_t=2.0, canvas_frame=canvas, canvas_t=1.5,
+                  hook=e(100), housing=e(800))
+    times = {f: f * 0.1 for f in list(range(10)) + [30, 50]}
+    clutter = {f: (0.05 if f == 50 else 0.3) for f in times}
+    sb = SceneBuilder(Reg(), {f: 1.0 for f in times}, clutter, times, window_s=10)
+    scenes = sb.build([meas(1, 100, 2), meas(2, 400, 5), meas(3, 200, 30)])
+    clear = [s for s in scenes if s.kind == 'registered_view']
+    # One clear frame carries both #1 and #2 (grouped), rather than frame 50 for #1 alone.
+    assert len(clear) == 1 and sorted(p.measurement_id for p in clear[0].placements) == [1, 2]
+    fallback = [s for s in scenes if s.kind == 'reading_frame']
+    assert [(s.placements[0].measurement_id, s.frame) for s in fallback] == [(3, 30)]
+    assert {l['measurement']: l['rejected_because']['endpoint_outside_frame'] for l in sb.log}[2] >= 1
+    assert all(p.source == 'registered' for p in clear[0].placements)
 
 
 # ---------------------------------------------------------------------------- annotation

@@ -15,10 +15,11 @@ import time
 import cv2
 import numpy as np
 
-from .annotate import render
+from .annotate import render, render_scene
 from .detect import ClassicalTapeDetector
 from .events import EventBuilder
 from .register import Registrar
+from .scene import SceneBuilder
 from .video import VideoInfo, iter_frames
 
 
@@ -101,8 +102,17 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
     timer.add('events_endpoints_registration', time.perf_counter() - t0)
 
     t0 = time.perf_counter()
+    scene_builder = SceneBuilder(reg, sharpness, reg.clutter, {k: v[0] for k, v in cache.items()})
+    scenes = scene_builder.build(measurements)
+    timer.add('scene_registration', time.perf_counter() - t0)
+
+    t0 = time.perf_counter()
+    for pattern in ('measurement_*.jpg', 'scene_*.jpg', 'diagnostics/candidate_*.jpg'):
+        for old in out_dir.glob(pattern):           # never leave images from a previous run
+            old.unlink()
+    (out_dir / 'diagnostics').mkdir(exist_ok=True)
     decode = lambda idx: cv2.imdecode(cache[idx][1], cv2.IMREAD_COLOR)
-    rendered = []
+    validated, candidates = [], []
     for m in measurements:
         md = m.as_dict()
         if m.context_frame is not None:
@@ -121,24 +131,43 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
                     H_ctx = np.array([[1, 0, dx], [0, 1, dy], [0, 0, 1]], dtype=np.float64) @ H_ctx
                     md['context_shift_px'] = round(float(np.hypot(dx, dy)), 1)
         img = render(md, decode(m.canvas_frame), ctx_img, H_ctx, video.name)
-        name = f'measurement_{m.id:02d}.jpg'
+        if m.status == 'validated':
+            name = f'measurement_{m.id:02d}.jpg'
+            validated.append(md)
+        else:
+            name = f'diagnostics/candidate_{m.id:02d}.jpg'
+            candidates.append(md)
         cv2.imwrite(str(out_dir / name), img, [cv2.IMWRITE_JPEG_QUALITY, 90])
         md['image'] = name
-        rendered.append(md)
+    by_id = {md['id']: md for md in validated}
+    scene_dicts = []
+    for i, sc in enumerate(scenes, 1):
+        sd = sc.as_dict()
+        if sc.kind == 'reading_frame' and len(sc.placements) == 1:
+            # No other view registered: the measurement's own (possibly mosaic) image is the scene.
+            sd['image'] = by_id[sc.placements[0].measurement_id]['image']
+        else:
+            sd['image'] = f'scene_{i:02d}.jpg'
+            cv2.imwrite(str(out_dir / sd['image']), render_scene(sd, decode(sc.frame), by_id, video.name),
+                        [cv2.IMWRITE_JPEG_QUALITY, 90])
+        scene_dicts.append(sd)
     timer.add('annotate', time.perf_counter() - t0)
 
     proxy_name = None
     if proxy:
         t0 = time.perf_counter()
         try:
-            if make_proxy(video, out_dir / 'video.mp4'):
+            existing = out_dir / 'video.mp4'
+            if existing.exists() and existing.stat().st_mtime > video.stat().st_mtime:
+                proxy_name = 'video.mp4'       # browser copy of this exact source already made
+            elif make_proxy(video, existing):
                 proxy_name = 'video.mp4'
         except subprocess.CalledProcessError as exc:
             log(f'proxy video failed: {exc}')
         timer.add('viewer_proxy_encode', time.perf_counter() - t0)
 
     results = {
-        'schema': 'reekon.results/1',
+        'schema': 'reekon.results/2',
         'created_utc': datetime.now(timezone.utc).isoformat(),
         'video': info.as_dict() | {'name': video.name},
         'config': {'sample_fps': sample_fps, 'detector': detector, 'python': platform.python_version(),
@@ -146,15 +175,25 @@ def run(video, out_dir, sample_fps=10.0, detector='classical', proxy=True, log=p
         'pipeline_seconds': round(time.perf_counter() - wall0, 2),
         'pipeline_seconds_excluding_proxy': round(time.perf_counter() - wall0 - timer.ms.get('viewer_proxy_encode', 0) / 1000, 2),
         'stage_timings': timer.as_dict(),
-        'counts': {'samples': samples, 'tape_observations': len(observations), 'measurements': len(measurements)},
+        'counts': {'samples': samples, 'tape_observations': len(observations),
+                   'candidate_events': len(measurements), 'measurements': len(validated),
+                   'uncertain': sum(c['status'] == 'uncertain' for c in candidates),
+                   'rejected': sum(c['status'] == 'rejected' for c in candidates),
+                   'scene_images': len(scene_dicts),
+                   'registered_view_scenes': sum(sd['kind'] == 'registered_view' for sd in scene_dicts)},
+        'identity': builder.identity,
         'episodes': builder.log[0]['episodes'] if builder.log else [],
-        'measurements': rendered,
+        'measurements': validated,
+        'candidates': candidates,
+        'scenes': scene_dicts,
+        'scene_log': scene_builder.log,
         'observations': [o.as_dict() for o in observations],
         'sampled_times': [round(cache[k][0], 4) for k in sorted(cache)],
         'proxy_video': proxy_name,
     }
     (out_dir / 'results.json').write_text(json.dumps(results, indent=1, default=_json_default))
-    log(f'  {len(measurements)} measurement(s); outputs in {out_dir}')
+    log(f'  {len(measurements)} candidate event(s): {len(validated)} validated, '
+        f'{len(candidates)} uncertain/rejected; {len(scene_dicts)} scene image(s); outputs in {out_dir}')
     return results
 
 
