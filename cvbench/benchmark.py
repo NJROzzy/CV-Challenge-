@@ -14,7 +14,10 @@ from time import perf_counter
 import warnings
 import cv2
 import numpy as np
-import psutil
+try:
+    import psutil
+except ImportError:  # e.g. JetPack's system Python, which has the CUDA-enabled PyTorch but no psutil
+    psutil = None
 from .backends import CPUBackend, GPUBackend, Config
 
 RESOLUTIONS = {'480p': (480, 640), '720p': (720, 1280), '1080p': (1080, 1920)}
@@ -47,6 +50,14 @@ def read_optional(path):
         return None
 
 
+def current_rss_bytes():
+    # Same quantity as psutil's memory_info().rss on Linux.
+    for line in Path('/proc/self/status').read_text().splitlines():
+        if line.startswith('VmRSS:'):
+            return int(line.split()[1]) * 1024
+    return None
+
+
 def peak_rss_bytes():
     # /proc tracks this process address space; getrusage can retain a parent's
     # pre-exec high-water mark in subprocesses on Linux.
@@ -67,8 +78,9 @@ def environment():
             'jetson_model': read_optional('/proc/device-tree/model'),
             'l4t_release': read_optional('/etc/nv_tegra_release'),
             'cpu': platform.processor(), 'cpu_count': os.cpu_count(),
-            'cpu_affinity': psutil.Process().cpu_affinity(),
-            'ram_total_bytes': psutil.virtual_memory().total,
+            'cpu_affinity': psutil.Process().cpu_affinity() if psutil else sorted(os.sched_getaffinity(0)),
+            'ram_total_bytes': psutil.virtual_memory().total if psutil else os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES'),
+            'psutil_available': psutil is not None,
             'python': sys.version, 'numpy': np.__version__, 'opencv': cv2.__version__,
             'opencv_build': cv2.getBuildInformation(), 'torch': torch.__version__,
             'torch_cuda_build': torch.version.cuda, 'cudnn': torch.backends.cudnn.version(),
@@ -92,7 +104,7 @@ def worker(c):
     for _ in range(c['warmup']):
         backend.run(frames)
         backend.sync()
-    rss_baseline = psutil.Process().memory_info().rss
+    rss_baseline = psutil.Process().memory_info().rss if psutil else current_rss_bytes()
     if c['backend'] == 'gpu':
         backend.torch.cuda.reset_peak_memory_stats()
     e2e = []
