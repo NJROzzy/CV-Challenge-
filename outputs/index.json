@@ -1,0 +1,14 @@
+[
+ {
+  "video": "Cabinet-1.MOV",
+  "detector": "classical",
+  "results": "Cabinet-1/classical/results.json",
+  "measurements": 4
+ },
+ {
+  "video": "Cabinet-1.MOV",
+  "detector": "hand-assisted",
+  "results": "Cabinet-1/hand-assisted/results.json",
+  "measurements": 4
+ }
+]
