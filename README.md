@@ -5,6 +5,29 @@ Output: for every measurement, an annotated image showing its two endpoints. **A
 
 Everything is automatic, with no manual annotation and no model trained on the footage. Reading the length is out of scope.
 
+## Implemented features
+
+- **Video ingestion:** timestamps every frame with its presentation timestamp, so variable-frame-rate phone video is handled correctly. Frames are sampled by time.
+- **Per-frame tape detection:** finds the blade, the hook end and the housing end, and flags ends cut off by the frame edge. A classical CPU strategy is the default; an optional AI-assisted strategy adds GPU hand pose.
+- **Measurement events:** split into episodes and readings, then merged when a reading has the same endpoints as the one before it in that episode.
+- **Endpoint localisation:** votes across many frames and reports confidence, agreement count and spread. An endpoint without enough agreement is reported as `missing`, never invented.
+- **Frame registration:** chains optical-flow homographies across frames. A straight-tape correction and a check against the consensus position choose the reference frame.
+- **Annotated images:** one per measurement, with a registered mosaic when an endpoint lies outside the reference frame.
+- **Browser viewer:** served on the LAN with HTTP Range support. It shows the video with a per-frame overlay, a timeline, measurement cards, the images and performance tables.
+- **Per-stage timings** in every `results.json`, plus the Phase 1 CPU/GPU preprocessing benchmark (`cvbench`).
+- **Tools:** footage inspection (`tools/`) and a pytest suite with an opt-in regression test on the real footage.
+
+## Tech stack (as run and tested)
+
+| Component | Version / detail |
+|---|---|
+| Hardware | NVIDIA Jetson Orin Nano Developer Kit (8 GB), JetPack 6 / L4T R36.3 |
+| Main environment (`.venv`) | Python 3.11, OpenCV 5.0.0, NumPy 2.4.6, pytest. Used for the pipeline, viewer server and tests |
+| GPU strategy environment (system `python3`) | Python 3.10.12, OpenCV 4.8.0, NumPy 1.26.4, `jetson-inference` with TensorRT 8.6 running NVIDIA's pretrained Pose-ResNet18-Hand |
+| Video tools | FFmpeg / ffprobe 4.4.2 (browser video copy, timestamp checks) |
+| Viewer | Static HTML/CSS/JavaScript (no frameworks or CDNs) served by Python's `http.server` with added Range support |
+| Phase 1 benchmark | NumPy/OpenCV CPU path and PyTorch 2.15 (CUDA 13.2 build) GPU path. CUDA cannot initialise on this JetPack driver, so GPU timings are unavailable |
+
 ## Quick start (Jetson)
 
 ```bash
