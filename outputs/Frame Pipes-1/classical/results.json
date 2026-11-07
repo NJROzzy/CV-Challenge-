@@ -1,0 +1,3523 @@
+{
+ "schema": "reekon.results/2",
+ "created_utc": "2026-11-07T15:17:37.910106+00:00",
+ "video": {
+  "path": "data/inbox/Frame Pipes-1.MOV",
+  "width": 1552,
+  "height": 2064,
+  "opencv_reported_fps": 30.00323310701584,
+  "frame_count": 464,
+  "duration_s": 15.464996400287978,
+  "measured_fps": 30.00324009072254,
+  "container_declared_fps": 120.0,
+  "container_average_fps": 30.00323310701584,
+  "name": "Frame Pipes-1.MOV"
+ },
+ "config": {
+  "sample_fps": 10.0,
+  "detector": "classical",
+  "python": "3.11.0rc1",
+  "opencv": "5.0.0",
+  "numpy": "2.4.6"
+ },
+ "pipeline_seconds": 50.44,
+ "pipeline_seconds_excluding_proxy": 37.38,
+ "stage_timings": {
+  "decode_and_sample": {
+   "total_ms": 12174.3,
+   "calls": 155,
+   "mean_ms": 78.54
+  },
+  "detect": {
+   "total_ms": 11511.0,
+   "calls": 155,
+   "mean_ms": 74.26
+  },
+  "registration_prep": {
+   "total_ms": 2384.9,
+   "calls": 155,
+   "mean_ms": 15.39
+  },
+  "frame_cache": {
+   "total_ms": 4070.7,
+   "calls": 155,
+   "mean_ms": 26.26
+  },
+  "events_endpoints_registration": {
+   "total_ms": 7134.1,
+   "calls": 1,
+   "mean_ms": 7134.1
+  },
+  "scene_registration": {
+   "total_ms": 0.1,
+   "calls": 1,
+   "mean_ms": 0.1
+  },
+  "annotate": {
+   "total_ms": 81.7,
+   "calls": 1,
+   "mean_ms": 81.68
+  },
+  "viewer_proxy_encode": {
+   "total_ms": 13062.2,
+   "calls": 1,
+   "mean_ms": 13062.22
+  }
+ },
+ "counts": {
+  "samples": 155,
+  "tape_observations": 90,
+  "candidate_events": 1,
+  "measurements": 0,
+  "uncertain": 1,
+  "rejected": 0,
+  "scene_images": 0,
+  "registered_view_scenes": 0
+ },
+ "identity": {
+  "relabelled": 4,
+  "conflicts": 0
+ },
+ "episodes": [
+  [
+   1.6,
+   2.4083333333333337,
+   5
+  ],
+  [
+   2.5083333333333333,
+   2.5083333333333333,
+   1
+  ],
+  [
+   3.2083333333333335,
+   4.0,
+   6
+  ],
+  [
+   6.131666666666667,
+   14.306666666666668,
+   78
+  ]
+ ],
+ "measurements": [],
+ "candidates": [
+  {
+   "id": 1,
+   "start_t": 6.132,
+   "end_t": 14.307,
+   "canvas_frame": 376,
+   "canvas_t": 12.532,
+   "confidence": 0.0,
+   "angle_deg": 174.6,
+   "notes": [
+    "hook end not observed with enough agreeing frames for this reading"
+   ],
+   "context_frame": null,
+   "status": "uncertain",
+   "reasons": [
+    "hook end not localised (never seen clearly, or not mappable)"
+   ],
+   "blade_length_frac": 0.486,
+   "episode": 3,
+   "hook": {
+    "kind": "hook",
+    "status": "missing",
+    "x": null,
+    "y": null,
+    "confidence": 0.0,
+    "support": 0,
+    "candidates": 1,
+    "spread_px": null,
+    "source_frames": [],
+    "alternatives": [],
+    "rejected_off_tape_line": 1
+   },
+   "housing": {
+    "kind": "housing",
+    "status": "observed",
+    "x": 774.5727360167732,
+    "y": 1475.1792589085494,
+    "confidence": 0.515,
+    "support": 33,
+    "candidates": 78,
+    "spread_px": 28.3,
+    "source_frames": [
+     330,
+     333,
+     336,
+     340,
+     343,
+     346,
+     349,
+     351,
+     355,
+     358,
+     361,
+     364,
+     367,
+     370,
+     373,
+     376,
+     379,
+     382,
+     385,
+     388,
+     391,
+     394,
+     397,
+     400,
+     403,
+     406,
+     409,
+     412,
+     415,
+     418,
+     421,
+     423,
+     426
+    ],
+    "alternatives": [
+     {
+      "x": 1057.2939805713086,
+      "y": 1508.0187634484716,
+      "support": 23
+     },
+     {
+      "x": 1332.13481407576,
+      "y": 1451.936155985526,
+      "support": 14
+     },
+     {
+      "x": 879.9915644672469,
+      "y": 1558.1846799122,
+      "support": 8
+     }
+    ],
+    "consensus_xy": [
+     781.5,
+     1475.2
+    ],
+    "weakest_link_inliers": 38
+   },
+   "image": "diagnostics/candidate_01.jpg"
+  }
+ ],
+ "scenes": [],
+ "scene_log": [],
+ "observations": [
+  {
+   "frame_index": 48,
+   "t": 1.6,
+   "detector": "classical",
+   "confidence": 0.811,
+   "angle_deg": 143.8,
+   "blade_width_px": 37.5,
+   "hook": {
+    "x": 1304.78858667875,
+    "y": 1815.1119154485282,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 949.0655125836172,
+    "y": 2075.222245799017,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 440.7,
+    "tick_texture": 0.123,
+    "straightness_rms_widths": 0.294,
+    "coverage": 1.0,
+    "length_score": 0.811,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 0.94,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 60,
+   "t": 2.0,
+   "detector": "classical",
+   "confidence": 0.968,
+   "angle_deg": 142.9,
+   "blade_width_px": 40.1,
+   "hook": {
+    "x": 1324.902917472279,
+    "y": 1755.7344212817695,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 905.50361535594,
+    "y": 2072.693644779038,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 525.7,
+    "tick_texture": 0.157,
+    "straightness_rms_widths": 0.29,
+    "coverage": 1.0,
+    "length_score": 0.968,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.07,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 63,
+   "t": 2.1,
+   "detector": "classical",
+   "confidence": 0.797,
+   "angle_deg": 145.4,
+   "blade_width_px": 48.9,
+   "hook": {
+    "x": 1337.148797201158,
+    "y": 1829.7390228737709,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 980.863770325024,
+    "y": 2075.389830628934,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 432.8,
+    "tick_texture": 0.14,
+    "straightness_rms_widths": 0.285,
+    "coverage": 1.0,
+    "length_score": 0.797,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.69,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 66,
+   "t": 2.2,
+   "detector": "classical",
+   "confidence": 0.716,
+   "angle_deg": 145.5,
+   "blade_width_px": 51.7,
+   "hook": {
+    "x": 1369.517133337322,
+    "y": 1855.6452998718541,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1049.2386442743207,
+    "y": 2076.105776383701,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 388.8,
+    "tick_texture": 0.137,
+    "straightness_rms_widths": 0.287,
+    "coverage": 1.0,
+    "length_score": 0.716,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.86,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 72,
+   "t": 2.4083333333333337,
+   "detector": "classical",
+   "confidence": 0.632,
+   "angle_deg": 147.3,
+   "blade_width_px": 51.2,
+   "hook": {
+    "x": 1362.555403257633,
+    "y": 1889.947248542949,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 1073.7618604554912,
+    "y": 2075.2138633787768,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 343.1,
+    "tick_texture": 0.129,
+    "straightness_rms_widths": 0.289,
+    "coverage": 1.0,
+    "length_score": 0.632,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.64,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 75,
+   "t": 2.5083333333333333,
+   "detector": "classical",
+   "confidence": 0.804,
+   "angle_deg": 92.8,
+   "blade_width_px": 45.7,
+   "hook": {
+    "x": 1281.3456694296287,
+    "y": 556.1790324322285,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 1308.1957538175623,
+    "y": 0.7184421333695454,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 556.1,
+    "tick_texture": 0.331,
+    "straightness_rms_widths": 0.399,
+    "coverage": 0.737,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.876,
+    "tick_transitions_per_width": 0.9,
+    "two_sided_dark_fraction": 0.78,
+    "end_not_seen_because": {
+     "hook": "hand_or_sleeve",
+     "housing": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 96,
+   "t": 3.2083333333333335,
+   "detector": "classical",
+   "confidence": 0.689,
+   "angle_deg": 153.1,
+   "blade_width_px": 51.0,
+   "hook": {
+    "x": 1040.2517650823886,
+    "y": 1906.0248015470468,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 706.4198949208261,
+    "y": 2075.4367798415537,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 374.4,
+    "tick_texture": 0.084,
+    "straightness_rms_widths": 0.293,
+    "coverage": 1.0,
+    "length_score": 0.689,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.77,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 99,
+   "t": 3.3000000000000003,
+   "detector": "classical",
+   "confidence": 0.796,
+   "angle_deg": 151.0,
+   "blade_width_px": 55.4,
+   "hook": {
+    "x": 1368.353377782636,
+    "y": 1660.5066603918547,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 604.7775310812813,
+    "y": 2083.254273977528,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 872.8,
+    "tick_texture": 0.433,
+    "straightness_rms_widths": 0.335,
+    "coverage": 0.633,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.46,
+    "two_sided_dark_fraction": 0.44,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "hand_or_sleeve"
+    },
+    "identity_relabelled": true
+   }
+  },
+  {
+   "frame_index": 102,
+   "t": 3.4000000000000004,
+   "detector": "classical",
+   "confidence": 0.832,
+   "angle_deg": 154.3,
+   "blade_width_px": 55.3,
+   "hook": {
+    "x": 1406.9099242553114,
+    "y": 1698.3503190194897,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 611.9684184761342,
+    "y": 2081.5569788800594,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 882.5,
+    "tick_texture": 0.399,
+    "straightness_rms_widths": 0.341,
+    "coverage": 0.692,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.38,
+    "two_sided_dark_fraction": 0.47,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "hand_or_sleeve"
+    },
+    "identity_relabelled": true
+   }
+  },
+  {
+   "frame_index": 105,
+   "t": 3.5000000000000004,
+   "detector": "classical",
+   "confidence": 0.843,
+   "angle_deg": 157.6,
+   "blade_width_px": 54.2,
+   "hook": {
+    "x": 1440.0321347500883,
+    "y": 1745.6777225413127,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 576.5161301294783,
+    "y": 2101.27797793053,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 933.9,
+    "tick_texture": 0.363,
+    "straightness_rms_widths": 0.371,
+    "coverage": 0.75,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.947,
+    "tick_transitions_per_width": 1.05,
+    "two_sided_dark_fraction": 0.47,
+    "end_not_seen_because": {
+     "hook": "frame_edge",
+     "housing": "hand_or_sleeve"
+    },
+    "identity_relabelled": true
+   }
+  },
+  {
+   "frame_index": 114,
+   "t": 3.8000000000000003,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 165.1,
+   "blade_width_px": 58.2,
+   "hook": {
+    "x": 1339.281422407089,
+    "y": 1767.2072941507863,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 595.7602016706494,
+    "y": 1964.669718734739,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 769.3,
+    "tick_texture": 0.241,
+    "straightness_rms_widths": 0.378,
+    "coverage": 0.886,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.93,
+    "tick_transitions_per_width": 1.14,
+    "two_sided_dark_fraction": 0.7,
+    "end_not_seen_because": {}
+   }
+  },
+  {
+   "frame_index": 120,
+   "t": 4.0,
+   "detector": "classical",
+   "confidence": 0.806,
+   "angle_deg": 164.2,
+   "blade_width_px": 112.3,
+   "hook": {
+    "x": 1146.649155579229,
+    "y": 1705.8423689635417,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 188.07336751245847,
+    "y": 1977.2694434779148,
+    "kind": "housing",
+    "visible": false
+   },
+   "housing_detected": false,
+   "evidence": {
+    "blade_length_px": 996.3,
+    "tick_texture": 0.278,
+    "straightness_rms_widths": 0.49,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.65,
+    "tick_transitions_per_width": 2.14,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "hand_or_sleeve",
+     "housing": "hand_or_sleeve"
+    },
+    "identity_relabelled": true
+   }
+  },
+  {
+   "frame_index": 184,
+   "t": 6.131666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 172.4,
+   "blade_width_px": 59.4,
+   "hook": {
+    "x": 1520.2561052442072,
+    "y": 1433.5255728097454,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 786.2823358088633,
+    "y": 1532.0231186027886,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 740.6,
+    "tick_texture": 0.22,
+    "straightness_rms_widths": 0.39,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.901,
+    "tick_transitions_per_width": 1.61,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 187,
+   "t": 6.231666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 172.3,
+   "blade_width_px": 59.0,
+   "hook": {
+    "x": 1513.6972072375013,
+    "y": 1416.6282731206877,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 770.6672127786443,
+    "y": 1517.527178383746,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 749.8,
+    "tick_texture": 0.206,
+    "straightness_rms_widths": 0.399,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.878,
+    "tick_transitions_per_width": 1.42,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 190,
+   "t": 6.331666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 172.3,
+   "blade_width_px": 59.4,
+   "hook": {
+    "x": 1503.9463604794778,
+    "y": 1400.1008937093172,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 757.0073972551471,
+    "y": 1501.1013102430918,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 753.7,
+    "tick_texture": 0.208,
+    "straightness_rms_widths": 0.403,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.867,
+    "tick_transitions_per_width": 1.26,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 193,
+   "t": 6.431666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 172.8,
+   "blade_width_px": 56.2,
+   "hook": {
+    "x": 1494.1928605098765,
+    "y": 1386.9765762659101,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 759.9987739757912,
+    "y": 1479.7211225636972,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 740.0,
+    "tick_texture": 0.19,
+    "straightness_rms_widths": 0.404,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.866,
+    "tick_transitions_per_width": 1.37,
+    "two_sided_dark_fraction": 0.95,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 196,
+   "t": 6.531666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 172.7,
+   "blade_width_px": 53.0,
+   "hook": {
+    "x": 1483.7904736965934,
+    "y": 1368.5302894108704,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 784.6707106237246,
+    "y": 1458.5766902992198,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 704.9,
+    "tick_texture": 0.234,
+    "straightness_rms_widths": 0.422,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.819,
+    "tick_transitions_per_width": 1.35,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {
+     "hook": "hand_or_sleeve"
+    }
+   }
+  },
+  {
+   "frame_index": 199,
+   "t": 6.631666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.9,
+   "blade_width_px": 55.4,
+   "hook": {
+    "x": 1490.6048428323,
+    "y": 1358.35584190644,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 776.5223028238654,
+    "y": 1434.9618050641038,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 718.2,
+    "tick_texture": 0.211,
+    "straightness_rms_widths": 0.41,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.851,
+    "tick_transitions_per_width": 1.08,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 202,
+   "t": 6.731666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.7,
+   "blade_width_px": 55.9,
+   "hook": {
+    "x": 1496.9881806013623,
+    "y": 1354.2808588189334,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 764.0526019830518,
+    "y": 1422.4121211667725,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 736.1,
+    "tick_texture": 0.204,
+    "straightness_rms_widths": 0.423,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.817,
+    "tick_transitions_per_width": 1.06,
+    "two_sided_dark_fraction": 0.92,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 205,
+   "t": 6.831666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.3,
+   "blade_width_px": 55.6,
+   "hook": {
+    "x": 1513.196125242396,
+    "y": 1354.7200764801307,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 765.3018445945481,
+    "y": 1416.4450209199795,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 750.4,
+    "tick_texture": 0.2,
+    "straightness_rms_widths": 0.42,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.826,
+    "tick_transitions_per_width": 1.19,
+    "two_sided_dark_fraction": 0.93,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 208,
+   "t": 6.9316666666666675,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.0,
+   "blade_width_px": 55.5,
+   "hook": {
+    "x": 1526.3317201849482,
+    "y": 1357.571145524027,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 798.5153177085973,
+    "y": 1409.0562999430842,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 729.6,
+    "tick_texture": 0.204,
+    "straightness_rms_widths": 0.409,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.853,
+    "tick_transitions_per_width": 1.07,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 217,
+   "t": 7.231666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 177.5,
+   "blade_width_px": 55.2,
+   "hook": {
+    "x": 1549.313801542735,
+    "y": 1390.0439059126109,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 874.335545409029,
+    "y": 1419.2528205991612,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 675.6,
+    "tick_texture": 0.209,
+    "straightness_rms_widths": 0.408,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.856,
+    "tick_transitions_per_width": 0.98,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 219,
+   "t": 7.3066666666666675,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 177.6,
+   "blade_width_px": 55.2,
+   "hook": {
+    "x": 1549.1987519021973,
+    "y": 1400.6317601920607,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 919.8788413002037,
+    "y": 1427.0362320785034,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 629.9,
+    "tick_texture": 0.236,
+    "straightness_rms_widths": 0.4,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.876,
+    "tick_transitions_per_width": 0.96,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 222,
+   "t": 7.406666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 178.6,
+   "blade_width_px": 55.1,
+   "hook": {
+    "x": 1549.1584310986698,
+    "y": 1419.0081252351604,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 952.8367700082882,
+    "y": 1433.848740454984,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 596.5,
+    "tick_texture": 0.217,
+    "straightness_rms_widths": 0.378,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.93,
+    "tick_transitions_per_width": 1.11,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 225,
+   "t": 7.506666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 179.5,
+   "blade_width_px": 55.0,
+   "hook": {
+    "x": 1548.8718449711448,
+    "y": 1437.6736487929768,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 956.7115936423878,
+    "y": 1442.9629766297614,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 592.2,
+    "tick_texture": 0.252,
+    "straightness_rms_widths": 0.384,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.916,
+    "tick_transitions_per_width": 1.3,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 229,
+   "t": 7.631666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 179.7,
+   "blade_width_px": 55.0,
+   "hook": {
+    "x": 1548.7772424548095,
+    "y": 1463.5442658190643,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 960.1486736406323,
+    "y": 1466.543670456038,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 588.6,
+    "tick_texture": 0.323,
+    "straightness_rms_widths": 0.434,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.79,
+    "tick_transitions_per_width": 0.93,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 241,
+   "t": 8.031666666666668,
+   "detector": "classical",
+   "confidence": 0.881,
+   "angle_deg": 2.7,
+   "blade_width_px": 61.6,
+   "hook": {
+    "x": 1550.7234950984428,
+    "y": 1562.075990494428,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 925.7757933572926,
+    "y": 1532.719721833347,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 625.6,
+    "tick_texture": 0.353,
+    "straightness_rms_widths": 0.515,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.586,
+    "tick_transitions_per_width": 1.38,
+    "two_sided_dark_fraction": 0.76,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 244,
+   "t": 8.131666666666668,
+   "detector": "classical",
+   "confidence": 0.892,
+   "angle_deg": 3.7,
+   "blade_width_px": 61.7,
+   "hook": {
+    "x": 1551.6082800354668,
+    "y": 1575.8518805708438,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 885.7051388959984,
+    "y": 1532.8932931391719,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 667.3,
+    "tick_texture": 0.377,
+    "straightness_rms_widths": 0.51,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.601,
+    "tick_transitions_per_width": 1.48,
+    "two_sided_dark_fraction": 0.83,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 247,
+   "t": 8.231666666666667,
+   "detector": "classical",
+   "confidence": 0.92,
+   "angle_deg": 4.6,
+   "blade_width_px": 58.8,
+   "hook": {
+    "x": 1551.9982785544198,
+    "y": 1579.8494062489806,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 850.5330483410052,
+    "y": 1523.2496035579743,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 703.7,
+    "tick_texture": 0.371,
+    "straightness_rms_widths": 0.494,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.64,
+    "tick_transitions_per_width": 1.84,
+    "two_sided_dark_fraction": 0.91,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 250,
+   "t": 8.331666666666667,
+   "detector": "classical",
+   "confidence": 0.945,
+   "angle_deg": 5.1,
+   "blade_width_px": 58.3,
+   "hook": {
+    "x": 1551.8713097727093,
+    "y": 1584.7906838594213,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 815.4015524147738,
+    "y": 1519.6663769763911,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 739.3,
+    "tick_texture": 0.376,
+    "straightness_rms_widths": 0.48,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.675,
+    "tick_transitions_per_width": 1.81,
+    "two_sided_dark_fraction": 0.94,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 253,
+   "t": 8.431666666666667,
+   "detector": "classical",
+   "confidence": 0.936,
+   "angle_deg": 5.1,
+   "blade_width_px": 58.6,
+   "hook": {
+    "x": 1552.035795846518,
+    "y": 1596.553667395728,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 783.5791010478084,
+    "y": 1527.3085587498692,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 771.6,
+    "tick_texture": 0.337,
+    "straightness_rms_widths": 0.485,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.662,
+    "tick_transitions_per_width": 2.58,
+    "two_sided_dark_fraction": 0.94,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 256,
+   "t": 8.531666666666668,
+   "detector": "classical",
+   "confidence": 0.979,
+   "angle_deg": 4.9,
+   "blade_width_px": 58.8,
+   "hook": {
+    "x": 1551.4286116164087,
+    "y": 1595.0559035676588,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 770.9494792346064,
+    "y": 1528.7020141006271,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 783.3,
+    "tick_texture": 0.319,
+    "straightness_rms_widths": 0.46,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.724,
+    "tick_transitions_per_width": 2.18,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 259,
+   "t": 8.631666666666668,
+   "detector": "classical",
+   "confidence": 0.965,
+   "angle_deg": 3.2,
+   "blade_width_px": 58.3,
+   "hook": {
+    "x": 1550.6913070107125,
+    "y": 1581.8843794148036,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 789.9603472434632,
+    "y": 1539.7900376996308,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 761.9,
+    "tick_texture": 0.324,
+    "straightness_rms_widths": 0.468,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.704,
+    "tick_transitions_per_width": 1.99,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 262,
+   "t": 8.731666666666667,
+   "detector": "classical",
+   "confidence": 0.93,
+   "angle_deg": 1.1,
+   "blade_width_px": 58.2,
+   "hook": {
+    "x": 1549.4744880256362,
+    "y": 1559.4138526754277,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 815.1538183215368,
+    "y": 1545.682139528827,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 734.4,
+    "tick_texture": 0.331,
+    "straightness_rms_widths": 0.488,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.654,
+    "tick_transitions_per_width": 1.9,
+    "two_sided_dark_fraction": 0.95,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 264,
+   "t": 8.806666666666667,
+   "detector": "classical",
+   "confidence": 0.936,
+   "angle_deg": 179.5,
+   "blade_width_px": 58.2,
+   "hook": {
+    "x": 1548.868628470666,
+    "y": 1550.550085804998,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 833.91123292404,
+    "y": 1556.8976191701279,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 715.0,
+    "tick_texture": 0.386,
+    "straightness_rms_widths": 0.485,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.662,
+    "tick_transitions_per_width": 1.79,
+    "two_sided_dark_fraction": 0.9,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 267,
+   "t": 8.906666666666668,
+   "detector": "classical",
+   "confidence": 0.95,
+   "angle_deg": 176.7,
+   "blade_width_px": 55.4,
+   "hook": {
+    "x": 1549.0301465020461,
+    "y": 1533.9243146369663,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 880.3121600776567,
+    "y": 1572.5857298742903,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 669.8,
+    "tick_texture": 0.377,
+    "straightness_rms_widths": 0.477,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.683,
+    "tick_transitions_per_width": 1.24,
+    "two_sided_dark_fraction": 0.95,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 270,
+   "t": 9.006666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.2,
+   "blade_width_px": 55.5,
+   "hook": {
+    "x": 1549.5977008384896,
+    "y": 1525.7171041166578,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 891.9107409139863,
+    "y": 1569.3830678064826,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 659.1,
+    "tick_texture": 0.313,
+    "straightness_rms_widths": 0.427,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.809,
+    "tick_transitions_per_width": 1.94,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 273,
+   "t": 9.106666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.8,
+   "blade_width_px": 55.2,
+   "hook": {
+    "x": 1549.8420884191435,
+    "y": 1519.4626821936463,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 875.6673457217979,
+    "y": 1557.2322815591074,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 675.2,
+    "tick_texture": 0.258,
+    "straightness_rms_widths": 0.362,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.97,
+    "tick_transitions_per_width": 2.29,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 277,
+   "t": 9.231666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.2,
+   "blade_width_px": 55.3,
+   "hook": {
+    "x": 1550.0802327279596,
+    "y": 1493.317095475102,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 847.6063262008554,
+    "y": 1552.1507157832643,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 704.9,
+    "tick_texture": 0.281,
+    "straightness_rms_widths": 0.366,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.961,
+    "tick_transitions_per_width": 2.35,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 280,
+   "t": 9.331666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.6,
+   "blade_width_px": 55.3,
+   "hook": {
+    "x": 1550.642662142028,
+    "y": 1478.0266544930334,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 818.6869790738145,
+    "y": 1547.4001542321823,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 735.2,
+    "tick_texture": 0.261,
+    "straightness_rms_widths": 0.376,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.934,
+    "tick_transitions_per_width": 2.41,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 283,
+   "t": 9.431666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.6,
+   "blade_width_px": 52.7,
+   "hook": {
+    "x": 1550.7337806945034,
+    "y": 1462.7101608989847,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 798.691127626754,
+    "y": 1534.3717776692959,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 755.4,
+    "tick_texture": 0.24,
+    "straightness_rms_widths": 0.351,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.997,
+    "tick_transitions_per_width": 2.72,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 286,
+   "t": 9.531666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.2,
+   "blade_width_px": 52.2,
+   "hook": {
+    "x": 1550.6194886755118,
+    "y": 1444.671344895268,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 780.0377298102037,
+    "y": 1536.5587844405904,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 776.0,
+    "tick_texture": 0.269,
+    "straightness_rms_widths": 0.396,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.884,
+    "tick_transitions_per_width": 2.02,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 289,
+   "t": 9.631666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 172.9,
+   "blade_width_px": 49.8,
+   "hook": {
+    "x": 1550.6557860131104,
+    "y": 1428.0760670785155,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 767.7850920843259,
+    "y": 1525.958957643114,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 789.0,
+    "tick_texture": 0.267,
+    "straightness_rms_widths": 0.373,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.944,
+    "tick_transitions_per_width": 2.4,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 292,
+   "t": 9.731666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.2,
+   "blade_width_px": 49.7,
+   "hook": {
+    "x": 1550.840813109954,
+    "y": 1417.325768987684,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 760.9073956197489,
+    "y": 1512.0759626015429,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 795.6,
+    "tick_texture": 0.273,
+    "straightness_rms_widths": 0.366,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.961,
+    "tick_transitions_per_width": 2.25,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 295,
+   "t": 9.831666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.1,
+   "blade_width_px": 49.3,
+   "hook": {
+    "x": 1550.301296432527,
+    "y": 1403.0953809538503,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 754.5568531828204,
+    "y": 1498.7847316520995,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 801.5,
+    "tick_texture": 0.293,
+    "straightness_rms_widths": 0.363,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.969,
+    "tick_transitions_per_width": 2.28,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 298,
+   "t": 9.931666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.2,
+   "blade_width_px": 49.3,
+   "hook": {
+    "x": 1550.4164508358126,
+    "y": 1396.778253000233,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 756.8110305549613,
+    "y": 1477.8729612750374,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 797.7,
+    "tick_texture": 0.27,
+    "straightness_rms_widths": 0.326,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.65,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 301,
+   "t": 10.031666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.2,
+   "blade_width_px": 48.9,
+   "hook": {
+    "x": 1550.041192437412,
+    "y": 1386.6424075180093,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 767.0131481649448,
+    "y": 1466.6350380572396,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 787.1,
+    "tick_texture": 0.279,
+    "straightness_rms_widths": 0.33,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.42,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 304,
+   "t": 10.131666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.6,
+   "blade_width_px": 49.2,
+   "hook": {
+    "x": 1550.006913189071,
+    "y": 1384.0347695905728,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 779.5408422228819,
+    "y": 1456.9706367752938,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 773.9,
+    "tick_texture": 0.256,
+    "straightness_rms_widths": 0.354,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.99,
+    "tick_transitions_per_width": 2.73,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 307,
+   "t": 10.231666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.5,
+   "blade_width_px": 49.2,
+   "hook": {
+    "x": 1549.6033191444433,
+    "y": 1382.8280972799575,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 799.506568305526,
+    "y": 1455.2857801480707,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 753.6,
+    "tick_texture": 0.312,
+    "straightness_rms_widths": 0.372,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.944,
+    "tick_transitions_per_width": 2.22,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 310,
+   "t": 10.331666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.9,
+   "blade_width_px": 49.2,
+   "hook": {
+    "x": 1549.493493990137,
+    "y": 1388.8128166828717,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 815.6525986666014,
+    "y": 1454.023006237247,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 736.7,
+    "tick_texture": 0.291,
+    "straightness_rms_widths": 0.39,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.901,
+    "tick_transitions_per_width": 2.34,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 313,
+   "t": 10.431666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.2,
+   "blade_width_px": 49.2,
+   "hook": {
+    "x": 1556.9738291339452,
+    "y": 1390.085109885621,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 847.9708714215911,
+    "y": 1450.2276022870356,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 711.5,
+    "tick_texture": 0.324,
+    "straightness_rms_widths": 0.399,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.876,
+    "tick_transitions_per_width": 1.66,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 316,
+   "t": 10.531666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.1,
+   "blade_width_px": 49.1,
+   "hook": {
+    "x": 1549.5117677461994,
+    "y": 1404.4277594784544,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 895.9099864496442,
+    "y": 1449.2662457464457,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 655.1,
+    "tick_texture": 0.294,
+    "straightness_rms_widths": 0.358,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.979,
+    "tick_transitions_per_width": 1.8,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 319,
+   "t": 10.631666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.4,
+   "blade_width_px": 49.0,
+   "hook": {
+    "x": 1549.3681821957864,
+    "y": 1416.111877527233,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 934.7883120613643,
+    "y": 1454.5719442054276,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 615.8,
+    "tick_texture": 0.334,
+    "straightness_rms_widths": 0.373,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.943,
+    "tick_transitions_per_width": 1.43,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 322,
+   "t": 10.731666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 177.2,
+   "blade_width_px": 48.9,
+   "hook": {
+    "x": 1549.187684050377,
+    "y": 1427.9735041212555,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 935.4694724036417,
+    "y": 1458.2288255998005,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 614.5,
+    "tick_texture": 0.357,
+    "straightness_rms_widths": 0.381,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.921,
+    "tick_transitions_per_width": 1.11,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 324,
+   "t": 10.806666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 177.9,
+   "blade_width_px": 48.7,
+   "hook": {
+    "x": 1549.1656838598894,
+    "y": 1430.4996793791697,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 920.1079394632869,
+    "y": 1453.1827737469282,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 629.5,
+    "tick_texture": 0.382,
+    "straightness_rms_widths": 0.417,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.833,
+    "tick_transitions_per_width": 1.55,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 327,
+   "t": 10.906666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 179.2,
+   "blade_width_px": 51.8,
+   "hook": {
+    "x": 1548.9162237671972,
+    "y": 1450.0256706318437,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 875.7945878727828,
+    "y": 1459.0192429033068,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 673.2,
+    "tick_texture": 0.403,
+    "straightness_rms_widths": 0.394,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.89,
+    "tick_transitions_per_width": 1.62,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 330,
+   "t": 11.006666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 179.9,
+   "blade_width_px": 51.7,
+   "hook": {
+    "x": 1548.7749502289469,
+    "y": 1461.5158870094203,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 821.2353339765083,
+    "y": 1462.4377446915162,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 727.5,
+    "tick_texture": 0.376,
+    "straightness_rms_widths": 0.413,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.842,
+    "tick_transitions_per_width": 1.64,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 333,
+   "t": 11.106666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 0.6,
+   "blade_width_px": 51.8,
+   "hook": {
+    "x": 1549.1954551782412,
+    "y": 1471.6847945717298,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 785.8806241414122,
+    "y": 1463.1353381309777,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 763.4,
+    "tick_texture": 0.37,
+    "straightness_rms_widths": 0.414,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.841,
+    "tick_transitions_per_width": 1.63,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 336,
+   "t": 11.206666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 0.6,
+   "blade_width_px": 51.8,
+   "hook": {
+    "x": 1549.192380697289,
+    "y": 1478.208536885361,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 779.4125166347948,
+    "y": 1469.6348372907917,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 769.8,
+    "tick_texture": 0.374,
+    "straightness_rms_widths": 0.425,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.813,
+    "tick_transitions_per_width": 1.08,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 340,
+   "t": 11.331666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 0.2,
+   "blade_width_px": 51.8,
+   "hook": {
+    "x": 1548.8812286445973,
+    "y": 1477.246497788355,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 792.2133403514857,
+    "y": 1475.034071790101,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 756.7,
+    "tick_texture": 0.384,
+    "straightness_rms_widths": 0.421,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.822,
+    "tick_transitions_per_width": 1.37,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 343,
+   "t": 11.431666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 179.5,
+   "blade_width_px": 51.8,
+   "hook": {
+    "x": 1548.8601386910716,
+    "y": 1468.2898999485078,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 814.5487621778859,
+    "y": 1475.1136236086077,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 734.3,
+    "tick_texture": 0.392,
+    "straightness_rms_widths": 0.424,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.815,
+    "tick_transitions_per_width": 1.13,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 346,
+   "t": 11.531666666666668,
+   "detector": "classical",
+   "confidence": 0.978,
+   "angle_deg": 178.8,
+   "blade_width_px": 45.5,
+   "hook": {
+    "x": 1548.904198307132,
+    "y": 1458.5809650974054,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 830.4772399921527,
+    "y": 1473.0823794550972,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 718.6,
+    "tick_texture": 0.422,
+    "straightness_rms_widths": 0.461,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.724,
+    "tick_transitions_per_width": 1.01,
+    "two_sided_dark_fraction": 0.95,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 349,
+   "t": 11.64,
+   "detector": "classical",
+   "confidence": 0.986,
+   "angle_deg": 178.2,
+   "blade_width_px": 45.4,
+   "hook": {
+    "x": 1549.0013362770867,
+    "y": 1452.8936962226392,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 833.4583533900643,
+    "y": 1475.0046693480235,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 715.9,
+    "tick_texture": 0.441,
+    "straightness_rms_widths": 0.456,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.734,
+    "tick_transitions_per_width": 1.9,
+    "two_sided_dark_fraction": 0.93,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 351,
+   "t": 11.706666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 0.4,
+   "blade_width_px": 45.3,
+   "hook": {
+    "x": 1548.9332854297684,
+    "y": 1464.8435946288564,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 824.8342000829355,
+    "y": 1459.4782343839267,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 724.1,
+    "tick_texture": 0.34,
+    "straightness_rms_widths": 0.319,
+    "coverage": 0.973,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.63,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 355,
+   "t": 11.831666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.9,
+   "blade_width_px": 45.7,
+   "hook": {
+    "x": 1549.135912582298,
+    "y": 1439.2241774935906,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 806.7498819387312,
+    "y": 1479.196384374212,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 743.5,
+    "tick_texture": 0.43,
+    "straightness_rms_widths": 0.433,
+    "coverage": 0.987,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.791,
+    "tick_transitions_per_width": 1.05,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 358,
+   "t": 11.931666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.0,
+   "blade_width_px": 45.8,
+   "hook": {
+    "x": 1549.3737887836357,
+    "y": 1428.1933975341112,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 793.1665141829397,
+    "y": 1480.6009779611627,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 758.0,
+    "tick_texture": 0.42,
+    "straightness_rms_widths": 0.439,
+    "coverage": 0.974,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.778,
+    "tick_transitions_per_width": 1.15,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 361,
+   "t": 12.031666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.5,
+   "blade_width_px": 45.9,
+   "hook": {
+    "x": 1549.4222854369095,
+    "y": 1414.7520629772664,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 782.8633046499718,
+    "y": 1475.6535010136965,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 769.0,
+    "tick_texture": 0.401,
+    "straightness_rms_widths": 0.417,
+    "coverage": 0.975,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.833,
+    "tick_transitions_per_width": 1.37,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 364,
+   "t": 12.131666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.8,
+   "blade_width_px": 46.0,
+   "hook": {
+    "x": 1549.6153302826071,
+    "y": 1409.3102276007698,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 766.2807576196494,
+    "y": 1480.9724697740885,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 786.6,
+    "tick_texture": 0.418,
+    "straightness_rms_widths": 0.429,
+    "coverage": 0.975,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.803,
+    "tick_transitions_per_width": 1.52,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 367,
+   "t": 12.231666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.1,
+   "blade_width_px": 46.0,
+   "hook": {
+    "x": 1549.6456731190076,
+    "y": 1408.509970408075,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 772.0482410832986,
+    "y": 1489.1435752224156,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 781.8,
+    "tick_texture": 0.409,
+    "straightness_rms_widths": 0.425,
+    "coverage": 0.975,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.811,
+    "tick_transitions_per_width": 1.71,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 370,
+   "t": 12.331666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.7,
+   "blade_width_px": 46.1,
+   "hook": {
+    "x": 1549.7109828457897,
+    "y": 1402.119419986168,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 765.3273487253015,
+    "y": 1488.7237915489318,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 789.2,
+    "tick_texture": 0.393,
+    "straightness_rms_widths": 0.42,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.824,
+    "tick_transitions_per_width": 1.63,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 373,
+   "t": 12.431666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.6,
+   "blade_width_px": 46.1,
+   "hook": {
+    "x": 1549.279719834512,
+    "y": 1394.935380483729,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 768.149839414943,
+    "y": 1482.0235735057238,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 786.0,
+    "tick_texture": 0.396,
+    "straightness_rms_widths": 0.41,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.849,
+    "tick_transitions_per_width": 1.93,
+    "two_sided_dark_fraction": 0.97,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 376,
+   "t": 12.531666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.6,
+   "blade_width_px": 45.7,
+   "hook": {
+    "x": 1549.668301237062,
+    "y": 1388.7158132129855,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 774.5727360167732,
+    "y": 1475.1792589085494,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 779.9,
+    "tick_texture": 0.41,
+    "straightness_rms_widths": 0.412,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.846,
+    "tick_transitions_per_width": 1.93,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 379,
+   "t": 12.631666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.2,
+   "blade_width_px": 45.7,
+   "hook": {
+    "x": 1549.4994157950146,
+    "y": 1384.6459944940318,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 777.8120589929183,
+    "y": 1462.685553466107,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 775.6,
+    "tick_texture": 0.372,
+    "straightness_rms_widths": 0.374,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.939,
+    "tick_transitions_per_width": 1.65,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 382,
+   "t": 12.731666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.5,
+   "blade_width_px": 45.4,
+   "hook": {
+    "x": 1549.4545522381343,
+    "y": 1378.0547699852102,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 777.9204570056216,
+    "y": 1452.5805001467213,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 775.1,
+    "tick_texture": 0.368,
+    "straightness_rms_widths": 0.367,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.958,
+    "tick_transitions_per_width": 2.28,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 385,
+   "t": 12.831666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.5,
+   "blade_width_px": 42.8,
+   "hook": {
+    "x": 1549.5873524173728,
+    "y": 1373.0383245790604,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 781.5360641841373,
+    "y": 1446.5737612118646,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 771.6,
+    "tick_texture": 0.389,
+    "straightness_rms_widths": 0.398,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.879,
+    "tick_transitions_per_width": 2.11,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 388,
+   "t": 12.931666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.6,
+   "blade_width_px": 45.1,
+   "hook": {
+    "x": 1549.436517304557,
+    "y": 1371.550710203482,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 785.1564744420131,
+    "y": 1443.8217057854595,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 767.7,
+    "tick_texture": 0.403,
+    "straightness_rms_widths": 0.382,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.92,
+    "tick_transitions_per_width": 2.17,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 391,
+   "t": 13.031666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.5,
+   "blade_width_px": 42.8,
+   "hook": {
+    "x": 1549.2503855806713,
+    "y": 1366.2346668961118,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 782.4731402203307,
+    "y": 1440.398615966145,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 770.4,
+    "tick_texture": 0.454,
+    "straightness_rms_widths": 0.421,
+    "coverage": 0.962,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.824,
+    "tick_transitions_per_width": 1.56,
+    "two_sided_dark_fraction": 0.96,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 394,
+   "t": 13.131666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.2,
+   "blade_width_px": 42.7,
+   "hook": {
+    "x": 1549.5550239634947,
+    "y": 1364.097455761959,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 779.6455402453121,
+    "y": 1429.1476568635692,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 772.7,
+    "tick_texture": 0.4,
+    "straightness_rms_widths": 0.41,
+    "coverage": 0.988,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.849,
+    "tick_transitions_per_width": 1.6,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 397,
+   "t": 13.231666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.4,
+   "blade_width_px": 45.6,
+   "hook": {
+    "x": 1549.2802867456282,
+    "y": 1364.4359214537362,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 779.7444895785206,
+    "y": 1425.849896943241,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 772.0,
+    "tick_texture": 0.403,
+    "straightness_rms_widths": 0.397,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.883,
+    "tick_transitions_per_width": 1.89,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 400,
+   "t": 13.331666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.5,
+   "blade_width_px": 45.6,
+   "hook": {
+    "x": 1549.2965768181996,
+    "y": 1364.7307864769916,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 779.9804797553386,
+    "y": 1425.2981459430894,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 771.7,
+    "tick_texture": 0.406,
+    "straightness_rms_widths": 0.397,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.882,
+    "tick_transitions_per_width": 1.6,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 403,
+   "t": 13.431666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.7,
+   "blade_width_px": 45.6,
+   "hook": {
+    "x": 1549.3947654301608,
+    "y": 1359.9187166568481,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 766.5953617111644,
+    "y": 1418.5517879552638,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 785.0,
+    "tick_texture": 0.378,
+    "straightness_rms_widths": 0.375,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.936,
+    "tick_transitions_per_width": 2.5,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 406,
+   "t": 13.531666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.4,
+   "blade_width_px": 45.6,
+   "hook": {
+    "x": 1549.345498159487,
+    "y": 1345.8257587334094,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 750.3591338653958,
+    "y": 1409.8273336996892,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 801.5,
+    "tick_texture": 0.391,
+    "straightness_rms_widths": 0.379,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 0.927,
+    "tick_transitions_per_width": 2.62,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 409,
+   "t": 13.631666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 176.0,
+   "blade_width_px": 42.6,
+   "hook": {
+    "x": 1549.5188429404864,
+    "y": 1333.065193353826,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 737.0340783510317,
+    "y": 1390.5483946979232,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 814.5,
+    "tick_texture": 0.337,
+    "straightness_rms_widths": 0.34,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.09,
+    "two_sided_dark_fraction": 1.0,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 412,
+   "t": 13.731666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.8,
+   "blade_width_px": 42.6,
+   "hook": {
+    "x": 1549.8470580923351,
+    "y": 1311.4326228715884,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 703.7967964530263,
+    "y": 1372.9193975663118,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 848.3,
+    "tick_texture": 0.32,
+    "straightness_rms_widths": 0.31,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.51,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 415,
+   "t": 13.831666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 175.0,
+   "blade_width_px": 42.7,
+   "hook": {
+    "x": 1550.2906753262193,
+    "y": 1281.559242226458,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 661.8396136874089,
+    "y": 1359.7095673644196,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 891.9,
+    "tick_texture": 0.32,
+    "straightness_rms_widths": 0.303,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.44,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 418,
+   "t": 13.931666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.3,
+   "blade_width_px": 42.9,
+   "hook": {
+    "x": 1555.6978215635452,
+    "y": 1248.4909556443513,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 611.4940614707513,
+    "y": 1360.123990022178,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 950.8,
+    "tick_texture": 0.327,
+    "straightness_rms_widths": 0.345,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.94,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 421,
+   "t": 14.031666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 172.6,
+   "blade_width_px": 43.4,
+   "hook": {
+    "x": 1550.7777967942236,
+    "y": 1224.7361363728937,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 546.2109840597562,
+    "y": 1355.3374891756835,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1013.0,
+    "tick_texture": 0.35,
+    "straightness_rms_widths": 0.304,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 2.1,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 423,
+   "t": 14.106666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 171.7,
+   "blade_width_px": 43.5,
+   "hook": {
+    "x": 1550.5708282757882,
+    "y": 1205.4180088145179,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 506.0240088267559,
+    "y": 1358.405960196691,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1055.7,
+    "tick_texture": 0.339,
+    "straightness_rms_widths": 0.319,
+    "coverage": 0.991,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.69,
+    "two_sided_dark_fraction": 0.98,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 426,
+   "t": 14.206666666666667,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 173.1,
+   "blade_width_px": 42.9,
+   "hook": {
+    "x": 1550.2615526969184,
+    "y": 1234.595123236495,
+    "kind": "hook",
+    "visible": false
+   },
+   "housing": {
+    "x": 485.38479006069633,
+    "y": 1363.0244815631115,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 1072.6,
+    "tick_texture": 0.339,
+    "straightness_rms_widths": 0.3,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.84,
+    "two_sided_dark_fraction": 0.99,
+    "end_not_seen_because": {
+     "hook": "frame_edge"
+    }
+   }
+  },
+  {
+   "frame_index": 429,
+   "t": 14.306666666666668,
+   "detector": "classical",
+   "confidence": 1.0,
+   "angle_deg": 174.9,
+   "blade_width_px": 42.7,
+   "hook": {
+    "x": 1403.0559642754338,
+    "y": 1339.4738810223464,
+    "kind": "hook",
+    "visible": true
+   },
+   "housing": {
+    "x": 475.48296079155773,
+    "y": 1422.3192802330238,
+    "kind": "housing",
+    "visible": true
+   },
+   "housing_detected": true,
+   "evidence": {
+    "blade_length_px": 931.3,
+    "tick_texture": 0.217,
+    "straightness_rms_widths": 0.304,
+    "coverage": 1.0,
+    "length_score": 1.0,
+    "texture_score": 1.0,
+    "straight_score": 1.0,
+    "tick_transitions_per_width": 1.56,
+    "two_sided_dark_fraction": 0.94,
+    "end_not_seen_because": {}
+   }
+  }
+ ],
+ "sampled_times": [
+  0.0,
+  0.1,
+  0.2,
+  0.3083,
+  0.4083,
+  0.5083,
+  0.6083,
+  0.7083,
+  0.8083,
+  0.9,
+  1.0,
+  1.1,
+  1.2,
+  1.3,
+  1.4,
+  1.5,
+  1.6,
+  1.7,
+  1.8,
+  1.9,
+  2.0,
+  2.1,
+  2.2,
+  2.3,
+  2.4083,
+  2.5083,
+  2.6,
+  2.7,
+  2.8,
+  2.9,
+  3.0,
+  3.1083,
+  3.2083,
+  3.3,
+  3.4,
+  3.5,
+  3.6,
+  3.7,
+  3.8,
+  3.9,
+  4.0,
+  4.1,
+  4.2,
+  4.3,
+  4.4,
+  4.5,
+  4.6083,
+  4.7083,
+  4.8083,
+  4.9083,
+  5.0,
+  5.1,
+  5.2,
+  5.3317,
+  5.4317,
+  5.5317,
+  5.6317,
+  5.7317,
+  5.8317,
+  5.9317,
+  6.0317,
+  6.1317,
+  6.2317,
+  6.3317,
+  6.4317,
+  6.5317,
+  6.6317,
+  6.7317,
+  6.8317,
+  6.9317,
+  7.0317,
+  7.1317,
+  7.2317,
+  7.3067,
+  7.4067,
+  7.5067,
+  7.6317,
+  7.7317,
+  7.8317,
+  7.9317,
+  8.0317,
+  8.1317,
+  8.2317,
+  8.3317,
+  8.4317,
+  8.5317,
+  8.6317,
+  8.7317,
+  8.8067,
+  8.9067,
+  9.0067,
+  9.1067,
+  9.2317,
+  9.3317,
+  9.4317,
+  9.5317,
+  9.6317,
+  9.7317,
+  9.8317,
+  9.9317,
+  10.0317,
+  10.1317,
+  10.2317,
+  10.3317,
+  10.4317,
+  10.5317,
+  10.6317,
+  10.7317,
+  10.8067,
+  10.9067,
+  11.0067,
+  11.1067,
+  11.2067,
+  11.3317,
+  11.4317,
+  11.5317,
+  11.64,
+  11.7067,
+  11.8317,
+  11.9317,
+  12.0317,
+  12.1317,
+  12.2317,
+  12.3317,
+  12.4317,
+  12.5317,
+  12.6317,
+  12.7317,
+  12.8317,
+  12.9317,
+  13.0317,
+  13.1317,
+  13.2317,
+  13.3317,
+  13.4317,
+  13.5317,
+  13.6317,
+  13.7317,
+  13.8317,
+  13.9317,
+  14.0317,
+  14.1067,
+  14.2067,
+  14.3067,
+  14.4067,
+  14.5067,
+  14.6067,
+  14.7067,
+  14.8067,
+  14.9067,
+  15.0067,
+  15.1067,
+  15.2067,
+  15.3067,
+  15.4317
+ ],
+ "proxy_video": "video.mp4"
+}

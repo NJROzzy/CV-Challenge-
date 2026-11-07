@@ -102,9 +102,31 @@ Outputs go to `outputs/<video>/<strategy>/`:
 | `results.json` | Everything above, plus every per-frame detection, the scene-registration log and per-stage timings |
 | `video.mp4` | Browser copy of the video, with the original timestamps. Git-ignored |
 
-## Results on the four videos
+## Results on all ten videos
 
-I judged each image by eye. That check is used only for this evaluation and is not part of the pipeline. Nothing here is a quantitative accuracy figure: there's no ground truth.
+I judged each image by eye. That check is used only for this evaluation and is not part of the pipeline. Nothing here is a quantitative accuracy figure: there's no ground truth. All ten were run with the classical strategy at the default settings (10 samples/s). The detection thresholds were set on the first four videos and were **not** retuned for the other six.
+
+### Overview
+
+| Video | Length | Tape samples | Candidate events | Validated | Uncertain / rejected | Outcome |
+|---|---:|---:|---:|---:|---:|---|
+| Cabinet-1 | 33 s | 253 of 327 | 4 | 4 | 0 / 0 | ✅ 4 correct |
+| Countertop-1 | 97 s | 439 of 966 | 8 | 2 | 6 / 0 | ✅ 2 correct, ⚠️ 6 uncertain |
+| Deck-1 | 75 s | 386 of 749 | 16 | 6 | 10 / 0 | ⚠️ 3 plausible, 2 partial, 1 uncertain; 10 uncertain |
+| Deck-2 | 20 s | 61 of 199 | 3 | 1 | 2 / 0 | ❌ the 1 validated is wrong; 2 uncertain |
+| Door-1 | 35 s | 17 of 351 | 0 | 0 | 0 / 0 | ❌ missed: no measurement event detected |
+| Frame Pipes-1 | 15 s | 90 of 155 | 1 | 0 | 1 / 0 | ⚠️ 1 uncertain (hook not localised) |
+| Kitchen Cabinets | 180 s | 242 of 1797 | 2 | 0 | 1 / 1 | ⚠️ 1 uncertain, 1 rejected (no endpoint) |
+| Kitchen Sink | 39 s | 104 of 387 | 1 | 1 | 0 / 0 | ✅ 1 plausible |
+| Large Window | 57 s | 21 of 572 | 0 | 0 | 0 / 0 | ❌ none: the measuring device is held against the framing with no extended blade, so this detector has nothing to find |
+| Outdoor_Pipes | 26 s | 44 of 259 | 1 | 0 | 1 / 0 | ⚠️ 1 uncertain (hook not localised) |
+| **Total** | | | **36** | **14** | **21 / 1** | |
+
+Key: ✅ validated and checked correct · ⚠️ uncertain, or validated but not clearly right · ❌ wrong or nothing found. Only validated measurements are drawn as measurements. Uncertain and rejected candidates are kept in `results.json`, and in `diagnostics/`, with their reasons.
+
+**Width/height labels.** Each validated measurement is labelled height, width or diagonal from the direction of its line in the reading frame. A left/right or top/bottom position is added only when a validated mapping lets two measurements of the same type be compared. The labels are present for Cabinet-1 (2 heights, 2 widths) and Countertop-1 (2 diagonals). Deck-1, Deck-2 and Kitchen Sink were processed before labelling was added and weren't rerun, so their validated measurements have no labels yet. The other five videos have no validated measurements to label.
+
+### First four videos, in detail
 
 | Video | Candidate events | Validated | Visual check of validated | Unconfirmed candidates | Scene images (registered views) | Compared with the previous pipeline |
 |---|---:|---:|---|---|---:|---|
@@ -112,6 +134,17 @@ I judged each image by eye. That check is used only for this evaluation and is n
 | Countertop-1 (97 s, marble counters) | 8 | 2 | 2 correct diagonal counter measurements | 6 uncertain: 4 with the housing end right but the hook not localised, 1 low-confidence, 1 correct measurement now unconfirmed (see regression) | 2 (1) | The false "carrying" event is gone. **Regression:** the 31–32 s measurement, correct before, is now uncertain |
 | Deck-1 (75 s, outdoor deck) | 16 | 6 | #3, #5, #6 plausible (vertical rail-to-rail); #2, #4 partial (hook placed where the blade goes behind over-exposed fingers); #1 uncertain | 10 uncertain, mostly the housing end right and the hook not localised | 5 (4), including #4 and #5 grouped on one frame | No longer confirms the railing-gap false line, the swapped-ends case or the frame-edge hooks |
 | Deck-2 (20 s, outdoor deck) | 3 | 1 | **Wrong:** A at the frame edge, B on the housing body | 2 uncertain | 1 (1) | The vegetation-edge and pole false events are gone; the remaining confirmed one is still wrong |
+
+### Six added videos, in detail
+
+| Video | Validated: visual check | Unconfirmed candidates | Scene images (registered views) | Why so few |
+|---|---|---|---:|---|
+| Door-1 (35 s) | none | none | 0 | The tape was seen in only 17 samples, too few for a reading |
+| Frame Pipes-1 (15 s) | none | 1 uncertain, 6.1–14.3 s: hook end not localised | 0 | The blade was seen often, but its far end was never confirmed |
+| Kitchen Cabinets (180 s) | none | 1 rejected, 101.2–102.1 s: no endpoint localised; 1 uncertain, 159.0–160.3 s: hook not localised | 0 | The tape was visible in only 13% of samples over a long video |
+| Kitchen Sink (39 s) | #1 plausible: along the top edge of a cabinet carcass, from back to front. A is close to the left edge of the frame | none | 1 (1) | n/a |
+| Large Window (57 s) | none | none | 0 | 21 blade-like detections in short bursts of up to 1 s, mostly without the housing. In the readings the device is pressed against the framing with its display showing and no blade extended. This is outside what a blade detector can measure |
+| Outdoor_Pipes (26 s) | none | 1 uncertain, 6.1–7.0 s: hook not localised | 0 | Few tape samples (44 of 259) |
 
 **Scene images, honestly:**
 - **What they are:** the "registered views" are nearby frames chosen for less obstruction. They still show the tape and hands.
@@ -236,7 +269,9 @@ Key findings:
 
 - **Cached TensorRT engine:** the hand-pose engine cached under `~/jetson-inference/data/networks` triggers a TensorRT warning that the plan was built for a different device model. Inference ran correctly on the GPU. Rebuilding the engine (delete the `.engine` file and let jetson-inference rebuild it) would remove the warning, but that changes a shared model folder, so it wasn't done.
 
-- **Four videos, no ground truth.** Correctness is a visual judgement, and the thresholds were set on these same videos.
+- **Ten videos, no ground truth.** Correctness is a visual judgement. The thresholds were set on the first four videos and don't generalise well to the other six: those six gave 1 validated measurement out of 5 candidate events, and 2 of them (Door-1, Large Window) gave no event at all.
+- **Blade-less measuring.** If the device is used without extending its blade (Large Window), there is nothing for the blade detector to find.
+- **Labels missing on three videos.** Deck-1, Deck-2 and Kitchen Sink would need a rerun to get width/height labels.
 - **Hidden hook ends.** A blade end hidden behind over-exposed fingers looks like a white surface, so it can be taken for the hook (Deck-1 #2, #4).
 - **Colour-based hand test.** It can mistake beige wood next to a hook for skin. That caused the Countertop-1 regression. Hand keypoints from the hand-pose model would be the principled replacement.
 - **Downward-pointing tapes.** Strongly foreshortened tapes, pointing away from the camera and held in hand, are often not detected at all.

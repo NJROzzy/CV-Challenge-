@@ -1,6 +1,6 @@
 {
  "schema": "reekon.results/2",
- "created_utc": "2026-11-07T14:49:32.638757+00:00",
+ "created_utc": "2026-11-07T16:06:11.046454+00:00",
  "video": {
   "path": "data/inbox/Deck-2.MOV",
   "width": 1360,
@@ -20,48 +20,48 @@
   "opencv": "5.0.0",
   "numpy": "2.4.6"
  },
- "pipeline_seconds": 48.83,
- "pipeline_seconds_excluding_proxy": 48.83,
+ "pipeline_seconds": 50.22,
+ "pipeline_seconds_excluding_proxy": 50.22,
  "stage_timings": {
   "decode_and_sample": {
-   "total_ms": 12614.9,
+   "total_ms": 12612.3,
    "calls": 199,
-   "mean_ms": 63.39
+   "mean_ms": 63.38
   },
   "detect": {
-   "total_ms": 13477.7,
+   "total_ms": 13576.8,
    "calls": 199,
-   "mean_ms": 67.73
+   "mean_ms": 68.23
   },
   "registration_prep": {
-   "total_ms": 2785.3,
+   "total_ms": 2805.9,
    "calls": 199,
-   "mean_ms": 14.0
+   "mean_ms": 14.1
   },
   "frame_cache": {
-   "total_ms": 4128.3,
+   "total_ms": 4136.9,
    "calls": 199,
-   "mean_ms": 20.75
+   "mean_ms": 20.79
   },
   "events_endpoints_registration": {
-   "total_ms": 3715.0,
+   "total_ms": 3883.3,
    "calls": 1,
-   "mean_ms": 3715.05
+   "mean_ms": 3883.26
   },
   "scene_registration": {
-   "total_ms": 11865.2,
+   "total_ms": 12965.9,
    "calls": 1,
-   "mean_ms": 11865.15
+   "mean_ms": 12965.92
   },
   "annotate": {
-   "total_ms": 222.1,
+   "total_ms": 217.5,
    "calls": 1,
-   "mean_ms": 222.08
+   "mean_ms": 217.5
   },
   "viewer_proxy_encode": {
-   "total_ms": 0.2,
+   "total_ms": 0.1,
    "calls": 1,
-   "mean_ms": 0.19
+   "mean_ms": 0.14
   }
  },
  "counts": {
@@ -72,7 +72,8 @@
   "uncertain": 2,
   "rejected": 0,
   "scene_images": 1,
-  "registered_view_scenes": 1
+  "registered_view_scenes": 1,
+  "clean_view_scenes": 0
  },
  "identity": {
   "relabelled": 4,
@@ -393,6 +394,16 @@
  "scene_log": [
   {
    "measurement": 1,
+   "stage": "clean_view",
+   "views_tried": 2,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 2
+   }
+  },
+  {
+   "measurement": 1,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 5,
    "rejected_because": {

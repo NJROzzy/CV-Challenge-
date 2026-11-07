@@ -1,6 +1,6 @@
 {
  "schema": "reekon.results/2",
- "created_utc": "2026-11-07T14:45:56.645291+00:00",
+ "created_utc": "2026-11-07T16:19:19.333874+00:00",
  "video": {
   "path": "data/inbox/Countertop-1.MOV",
   "width": 1376,
@@ -20,48 +20,48 @@
   "opencv": "5.0.0",
   "numpy": "2.4.6"
  },
- "pipeline_seconds": 152.65,
- "pipeline_seconds_excluding_proxy": 152.65,
+ "pipeline_seconds": 156.74,
+ "pipeline_seconds_excluding_proxy": 156.74,
  "stage_timings": {
   "decode_and_sample": {
-   "total_ms": 55184.6,
+   "total_ms": 57359.4,
    "calls": 966,
-   "mean_ms": 57.13
+   "mean_ms": 59.38
   },
   "detect": {
-   "total_ms": 40141.0,
+   "total_ms": 40310.2,
    "calls": 966,
-   "mean_ms": 41.55
+   "mean_ms": 41.73
   },
   "registration_prep": {
-   "total_ms": 13420.5,
+   "total_ms": 13685.9,
    "calls": 966,
-   "mean_ms": 13.89
+   "mean_ms": 14.17
   },
   "frame_cache": {
-   "total_ms": 18490.8,
+   "total_ms": 18522.3,
    "calls": 966,
-   "mean_ms": 19.14
+   "mean_ms": 19.17
   },
   "events_endpoints_registration": {
-   "total_ms": 17071.0,
+   "total_ms": 15792.6,
    "calls": 1,
-   "mean_ms": 17070.96
+   "mean_ms": 15792.55
   },
   "scene_registration": {
-   "total_ms": 7866.3,
+   "total_ms": 10589.4,
    "calls": 1,
-   "mean_ms": 7866.3
+   "mean_ms": 10589.43
   },
   "annotate": {
-   "total_ms": 421.5,
+   "total_ms": 430.8,
    "calls": 1,
-   "mean_ms": 421.46
+   "mean_ms": 430.85
   },
   "viewer_proxy_encode": {
-   "total_ms": 0.2,
+   "total_ms": 0.1,
    "calls": 1,
-   "mean_ms": 0.18
+   "mean_ms": 0.15
   }
  },
  "counts": {
@@ -72,7 +72,8 @@
   "uncertain": 6,
   "rejected": 0,
   "scene_images": 2,
-  "registered_view_scenes": 1
+  "registered_view_scenes": 1,
+  "clean_view_scenes": 0
  },
  "identity": {
   "relabelled": 30,
@@ -153,6 +154,13 @@
    "reasons": [],
    "blade_length_frac": 0.581,
    "episode": 2,
+   "label": {
+    "kind": "diagonal",
+    "direction": "top-left \u2192 bottom-right",
+    "position": null,
+    "text": "#1 Diagonal",
+    "detail": "Diagonal, measured top-left \u2192 bottom-right"
+   },
    "hook": {
     "kind": "hook",
     "status": "observed",
@@ -239,6 +247,13 @@
    "reasons": [],
    "blade_length_frac": 0.6,
    "episode": 3,
+   "label": {
+    "kind": "diagonal",
+    "direction": "top-left \u2192 bottom-right",
+    "position": null,
+    "text": "#2 Diagonal",
+    "detail": "Diagonal, measured top-left \u2192 bottom-right"
+   },
    "hook": {
     "kind": "hook",
     "status": "observed",
@@ -812,6 +827,25 @@
  "scene_log": [
   {
    "measurement": 1,
+   "stage": "clean_view",
+   "views_tried": 8,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 8
+   }
+  },
+  {
+   "measurement": 2,
+   "stage": "clean_view",
+   "views_tried": 8,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 8
+   }
+  },
+  {
+   "measurement": 1,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 0,
    "rejected_because": {
@@ -823,6 +857,7 @@
   },
   {
    "measurement": 2,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 1,
    "rejected_because": {

@@ -1,6 +1,6 @@
 {
  "schema": "reekon.results/2",
- "created_utc": "2026-11-07T14:43:23.585801+00:00",
+ "created_utc": "2026-11-07T16:16:41.360058+00:00",
  "video": {
   "path": "data/inbox/Cabinet-1.MOV",
   "width": 1552,
@@ -20,48 +20,48 @@
   "opencv": "5.0.0",
   "numpy": "2.4.6"
  },
- "pipeline_seconds": 81.23,
- "pipeline_seconds_excluding_proxy": 81.23,
+ "pipeline_seconds": 86.38,
+ "pipeline_seconds_excluding_proxy": 86.38,
  "stage_timings": {
   "decode_and_sample": {
-   "total_ms": 23059.6,
+   "total_ms": 22959.8,
    "calls": 327,
-   "mean_ms": 70.52
+   "mean_ms": 70.21
   },
   "detect": {
-   "total_ms": 19027.6,
+   "total_ms": 18851.0,
    "calls": 327,
-   "mean_ms": 58.19
+   "mean_ms": 57.65
   },
   "registration_prep": {
-   "total_ms": 4900.7,
+   "total_ms": 4914.7,
    "calls": 327,
-   "mean_ms": 14.99
+   "mean_ms": 15.03
   },
   "frame_cache": {
-   "total_ms": 7715.2,
+   "total_ms": 7687.1,
    "calls": 327,
-   "mean_ms": 23.59
+   "mean_ms": 23.51
   },
   "events_endpoints_registration": {
-   "total_ms": 14887.6,
+   "total_ms": 17965.9,
    "calls": 1,
-   "mean_ms": 14887.62
+   "mean_ms": 17965.85
   },
   "scene_registration": {
-   "total_ms": 10860.0,
+   "total_ms": 12239.8,
    "calls": 1,
-   "mean_ms": 10860.03
+   "mean_ms": 12239.8
   },
   "annotate": {
-   "total_ms": 746.1,
+   "total_ms": 1722.6,
    "calls": 1,
-   "mean_ms": 746.08
+   "mean_ms": 1722.62
   },
   "viewer_proxy_encode": {
    "total_ms": 0.2,
    "calls": 1,
-   "mean_ms": 0.17
+   "mean_ms": 0.16
   }
  },
  "counts": {
@@ -72,7 +72,8 @@
   "uncertain": 0,
   "rejected": 0,
   "scene_images": 4,
-  "registered_view_scenes": 2
+  "registered_view_scenes": 2,
+  "clean_view_scenes": 0
  },
  "identity": {
   "relabelled": 0,
@@ -113,6 +114,13 @@
    "reasons": [],
    "blade_length_frac": 0.838,
    "episode": 1,
+   "label": {
+    "kind": "height",
+    "direction": "top \u2192 bottom",
+    "position": null,
+    "text": "#1 Height",
+    "detail": "Height, measured top \u2192 bottom"
+   },
    "hook": {
     "kind": "hook",
     "status": "observed",
@@ -238,6 +246,13 @@
    "reasons": [],
    "blade_length_frac": 0.988,
    "episode": 1,
+   "label": {
+    "kind": "height",
+    "direction": "top \u2192 bottom",
+    "position": null,
+    "text": "#2 Height",
+    "detail": "Height, measured top \u2192 bottom"
+   },
    "hook": {
     "kind": "hook",
     "status": "observed",
@@ -341,6 +356,13 @@
    "reasons": [],
    "blade_length_frac": 0.506,
    "episode": 2,
+   "label": {
+    "kind": "width",
+    "direction": "left \u2192 right",
+    "position": null,
+    "text": "#3 Width",
+    "detail": "Width, measured left \u2192 right"
+   },
    "hook": {
     "kind": "hook",
     "status": "registered",
@@ -474,6 +496,13 @@
    "reasons": [],
    "blade_length_frac": 0.5,
    "episode": 2,
+   "label": {
+    "kind": "width",
+    "direction": "left \u2192 right",
+    "position": null,
+    "text": "#4 Width",
+    "detail": "Width, measured left \u2192 right"
+   },
    "hook": {
     "kind": "hook",
     "status": "registered",
@@ -725,6 +754,43 @@
  "scene_log": [
   {
    "measurement": 1,
+   "stage": "clean_view",
+   "views_tried": 8,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 8
+   }
+  },
+  {
+   "measurement": 2,
+   "stage": "clean_view",
+   "views_tried": 8,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 8
+   }
+  },
+  {
+   "measurement": 3,
+   "stage": "clean_view",
+   "views_tried": 8,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 8
+   }
+  },
+  {
+   "measurement": 4,
+   "stage": "clean_view",
+   "views_tried": 8,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 8
+   }
+  },
+  {
+   "measurement": 1,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 1,
    "rejected_because": {
@@ -736,6 +802,7 @@
   },
   {
    "measurement": 2,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 2,
    "rejected_because": {
@@ -747,6 +814,7 @@
   },
   {
    "measurement": 3,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 0,
    "rejected_because": {
@@ -758,6 +826,7 @@
   },
   {
    "measurement": 4,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 0,
    "rejected_because": {

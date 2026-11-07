@@ -46,5 +46,41 @@
   "detector": "hand-assisted",
   "results": "Deck-2/hand-assisted/results.json",
   "measurements": 2
+ },
+ {
+  "video": "Door-1.MOV",
+  "detector": "classical",
+  "results": "Door-1/classical/results.json",
+  "measurements": 0
+ },
+ {
+  "video": "Frame Pipes-1.MOV",
+  "detector": "classical",
+  "results": "Frame Pipes-1/classical/results.json",
+  "measurements": 0
+ },
+ {
+  "video": "Kitchen Cabinets.MOV",
+  "detector": "classical",
+  "results": "Kitchen Cabinets/classical/results.json",
+  "measurements": 0
+ },
+ {
+  "video": "Kitchen Sink.mov",
+  "detector": "classical",
+  "results": "Kitchen Sink/classical/results.json",
+  "measurements": 1
+ },
+ {
+  "video": "Large Window.MOV",
+  "detector": "classical",
+  "results": "Large Window/classical/results.json",
+  "measurements": 0
+ },
+ {
+  "video": "Outdoor_Pipes.mp4",
+  "detector": "classical",
+  "results": "Outdoor_Pipes/classical/results.json",
+  "measurements": 0
  }
 ]

@@ -1,6 +1,6 @@
 {
  "schema": "reekon.results/2",
- "created_utc": "2026-11-07T14:48:43.296556+00:00",
+ "created_utc": "2026-11-07T16:05:20.118008+00:00",
  "video": {
   "path": "data/inbox/Deck-1.MOV",
   "width": 1376,
@@ -20,48 +20,48 @@
   "opencv": "5.0.0",
   "numpy": "2.4.6"
  },
- "pipeline_seconds": 166.09,
- "pipeline_seconds_excluding_proxy": 166.09,
+ "pipeline_seconds": 181.84,
+ "pipeline_seconds_excluding_proxy": 181.84,
  "stage_timings": {
   "decode_and_sample": {
-   "total_ms": 44121.8,
+   "total_ms": 45208.9,
    "calls": 749,
-   "mean_ms": 58.91
+   "mean_ms": 60.36
   },
   "detect": {
-   "total_ms": 35959.1,
+   "total_ms": 36424.8,
    "calls": 749,
-   "mean_ms": 48.01
+   "mean_ms": 48.63
   },
   "registration_prep": {
-   "total_ms": 10556.0,
+   "total_ms": 10751.5,
    "calls": 749,
-   "mean_ms": 14.09
+   "mean_ms": 14.35
   },
   "frame_cache": {
-   "total_ms": 15793.1,
+   "total_ms": 15817.0,
    "calls": 749,
-   "mean_ms": 21.09
+   "mean_ms": 21.12
   },
   "events_endpoints_registration": {
-   "total_ms": 21382.6,
+   "total_ms": 21781.5,
    "calls": 1,
-   "mean_ms": 21382.63
+   "mean_ms": 21781.51
   },
   "scene_registration": {
-   "total_ms": 36923.6,
+   "total_ms": 50366.3,
    "calls": 1,
-   "mean_ms": 36923.56
+   "mean_ms": 50366.32
   },
   "annotate": {
-   "total_ms": 1305.8,
+   "total_ms": 1449.3,
    "calls": 1,
-   "mean_ms": 1305.8
+   "mean_ms": 1449.32
   },
   "viewer_proxy_encode": {
-   "total_ms": 0.2,
+   "total_ms": 0.1,
    "calls": 1,
-   "mean_ms": 0.19
+   "mean_ms": 0.14
   }
  },
  "counts": {
@@ -72,7 +72,8 @@
   "uncertain": 10,
   "rejected": 0,
   "scene_images": 5,
-  "registered_view_scenes": 4
+  "registered_view_scenes": 4,
+  "clean_view_scenes": 0
  },
  "identity": {
   "relabelled": 25,
@@ -1558,6 +1559,68 @@
  "scene_log": [
   {
    "measurement": 1,
+   "stage": "clean_view",
+   "views_tried": 14,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 6,
+    "round_trip_error": 4,
+    "appearance_mismatch": 3,
+    "endpoint_outside_frame": 1
+   }
+  },
+  {
+   "measurement": 2,
+   "stage": "clean_view",
+   "views_tried": 14,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 13,
+    "endpoint_outside_frame": 1
+   }
+  },
+  {
+   "measurement": 3,
+   "stage": "clean_view",
+   "views_tried": 14,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 14
+   }
+  },
+  {
+   "measurement": 4,
+   "stage": "clean_view",
+   "views_tried": 14,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 14
+   }
+  },
+  {
+   "measurement": 5,
+   "stage": "clean_view",
+   "views_tried": 14,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 14
+   }
+  },
+  {
+   "measurement": 6,
+   "stage": "clean_view",
+   "views_tried": 14,
+   "views_ok": 0,
+   "rejected_because": {
+    "too_few_matches": 7,
+    "appearance_mismatch": 4,
+    "round_trip_error": 2,
+    "endpoint_outside_frame": 1
+   }
+  },
+  {
+   "measurement": 1,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 0,
    "rejected_because": {
@@ -1569,6 +1632,7 @@
   },
   {
    "measurement": 2,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 1,
    "rejected_because": {
@@ -1580,6 +1644,7 @@
   },
   {
    "measurement": 3,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 1,
    "rejected_because": {
@@ -1591,6 +1656,7 @@
   },
   {
    "measurement": 4,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 4,
    "rejected_because": {
@@ -1602,6 +1668,7 @@
   },
   {
    "measurement": 5,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 4,
    "rejected_because": {
@@ -1613,6 +1680,7 @@
   },
   {
    "measurement": 6,
+   "stage": "nearby_view",
    "views_tried": 30,
    "views_ok": 2,
    "rejected_because": {
