@@ -61,7 +61,13 @@ def _odd(n):
 class ClassicalTapeDetector:
     name = 'classical'
 
-    def __init__(self, proc_width=480, dark_abs=90, dark_rel=0.45, min_confidence=0.25):
+    def __init__(self, proc_width=480, dark_abs=90, dark_rel=0.45, min_confidence=0.25,
+                 min_transitions=0.9, min_two_sided=0.4):
+        # Strip thresholds, measured on 24 frames from the 4 videos: true blades >= 1.38
+        # alternations per width (false lines <= 0.79); two-sided fraction true mostly 0.85-1.0
+        # (a vegetation edge 0.17). Set conservatively between the two groups.
+        self.min_transitions = min_transitions
+        self.min_two_sided = min_two_sided
         self.proc_width = proc_width
         self.dark_abs = dark_abs
         self.dark_rel = dark_rel
@@ -222,16 +228,37 @@ class ClassicalTapeDetector:
 
         p_hook = c + d * t_hook
         p_housing = c + d * t_housing
-        margin = 0.015 * W
+        hsv = cv2.cvtColor(small, cv2.COLOR_BGR2HSV)
+        occlusion = {}
 
-        def on_border(p, along):
-            # An end is cut off if the tape continues to the border there.
-            q = p + along * 2.0
-            return not (margin <= q[0] <= W - 1 - margin and margin <= q[1] <= H - 1 - margin)
+        def to_border(p, along):
+            """Distance from p to the image border walking along `along`."""
+            ts = []
+            for k, lim in ((0, W - 1), (1, H - 1)):
+                if along[k] > 1e-9:
+                    ts.append((lim - p[k]) / along[k])
+                elif along[k] < -1e-9:
+                    ts.append(-p[k] / along[k])
+            return max(0.0, min(ts)) if ts else np.inf
+
+        def end_seen(p, along, key):
+            """True only if this is where the blade really ends: the blade does not run into the frame
+            edge (a real end near the edge leaves a gap of background) and does not disappear behind a
+            hand or sleeve."""
+            # Measured (blade widths from the end to the border along the blade): ends cut off by
+            # the frame edge 0.71-0.99, genuine hooks near the edge 1.18-1.30. Thin margin; an end
+            # hidden behind over-exposed fingers is NOT caught (colour equals a white surface).
+            if to_border(p, along) <= max(3.0, 1.1 * w):
+                occlusion[key] = 'frame_edge'
+                return False
+            if self._occluded(hsv, p, along, w):
+                occlusion[key] = 'hand_or_sleeve'
+                return False
+            return True
 
         hook_dir = -d if t_hook < t_housing else d
-        hook_visible = not on_border(p_hook, hook_dir)
-        housing_visible = housing_detected or not on_border(p_housing, -hook_dir)
+        hook_visible = end_seen(p_hook, hook_dir, 'hook')
+        housing_visible = housing_detected or end_seen(p_housing, -hook_dir, 'housing')
 
         if not housing_detected:
             # No wide end seen. If exactly one end is cut off, the in-frame end is the hook
@@ -258,6 +285,11 @@ class ClassicalTapeDetector:
             confidence = min(1.0, confidence * 1.15)
         if confidence < self.min_confidence:
             return None
+        # Strip verification (rejects railings, vegetation edges, poles, shadows): a tape blade is a
+        # dark strip darker than the surface on BOTH sides, with regularly alternating bright marks.
+        transitions, two_sided = self._strip_evidence(v, ref, p_hook, p_housing, w)
+        if transitions < self.min_transitions or two_sided < self.min_two_sided:
+            return None
 
         inv = 1.0 / scale
         angle = (math.degrees(math.atan2(d[1], d[0])) + 180) % 180
@@ -270,7 +302,47 @@ class ClassicalTapeDetector:
             evidence={'blade_length_px': round(blade_len * inv, 1), 'tick_texture': round(texture, 3),
                       'straightness_rms_widths': round(straight_rms, 3), 'coverage': round(coverage, 3),
                       'length_score': round(length_score, 3), 'texture_score': round(texture_score, 3),
-                      'straight_score': round(straight_score, 3)})
+                      'straight_score': round(straight_score, 3),
+                      'tick_transitions_per_width': round(transitions, 2),
+                      'two_sided_dark_fraction': round(two_sided, 2),
+                      'end_not_seen_because': occlusion})
+
+    @staticmethod
+    def _sample(img, pts):
+        x = np.clip(np.round(pts[..., 0]).astype(int), 0, img.shape[1] - 1)
+        y = np.clip(np.round(pts[..., 1]).astype(int), 0, img.shape[0] - 1)
+        return img[y, x]
+
+    def _occluded(self, hsv, p, along, w):
+        """Is the area just beyond this end mostly hand/sleeve (skin-to-orange hues, saturated)?
+        The small brass hook tab is far smaller than the sampled patch, so it does not trigger this."""
+        n = np.array([-along[1], along[0]])
+        pts = np.array([p + along * a + n * b for a in np.linspace(0.7 * w, 3.0 * w, 6)
+                        for b in np.linspace(-1.2 * w, 1.2 * w, 5)])
+        h, s_, v_ = (self._sample(hsv, pts)[:, k].astype(int) for k in range(3))
+        skin = ((h <= 25) | (h >= 165)) & (s_ >= 50) & (v_ >= 60)
+        return float(np.mean(skin)) >= 0.35
+
+    def _strip_evidence(self, v, ref, a, b, w):
+        """(bright/dark alternations per blade width along the centre line,
+             fraction of the strip darker than the surface on both sides)."""
+        L = float(np.linalg.norm(b - a))
+        if L < 4 * w:
+            return 0.0, 0.0
+        d = (b - a) / L
+        n = np.array([-d[1], d[0]])
+        P = a + np.arange(0, L, 2.0)[:, None] * d
+        centre = self._sample(v, P).astype(float)
+        transitions = float(np.abs(np.diff((centre > 0.55 * ref).astype(int))).sum() / (L / w))
+        core = np.min([self._sample(v, P + k * w * n) for k in (-0.25, 0.0, 0.25)], axis=0).astype(float)
+        left = np.median([self._sample(v, P - k * w * n) for k in (1.0, 1.3, 1.6)], axis=0)
+        right = np.median([self._sample(v, P + k * w * n) for k in (1.0, 1.3, 1.6)], axis=0)
+        H, W = v.shape
+        inside = (P[:, 0] > 2 * w) & (P[:, 0] < W - 2 * w) & (P[:, 1] > 2 * w) & (P[:, 1] < H - 2 * w)
+        if not inside.any():
+            return transitions, 0.0
+        both = ((left - core) > 0.25 * ref) & ((right - core) > 0.25 * ref)
+        return transitions, float(np.mean(both[inside]))
 
     @staticmethod
     def _texture(v, ref, c, d, lo, hi, w):

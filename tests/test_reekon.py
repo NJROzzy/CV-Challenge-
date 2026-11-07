@@ -134,6 +134,35 @@ def test_rejects_scenes_without_a_tape():
     assert det.detect(solid) is None
 
 
+def test_blade_running_into_frame_edge_has_no_visible_hook():
+    # Blade from the housing down to just past the bottom border (end only ~0.5 widths inside).
+    img = draw_tape(textured_background(640, 480), hook=(260, 646), housing_end=(240, 260))
+    obs = ClassicalTapeDetector().detect(img)
+    assert obs is not None and obs.housing_detected
+    assert not obs.hook.visible and obs.evidence['end_not_seen_because'].get('hook') == 'frame_edge'
+
+
+def test_blade_disappearing_behind_a_hand_has_no_visible_hook():
+    img = draw_tape(textured_background(640, 480), hook=(140, 120), housing_end=(300, 470))
+    # A skin-coloured hand covering the blade's far end (HSV ~ hue 10, saturated).
+    cv2.ellipse(img, (125, 88), (55, 40), 30, 0, 360, (90, 140, 215), -1)
+    cv2.line(img, (140, 120), (110, 55), (20, 20, 20), 12)      # blade continues under the hand...
+    cv2.ellipse(img, (125, 88), (55, 40), 30, 0, 360, (90, 140, 215), -1)   # ...and is hidden by it
+    obs = ClassicalTapeDetector().detect(img)
+    assert obs is not None
+    assert not obs.hook.visible and obs.evidence['end_not_seen_because'].get('hook') == 'hand_or_sleeve'
+
+
+def test_one_sided_dark_edge_is_not_a_tape():
+    """A dark region's straight boundary (e.g. vegetation against sand) is dark on one side only."""
+    img = textured_background(640, 480)
+    pts = np.array([[0, 300], [480, 260], [480, 640], [0, 640]], np.int32)
+    cv2.fillPoly(img, [pts], (40, 45, 40))
+    for x in range(20, 470, 40):                                   # mottled, as vegetation is
+        cv2.circle(img, (x, 300 + (x % 3) * 20), 9, (150, 160, 150), -1)
+    assert ClassicalTapeDetector().detect(img) is None
+
+
 # ---------------------------------------------------------------------------- registration
 def test_chained_registration_recovers_known_motion():
     base = textured_background(900, 900, seed=3)
